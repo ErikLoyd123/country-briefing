@@ -5,6 +5,7 @@
 @import "@fontsource/be-vietnam-pro/400.css";
 @import "@fontsource/be-vietnam-pro/500.css";
 @import "@fontsource/be-vietnam-pro/600.css";
+@import "@fontsource/be-vietnam-pro/800.css";
 
 /*
  * Design tokens. Components use these via Tailwind classes (bg-paper, text-sg, …).
@@ -42,6 +43,9 @@
 
   --color-sample: #6b4fbb;
 
+  /* Home hero call to action only: a fill on the night ground, never text on paper. */
+  --color-saffron: #f5a524;
+
   --text-mega: clamp(3rem, 8vw, 7.5rem);
   --text-mega--line-height: 0.95;
 }
@@ -73,6 +77,12 @@
 @layer components {
   .num {
     font-variant-numeric: tabular-nums;
+  }
+  /* Heavy sans, reserved for the two countries' headline facts: their names and overall scores. */
+  .type-heavy {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    letter-spacing: -0.04em;
   }
   .kicker {
     font-family: var(--font-sans);

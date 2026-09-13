@@ -4,16 +4,37 @@ import HeroMedia from '../components/story/HeroMedia.astro';
 import HeroReel from '../components/story/HeroReel.astro';
 import RatingChip from '../components/story/RatingChip.astro';
 import Lorem from '../components/story/Lorem.astro';
+import SampleBadge from '../components/story/SampleBadge.astro';
 import RegionMap from '../components/maps/RegionMap.astro';
-import ScoreSummary from '../components/verdict/ScoreSummary.astro';
+import AnimatedNumber from '../components/ui/AnimatedNumber.jsx';
 import { getTopics } from '../lib/topics.js';
-import { SlidersHorizontal, Presentation, FileText } from '@lucide/astro';
+import { scorecard, balancedScores } from '../lib/scorecard.js';
+import { getLatest } from '../lib/data.js';
+import { formatInText } from '../lib/bib.js';
+import { COUNTRY, formatValue, UNIT_LABEL } from '../lib/format.js';
+import { loremSentence } from '../lib/lorem.js';
+import { SlidersHorizontal, Presentation, FileText, ArrowRight, Play } from '@lucide/astro';
 
 const topics = await getTopics();
+const scores = balancedScores();
+
+// Each risk area links to the briefing that covers it.
+const pillarBriefing = { government: 'political-stability', society: 'society', security: 'security-disasters', economy: 'economic-risk' };
+const areas = scorecard.pillars.map((p) => ({
+  label: p.label.replace(' & Politics', ''),
+  href: `/briefing/${pillarBriefing[p.id]}`,
+  SG: scores.SG.pillars[p.id],
+  VN: scores.VN.pillars[p.id],
+}));
+// Bars share one 0–5 scale; 2.75rem of each half is kept free for the value label.
+const barWidth = (v) => `calc((100% - 2.75rem) * ${v / 5})`;
+
+const trade = ['fdi_inflow_usd_bn', 'trade_openness'].map((id) => getLatest(id));
+const tradeSources = await formatInText([...new Set(trade.map((l) => l.meta.sourceKey))]);
 ---
 
 <BaseLayout title="Overview">
-  <!-- Split hero: the one bold moment. -->
+  <!-- Hero: synced Singapore / Vietnam aerial reel. Its center seam continues down the page below. -->
   <section data-hero class="relative isolate grid min-h-[calc(100svh-3.5rem)] grid-rows-[1fr_auto] overflow-hidden bg-night text-on-night">
     <HeroReel
       pairs={[
@@ -25,58 +46,123 @@ const topics = await getTopics();
 
     <div data-hero-line class="container-wide relative grid gap-6 border-t border-white/10 py-8 md:grid-cols-[1fr_auto] md:items-end">
       <div>
-        <h1 class="font-display text-2xl leading-snug md:text-3xl">
+        <h1 class="type-heavy max-w-3xl text-3xl leading-[1.05] tracking-[-0.035em] md:text-4xl">
           <span class="sr-only">Singapore and Vietnam: </span>Politics and risk for a go or no-go decision
         </h1>
-        <p class="mt-2 max-w-2xl text-on-night-muted">A briefing for executives weighing investment in either market: government, society, security, and the economy.</p>
+        <p class="mt-3 max-w-2xl text-on-night-muted">A briefing for executives weighing investment in either market: government, society, security, and the economy.</p>
       </div>
-      <a href="#question" class="inline-flex items-center gap-2 self-start rounded-full border border-white/25 px-5 py-2.5 text-sm hover:bg-white/10 md:self-end">Start the briefing</a>
-    </div>
-  </section>
-
-  <!-- The question -->
-  <section id="question" class="container-wide grid gap-10 py-24 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] md:py-32">
-    <h2 class="text-4xl leading-tight md:text-5xl">What would a company need to know before committing?</h2>
-    <div class="font-display text-xl leading-relaxed text-ink-2">
-      <Lorem paragraphs={2} seed={77} />
-    </div>
-  </section>
-
-  <!-- Headline scores -->
-  <section class="border-y border-rule bg-paper-2/60">
-    <div class="container-wide py-20">
-      <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
-        <h2 class="text-4xl">Overall risk today</h2>
-        <a href="/verdict" class="inline-flex items-center gap-2 text-sm text-ink underline decoration-rule underline-offset-4 hover:decoration-ink">
-          <SlidersHorizontal size={16} aria-hidden="true" /> Adjust the weights for your industry
+      <div class="flex flex-wrap gap-3">
+        <a href="#question" class="inline-flex items-center gap-2 rounded-full bg-saffron px-6 py-3 font-semibold text-ink shadow-lg shadow-black/20 transition hover:brightness-105">
+          Start the briefing <ArrowRight size={18} aria-hidden="true" />
+        </a>
+        <a href="/present" class="inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-3 font-medium text-white hover:bg-white/10">
+          <Play size={16} aria-hidden="true" /> Present
         </a>
       </div>
-      <ScoreSummary />
     </div>
   </section>
 
-  <!-- Topic strip (pinned + scrubbed on wide screens) -->
-  <section data-pin-strip class="overflow-hidden py-20 lg:flex lg:h-svh lg:flex-col lg:justify-center lg:py-0">
+  <!-- The question and the overall scores share the seam: joined content covers it, comparisons split on it. -->
+  <div class="relative">
+    <div class="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px bg-ink/15 md:block" aria-hidden="true"></div>
+
+    <section id="question" class="scroll-mt-14 px-4 pt-24 pb-20 md:pt-32 md:pb-28">
+      <div class="relative mx-auto max-w-4xl bg-paper py-4 text-center">
+        <h2 class="mx-auto max-w-[22ch] text-4xl leading-[1.08] text-ink md:text-6xl">What would a company need to know before committing to Singapore or Vietnam?</h2>
+        <p class="mx-auto mt-7 max-w-[38rem] font-display text-xl leading-relaxed text-ink-2">
+          {`${loremSentence(77, 14, 20)} ${loremSentence(78, 12, 18)}`}
+        </p>
+      </div>
+    </section>
+
+    <section aria-labelledby="risk-heading" class="pb-24 md:pb-32">
+      <div class="container-wide">
+        <h2 id="risk-heading" class="relative mx-auto w-fit bg-paper px-6 py-2 text-center text-2xl text-ink md:text-3xl">Overall risk today</h2>
+
+        <div class="mt-12 grid grid-cols-2 md:mt-16">
+          {
+            ['SG', 'VN'].map((code) => {
+              const s = scores[code];
+              const vn = code === 'VN';
+              return (
+                <div class:list={['min-w-0', vn ? 'pl-4 text-right md:pl-10' : 'pr-4 md:pr-10']}>
+                  <p class:list={['flex items-center gap-2 font-medium text-ink', vn && 'justify-end']}>
+                    <span class:list={['size-2.5 rounded-full', vn ? 'bg-vn' : 'bg-sg']} aria-hidden="true" />
+                    {COUNTRY[code].name}
+                  </p>
+                  <p class="type-heavy num mt-2 text-[clamp(3.25rem,11vw,9rem)] leading-[0.9] text-ink">
+                    <span class="sr-only">Overall risk </span>
+                    <span class="screen-only"><AnimatedNumber client:visible value={Number(s.overall.toFixed(2))} decimals={2} /></span>
+                    <span class="print-only">{s.overall.toFixed(2)}</span>
+                    <span class="sr-only"> out of 5</span>
+                  </p>
+                  <p class="mt-4 font-display text-2xl leading-tight text-ink md:text-3xl">{s.band.label}</p>
+                  <p class:list={['mt-2 max-w-xs text-sm text-ink-2 md:text-base', vn && 'ml-auto']}>{s.band.summary}</p>
+                </div>
+              );
+            })
+          }
+        </div>
+
+        <!-- Risk by area, mirrored on the seam: Singapore grows left, Vietnam grows right. -->
+        <div class="mx-auto mt-16 max-w-5xl md:mt-20">
+          <ul class="space-y-6">
+            {
+              areas.map((a) => (
+                <li>
+                  <a href={a.href} class="relative mx-auto block w-fit bg-paper px-3 text-center text-sm text-ink underline decoration-transparent underline-offset-4 hover:decoration-ink/40 md:text-base">
+                    {a.label}
+                    <span class="sr-only">: Singapore {a.SG.toFixed(1)}, Vietnam {a.VN.toFixed(1)}</span>
+                  </a>
+                  <div class="mt-2 grid grid-cols-2 gap-x-1.5" aria-hidden="true">
+                    <div class="flex items-center justify-end gap-3" title={`Singapore, ${a.label}: ${a.SG.toFixed(1)} of 5`}>
+                      <span class="num text-sm font-semibold text-ink">{a.SG.toFixed(1)}</span>
+                      <span class="h-2.5 shrink-0 rounded-l bg-sg" style={`width:${barWidth(a.SG)}`} />
+                    </div>
+                    <div class="flex items-center gap-3" title={`Vietnam, ${a.label}: ${a.VN.toFixed(1)} of 5`}>
+                      <span class="h-2.5 shrink-0 rounded-r bg-vn" style={`width:${barWidth(a.VN)}`} />
+                      <span class="num text-sm font-semibold text-ink">{a.VN.toFixed(1)}</span>
+                    </div>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+
+          <div class="relative mx-auto mt-10 flex w-fit flex-col items-center gap-5 bg-paper px-6 py-3 text-center">
+            <p class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-muted">
+              Balanced weighting. Risk from 1, very low, to 5, very high.
+              {scorecard.sample && <SampleBadge />}
+            </p>
+            <a href="/verdict" class="inline-flex items-center gap-2 rounded-md border border-ink/70 px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-paper">
+              <SlidersHorizontal size={16} aria-hidden="true" /> Weight the areas for your industry
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Seven briefings (pinned + scrubbed on wide screens) -->
+  <section data-pin-strip class="overflow-hidden border-t border-rule py-20 lg:flex lg:h-svh lg:flex-col lg:justify-center lg:py-0">
     <div class="container-wide mb-10 flex flex-wrap items-end justify-between gap-4">
-      <h2 class="text-4xl">Seven briefings</h2>
+      <h2 class="text-4xl text-ink md:text-5xl">Seven briefings</h2>
       <p class="max-w-md text-ink-2">Each compares Singapore and Vietnam on one area of risk and ends with what it means for foreign investment.</p>
     </div>
-    <ol data-pin-track class="container-wide grid gap-5 sm:grid-cols-2 lg:mx-0 lg:flex lg:w-max lg:max-w-none lg:gap-6 lg:pr-[20vw] lg:pl-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))]">
+    <ol data-pin-track class="container-wide grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:mx-0 lg:flex lg:w-max lg:max-w-none lg:gap-10 lg:pr-[20vw] lg:pl-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))]">
       {
         topics.map((t) => (
-          <li class="lg:w-[26rem]">
-            <a href={`/briefing/${t.slug}`} class="group flex h-full flex-col overflow-hidden rounded-lg border border-rule bg-paper hover:border-ink">
-              <div class="relative aspect-[16/10] overflow-hidden bg-night">
-                <HeroMedia image={t.hero.image} video={t.hero.video} alt={t.hero.alt} label={t.hero.label} sizes="(min-width: 1024px) 26rem, (min-width: 640px) 50vw, 100vw" tone="light" compact />
+          <li class="lg:w-[25rem]">
+            <a href={`/briefing/${t.slug}`} class="group flex h-full flex-col">
+              <div class="relative aspect-[4/3] overflow-hidden rounded-md bg-night">
+                <HeroMedia image={t.hero.image} video={t.hero.video} alt={t.hero.alt} label={t.hero.label} sizes="(min-width: 1024px) 25rem, (min-width: 640px) 50vw, 100vw" tone="light" compact />
               </div>
-              <div class="flex flex-1 flex-col p-6">
-                <p class="text-sm text-muted">Briefing {t.order}</p>
-                <h3 class="mt-1 text-2xl leading-tight text-ink group-hover:underline group-hover:decoration-rule group-hover:underline-offset-4">{t.title}</h3>
-                <p class="mt-3 flex-1 text-ink-2">{t.thesis}</p>
-                <div class="mt-5 flex flex-wrap gap-2">
-                  <RatingChip country="SG" score={t.ratings.SG} />
-                  <RatingChip country="VN" score={t.ratings.VN} />
-                </div>
+              <p class="num mt-5 text-sm text-muted">Briefing {t.order}</p>
+              <h3 class="mt-1 text-[1.65rem] leading-tight text-ink underline decoration-transparent decoration-1 underline-offset-[5px] group-hover:decoration-ink/40">{t.title}</h3>
+              <p class="mt-2 flex-1 text-ink-2">{t.thesis}</p>
+              <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                <RatingChip country="SG" score={t.ratings.SG} plain />
+                <RatingChip country="VN" score={t.ratings.VN} plain />
               </div>
             </a>
           </li>
@@ -85,37 +171,72 @@ const topics = await getTopics();
     </ol>
   </section>
 
-  <!-- Geography -->
-  <section class="bg-night text-on-night">
-    <div class="container-wide grid items-center gap-12 py-24 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+  <!-- Trade: text and figures on the left, the map runs off the right edge. -->
+  <section class="overflow-hidden">
+    <div class="container-wide grid items-center gap-12 py-20 md:py-28 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
       <div>
-        <h2 class="text-4xl leading-tight md:text-5xl">On the main artery of Asian trade</h2>
-        <div class="mt-6 text-lg leading-relaxed text-on-night-muted">
+        <h2 class="max-w-[16ch] text-4xl leading-[1.05] text-ink md:text-5xl">On the main artery of Asian trade</h2>
+        <div class="mt-6 font-display text-xl leading-relaxed text-ink-2">
           <Lorem paragraphs={1} seed={88} />
         </div>
-        <a href="/briefing/trade-investment" class="mt-8 inline-block rounded-full border border-white/25 px-5 py-2.5 text-sm hover:bg-white/10">Read the trade briefing</a>
+
+        <table class="mt-10 w-full text-left">
+          <caption class="sr-only">Trade indicators, Singapore and Vietnam</caption>
+          <thead>
+            <tr class="text-sm text-muted">
+              <td></td>
+              <th scope="col" class="pb-3 text-right font-normal"><span class="mr-1.5 inline-block size-2 rounded-full bg-sg" aria-hidden="true" />Singapore</th>
+              <th scope="col" class="pb-3 pl-6 text-right font-normal"><span class="mr-1.5 inline-block size-2 rounded-full bg-vn" aria-hidden="true" />Vietnam</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              trade.map((l) => (
+                <tr class="border-t border-rule">
+                  <th scope="row" class="py-4 font-normal">
+                    <span class="block text-ink">{l.meta.short ?? l.meta.label}</span>
+                    <span class="block text-sm text-muted">{UNIT_LABEL[l.meta.unit]}, {l.SG?.year ?? l.VN?.year}</span>
+                  </th>
+                  <td class="num py-4 text-right text-2xl font-semibold tracking-tight text-ink">{formatValue(l.SG?.value, l.meta.unit)}</td>
+                  <td class="num py-4 pl-6 text-right text-2xl font-semibold tracking-tight text-ink">{formatValue(l.VN?.value, l.meta.unit)}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <p class="flex flex-wrap items-center gap-3 border-t border-rule pt-3 text-xs text-muted">
+          <span>Sources: {tradeSources}</span>
+          {trade.some((l) => l.sample) && <SampleBadge />}
+        </p>
+
+        <a href="/briefing/trade-investment" class="mt-8 inline-block font-medium text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink">Read the trade briefing</a>
       </div>
-      <RegionMap compact tone="dark" />
+
+      <div class="lg:-mr-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))]">
+        <div class="[&_svg]:rounded-none [&_svg]:rounded-l-md">
+          <RegionMap compact />
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Ways to use it -->
-  <section class="container-wide grid gap-6 py-24 md:grid-cols-3">
-    <a href="/verdict" class="rounded-lg border border-rule p-7 hover:border-ink">
-      <SlidersHorizontal size={22} aria-hidden="true" />
-      <h3 class="mt-4 text-2xl">Run the scorecard</h3>
-      <p class="mt-2 text-ink-2">Weight the four risk areas for your industry and see how each country scores.</p>
-    </a>
-    <a href="/present" class="rounded-lg border border-rule p-7 hover:border-ink">
-      <Presentation size={22} aria-hidden="true" />
-      <h3 class="mt-4 text-2xl">Present the briefing</h3>
-      <p class="mt-2 text-ink-2">Full-screen slides built from the same data. Use the arrow keys to move through them.</p>
-    </a>
-    <a href="/paper" class="rounded-lg border border-rule p-7 hover:border-ink">
-      <FileText size={22} aria-hidden="true" />
-      <h3 class="mt-4 text-2xl">Read the paper</h3>
-      <p class="mt-2 text-ink-2">Every briefing in one printable document with APA citations and references.</p>
-    </a>
+  <section>
+    <div class="container-wide grid gap-12 pt-4 md:grid-cols-3 md:gap-10">
+      {
+        [
+          { href: '/verdict', Icon: SlidersHorizontal, title: 'Run the scorecard', body: 'Weight the four risk areas for your industry and see how each country scores.' },
+          { href: '/present', Icon: Presentation, title: 'Present the briefing', body: 'Full-screen slides built from the same data. Use the arrow keys to move through them.' },
+          { href: '/paper', Icon: FileText, title: 'Read the paper', body: 'Every briefing in one printable document with APA citations and references.' },
+        ].map(({ href, Icon, title, body }) => (
+          <a href={href} class="group block">
+            <Icon size={22} class="text-muted" aria-hidden="true" />
+            <h3 class="mt-4 text-2xl text-ink underline decoration-transparent decoration-1 underline-offset-[5px] group-hover:decoration-ink/40">{title}</h3>
+            <p class="mt-2 max-w-sm text-ink-2">{body}</p>
+          </a>
+        ))
+      }
+    </div>
   </section>
 </BaseLayout>
 

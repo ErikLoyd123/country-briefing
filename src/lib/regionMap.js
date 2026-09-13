@@ -7,7 +7,9 @@ import lanes from '../data/geo/shipping-lanes.json';
 export const MAP_W = 960;
 export const MAP_H = 760;
 const ISO = { '702': 'SG', '704': 'VN' };
-const BBOX = { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[92, -6], [124, -6], [124, 25], [92, 25], [92, -6]]] } };
+// Fit to the region's corner points. (A Polygon here would need d3's clockwise winding;
+// the GeoJSON-style counter-clockwise ring is read as "the whole globe minus this box".)
+const BBOX = { type: 'MultiPoint', coordinates: [[92, -6], [124, 25]] };
 
 const CITIES = [
   { name: 'Singapore', lonlat: [103.82, 1.35], country: 'SG', anchor: 'start', dx: 14, dy: 18 },
@@ -17,7 +19,7 @@ const CITIES = [
 const SEAS = [
   { name: 'South China Sea', lonlat: [114, 13] },
   { name: 'Strait of Malacca', lonlat: [97.6, 3.6] },
-  { name: 'Gulf of Thailand', lonlat: [101.5, 9.8] },
+  { name: 'Gulf of Thailand', lonlat: [100.9, 8.2] },
 ];
 
 export function buildRegionMap() {

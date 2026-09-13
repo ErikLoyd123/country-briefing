@@ -1,15 +1,18 @@
 ---
 import { COUNTRY, RISK_LABELS } from '../../lib/format.js';
 
-const { country, score, tone = 'light', size = 'sm' } = Astro.props;
+// plain: no pill outline, for use in lists where the chip would add visual noise.
+const { country, score, tone = 'light', size = 'sm', plain = false } = Astro.props;
 const onNight = tone === 'dark';
 ---
 
 <span
   class:list={[
-    'inline-flex items-center gap-2 rounded-full border',
-    size === 'lg' ? 'py-1.5 pr-4 pl-1.5 text-base' : 'py-1 pr-3 pl-1 text-sm',
-    onNight ? 'border-white/20 text-on-night' : 'border-rule bg-paper text-ink',
+    'inline-flex items-center gap-2',
+    !plain && 'rounded-full border',
+    size === 'lg' ? 'text-base' : 'text-sm',
+    !plain && (size === 'lg' ? 'py-1.5 pr-4 pl-1.5' : 'py-1 pr-3 pl-1'),
+    onNight ? 'border-white/20 text-on-night' : ['text-ink', !plain && 'border-rule bg-paper'],
   ]}
 >
   <span
