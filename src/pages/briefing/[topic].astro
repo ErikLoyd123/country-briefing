@@ -3,11 +3,9 @@ import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChapterOpener from '../../components/story/ChapterOpener.astro';
 import StatStrip from '../../components/story/StatStrip.astro';
-import SourcesList from '../../components/story/SourcesList.astro';
 import StatusBadge from '../../components/layout/StatusBadge.astro';
 import { mdxComponents } from '../../components/mdx.js';
 import { getTopics } from '../../lib/topics.js';
-import { getIndicator } from '../../lib/data.js';
 
 export async function getStaticPaths() {
   const topics = await getTopics();
@@ -19,27 +17,24 @@ export async function getStaticPaths() {
 
 const { topic, prev, next, total } = Astro.props;
 const [overview, singapore, vietnam] = await Promise.all(['index', 'singapore', 'vietnam'].map((p) => render(topic.parts[p])));
-const citeKeys = [
-  ...overview.remarkPluginFrontmatter.citeKeys ?? [],
-  ...singapore.remarkPluginFrontmatter.citeKeys ?? [],
-  ...vietnam.remarkPluginFrontmatter.citeKeys ?? [],
-  ...topic.keyStats.map((id) => getIndicator(id).sourceKey),
-];
 const sections = [
   { id: 'overview', label: 'Overview', status: topic.parts.index.data.status },
   { id: 'singapore', label: 'Singapore', status: topic.parts.singapore.data.status, color: 'bg-sg' },
   { id: 'vietnam', label: 'Vietnam', status: topic.parts.vietnam.data.status, color: 'bg-vn' },
-  { id: 'sources', label: 'Sources' },
 ];
 ---
 
 <BaseLayout title={topic.title} description={topic.thesis}>
-  <ChapterOpener topic={topic} total={total} />
-  <StatStrip ids={topic.keyStats} />
+  <!-- On laptop-sized screens the page reads like a deck: the opener and every .frame fill one screen. -->
+  <div class="opener-frame" data-frame>
+    <ChapterOpener topic={topic} total={total} class="opener-media" />
+    <StatStrip ids={topic.keyStats} />
+  </div>
 
-  <div class="container-wide grid gap-10 pt-14 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-16">
+  <div class="container-wide grid gap-10 pt-14 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-16 lg:pt-0">
     <nav aria-label="On this page" class="screen-only hidden lg:block">
-      <ol class="sticky top-24 space-y-1 border-l border-rule text-sm">
+      <div class="sticky top-24 mt-14">
+      <ol class="space-y-1 border-l border-rule text-sm">
         {
           sections.map((s) => (
             <li>
@@ -52,6 +47,8 @@ const sections = [
           ))
         }
       </ol>
+      <p class="mt-6 pl-4 text-xs text-muted">Use the arrow keys to move between screens.</p>
+      </div>
     </nav>
 
     <article class="briefing min-w-0 max-w-[52rem]">
@@ -59,19 +56,15 @@ const sections = [
         <overview.Content components={mdxComponents} />
       </section>
 
-      <section id="singapore" class="briefing-prose country-section mt-20 scroll-mt-24 border-t-2 border-sg pt-2">
+      <section id="singapore" class="briefing-prose country-section is-sg mt-20 scroll-mt-24 border-t-2 border-sg pt-2">
         <singapore.Content components={mdxComponents} />
       </section>
 
-      <section id="vietnam" class="briefing-prose country-section mt-20 scroll-mt-24 border-t-2 border-vn pt-2">
+      <section id="vietnam" class="briefing-prose country-section is-vn mt-20 scroll-mt-24 border-t-2 border-vn pt-2">
         <vietnam.Content components={mdxComponents} />
       </section>
 
-      <div id="sources" class="mt-20 scroll-mt-24 border-t border-rule pt-10">
-        <SourcesList keys={citeKeys} />
-      </div>
-
-      <nav aria-label="Next and previous briefings" class="screen-only mt-20 grid gap-8 border-t border-ink pt-6 sm:grid-cols-2">
+      <nav aria-label="Next and previous briefings" class="screen-only mt-20 mb-4 grid gap-8 border-t border-ink pt-6 sm:grid-cols-2">
         {
           [
             prev ? { href: `/briefing/${prev.slug}`, label: 'Previous briefing', title: prev.title } : { href: '/', label: 'Back to', title: 'Overview' },
@@ -109,19 +102,156 @@ const sections = [
     const el = document.getElementById(id);
     if (el) observer.observe(el);
   }
+
+  // Screen-by-screen reading. Keep FRAME_QUERY in sync with the @media rule in the <style> below.
+  const FRAME_QUERY = '(min-width: 1024px) and (min-height: 600px)';
+  const frames = [...document.querySelectorAll('[data-frame], .briefing .frame')];
+  const headerHeight = () => document.querySelector('header')?.getBoundingClientRect().height ?? 56;
+
+  // ← / → (and PageUp / PageDown) move one screen at a time, like the presenter.
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey || !window.matchMedia(FRAME_QUERY).matches) return;
+    if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [contenteditable]')) return;
+    const dir = { ArrowRight: 1, PageDown: 1, ArrowLeft: -1, PageUp: -1 }[e.key];
+    if (!dir) return;
+    const edge = headerHeight();
+    const tops = frames.map((f) => f.getBoundingClientRect().top - edge);
+    const target = dir > 0 ? frames[tops.findIndex((t) => t > 8)] : frames[tops.findLastIndex((t) => t < -8)];
+    if (!target) return;
+    e.preventDefault();
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+  });
+
+  // In dev, flag any screen whose content is taller than the current window so the text can be trimmed.
+  if (import.meta.env.DEV) {
+    const flag = () => {
+      const active = window.matchMedia(FRAME_QUERY).matches;
+      const available = window.innerHeight - headerHeight();
+      for (const f of frames) {
+        const over = Math.round(f.getBoundingClientRect().height - available);
+        if (active && over > 1) f.dataset.overflow = `${over}px taller than this screen`;
+        else delete f.dataset.overflow;
+      }
+    };
+    new ResizeObserver(flag).observe(document.body);
+    window.addEventListener('resize', flag);
+  }
 </script>
 
 <style>
-  .briefing-prose :global(> p),
-  .briefing-prose :global(> ul),
-  .briefing-prose :global(> ol),
-  .briefing-prose :global(> h2),
-  .briefing-prose :global(> h3) {
+  .briefing-prose :global(> :is(p, ul, ol, h2, h3)),
+  .briefing-prose :global(> .frame > :is(p, ul, ol, h2, h3)) {
     max-width: 42rem;
   }
-  .country-section :global(> h2:first-child) {
+  .country-section :global(> .frame:first-child > h2:first-child) {
     margin-top: 1.25rem;
   }
+
+  /* Keep in sync with FRAME_QUERY in the script above. */
+  @media screen and (min-width: 1024px) and (min-height: 600px) {
+    :global(html:has(.briefing)) {
+      scroll-snap-type: y proximity;
+      scroll-padding-top: 3.5rem;
+    }
+    .opener-frame,
+    .briefing :global(.frame) {
+      min-height: calc(100svh - 3.5rem);
+      scroll-snap-align: start;
+    }
+    .opener-frame {
+      display: flex;
+      flex-direction: column;
+    }
+    .opener-frame :global(.opener-media) {
+      min-height: 0;
+      flex: 1;
+    }
+    .briefing :global(.frame) {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-block: clamp(1.25rem, 5vh, 3rem);
+    }
+    .opener-frame :global(.opener-media .container-wide) {
+      padding-top: clamp(2rem, 9vh, 8rem);
+      padding-bottom: clamp(1.5rem, 6vh, 5rem);
+    }
+
+    /* Tall visuals shrink to the screen instead of spilling past it. The rem values
+       reserve room for each figure's title, legend and source line. */
+    .briefing :global(.frame .chart-frame astro-island > div[style]) {
+      max-height: calc(100svh - 3.5rem - 22rem);
+      min-height: 14rem;
+    }
+    .briefing :global(.frame .region-map svg) {
+      max-height: calc(100svh - 3.5rem - 16rem);
+    }
+    .briefing :global(.frame figure img) {
+      max-height: calc(100svh - 3.5rem - 9rem);
+      object-fit: cover;
+    }
+    .briefing :global(.frame .heatmap :is(th, td)) {
+      padding-block: 0.3rem;
+    }
+    .briefing :global(.frame .heatmap th[scope='rowgroup']) {
+      padding-top: 0.6rem;
+    }
+    .briefing :global(.frame > :first-child) {
+      margin-top: 0;
+    }
+    .briefing :global(.frame > :last-child) {
+      margin-bottom: 0;
+    }
+
+    /* Country sections open on a divider screen instead of a rule. */
+    .country-section {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+    .country-section :global(> .frame:first-child > h2:first-child) {
+      margin-top: 0;
+      font-size: 3.5rem;
+      line-height: 1.05;
+    }
+    .country-section :global(> .frame:first-child > h2:first-child)::before {
+      content: '';
+      display: block;
+      width: 3rem;
+      height: 4px;
+      margin-bottom: 1.25rem;
+      background: var(--country);
+    }
+    .is-sg {
+      --country: var(--color-sg);
+    }
+    .is-vn {
+      --country: var(--color-vn);
+    }
+
+    /* Dev-only overflow flag, set by the script above. */
+    .briefing :global(.frame[data-overflow]),
+    .opener-frame[data-overflow] {
+      position: relative;
+      outline: 2px dashed var(--color-risk-3);
+      outline-offset: -2px;
+    }
+    .briefing :global(.frame[data-overflow])::after,
+    .opener-frame[data-overflow]::after {
+      content: attr(data-overflow);
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      z-index: 5;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: var(--color-risk-4);
+      color: white;
+      font: 500 0.75rem/1.4 var(--font-sans);
+    }
+  }
+
   @media print {
     .country-section {
       break-before: page;

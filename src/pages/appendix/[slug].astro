@@ -1,7 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SourcesList from '../../components/story/SourcesList.astro';
 import { mdxComponents } from '../../components/mdx.js';
 
 export async function getStaticPaths() {
@@ -10,7 +9,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content, remarkPluginFrontmatter } = await render(entry);
+const { Content } = await render(entry);
 ---
 
 <BaseLayout title={entry.data.title}>
@@ -18,9 +17,6 @@ const { Content, remarkPluginFrontmatter } = await render(entry);
     <h1 class="text-5xl leading-tight">{entry.data.title}</h1>
     <div class="briefing-prose mt-10">
       <Content components={mdxComponents} />
-    </div>
-    <div class="mt-16 border-t border-rule pt-10">
-      <SourcesList keys={remarkPluginFrontmatter.citeKeys ?? []} />
     </div>
   </article>
 </BaseLayout>

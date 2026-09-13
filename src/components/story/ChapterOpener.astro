@@ -5,13 +5,13 @@ import HeroMedia from './HeroMedia.astro';
 import RatingChip from './RatingChip.astro';
 import { findCredit } from '../../lib/credits.js';
 
-const { topic, total } = Astro.props;
+const { topic, total, class: className } = Astro.props;
 const { hero } = topic;
 const media = hero.video ?? hero.image;
 const aiGenerated = media ? Boolean(findCredit(media)?.aiGenerated) : false;
 ---
 
-<section class="chapter-opener relative isolate flex min-h-[78svh] items-end overflow-hidden bg-night text-on-night">
+<section class:list={['chapter-opener relative isolate flex min-h-[78svh] items-end overflow-hidden bg-night text-on-night', className]}>
   <div class="absolute inset-0 -z-10">
     <HeroMedia image={hero.image} video={hero.video} alt={hero.alt} label={hero.label} eager />
   </div>

@@ -65,6 +65,15 @@ Replace `<Lorem paragraphs={2} />` placeholders with your writing as you go.
 
 While running `npm run dev`, a small badge shows each section's status in the briefing side menu.
 
+### One screen at a time
+
+On a laptop, a briefing reads like a slide deck: each piece of content fills one screen, and the arrow keys move between screens. The page splits your file into screens for you:
+
+- Every `##` or `###` heading starts a new screen, along with the text under it.
+- Every chart, map, timeline, callout, or hint list gets a screen of its own. If it sits directly under a heading, it shares that heading's screen.
+
+Aim for about 150–200 words per subsection so it fits. While running `npm run dev`, any screen taller than your browser window gets a dashed red outline and a label saying how much to cut. Check at your own laptop's window size.
+
 ## Citing sources (APA)
 
 1. Add the source to `src/references.bib`. The easiest way is Zotero: right-click an item, choose **Export Item…**, then **BibTeX**, and paste the entry. A hand-written entry looks like this:
@@ -88,7 +97,7 @@ While running `npm run dev`, a small badge shows each section's status in the br
    | `[@wb-wgi-2025, p. 12]` | (World Bank, 2025, p. 12) |
    | `[@wb-wgi-2025; @ti-cpi-2025]` | (World Bank, 2025; Transparency International, 2025) |
 
-Each page lists its sources at the bottom automatically, and the full reference list is at `/bibliography`.
+Citations show in the text as (Author, year). The full reference list is on the Sources page (`/bibliography`) and at the end of the paper; briefing pages don't repeat it.
 
 Entries with keys starting `sample-` are placeholders. Replace them with the exact report you cite.
 

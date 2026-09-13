@@ -24,16 +24,21 @@ const label = (d) => `${MONTHS[Number(d.slice(5)) - 1]} ${d.slice(0, 4)}`;
     <h3 class="font-display text-2xl text-ink">{title}</h3>
     {anySample && <SampleBadge />}
   </div>
-  <div class="mt-3 hidden grid-cols-[1fr_5.5rem_1fr] text-sm font-medium md:grid" aria-hidden="true">
+  <div class="mt-3 hidden grid-cols-[1fr_5.5rem_1fr] text-sm font-medium md:grid lg:hidden" aria-hidden="true">
     <span class="text-right text-ink">Singapore</span><span></span><span class="text-ink">Vietnam</span>
   </div>
-  <ol class="timeline relative mt-4">
+  <ul class="mt-3 hidden gap-5 text-sm text-ink-2 lg:flex" aria-label="Legend">
+    <li class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-sg" aria-hidden="true" />Singapore</li>
+    <li class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-vn" aria-hidden="true" />Vietnam</li>
+    <li class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-ink" aria-hidden="true" />Both countries</li>
+  </ul>
+  <ol class="timeline relative mt-4" style={`--cols:${events.length + 1}`}>
     {
-      events.map((e) => (
-        <li class:list={['tl-item', `is-${e.country.toLowerCase()}`]}>
+      events.map((e, i) => (
+        <li class:list={['tl-item', `is-${e.country.toLowerCase()}`, i % 2 ? 'is-below' : 'is-above']} style={`--col:${i + 1}`}>
           <time class="tl-date num" datetime={e.date}>{label(e.date)}</time>
           <div class="tl-card">
-            <p class="md:hidden text-xs text-muted">{e.country === 'SG' ? 'Singapore' : e.country === 'VN' ? 'Vietnam' : 'Both countries'}</p>
+            <p class="tl-country text-xs text-muted">{e.country === 'SG' ? 'Singapore' : e.country === 'VN' ? 'Vietnam' : 'Both countries'}</p>
             <p class="font-medium text-ink">{e.title}</p>
             <p class="mt-1 text-[0.95rem] text-ink-2">{e.detail}</p>
           </div>
@@ -44,6 +49,9 @@ const label = (d) => `${MONTHS[Number(d.slice(5)) - 1]} ${d.slice(0, 4)}`;
 </section>
 
 <style>
+  /* Phones: one lane down the left. Tablets: Singapore left, Vietnam right of a center axis.
+     Laptops and up: a horizontal axis with events alternating above and below, so the whole
+     timeline fits on one screen. */
   .timeline::before {
     content: '';
     position: absolute;
@@ -83,7 +91,10 @@ const label = (d) => `${MONTHS[Number(d.slice(5)) - 1]} ${d.slice(0, 4)}`;
     margin-top: 0.15rem;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 768px) and (max-width: 1023.98px) {
+    .tl-country {
+      display: none;
+    }
     .timeline::before {
       left: 50%;
     }
@@ -119,6 +130,70 @@ const label = (d) => `${MONTHS[Number(d.slice(5)) - 1]} ${d.slice(0, 4)}`;
       background: var(--color-paper);
       padding: 0.25rem 0.75rem;
       position: relative;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+      grid-template-rows: auto 2.5rem auto;
+    }
+    /* The axis: a grid item spanning the middle row. */
+    .timeline::before {
+      position: static;
+      grid-row: 2;
+      grid-column: 1 / -1;
+      align-self: center;
+      width: auto;
+      height: 1px;
+    }
+    .tl-item {
+      grid-column: var(--col) / span 2;
+      padding: 0 1rem 0 0;
+    }
+    .tl-item.is-above {
+      grid-row: 1;
+      align-self: end;
+      padding-bottom: 0.75rem;
+    }
+    .tl-item.is-below {
+      grid-row: 3;
+      align-self: start;
+      padding-top: 0.75rem;
+    }
+    .tl-item::before {
+      top: auto;
+      left: 0;
+    }
+    .tl-item.is-above::before {
+      bottom: -1.625rem;
+    }
+    .tl-item.is-below::before {
+      top: -1.625rem;
+    }
+    /* Tick from the text to its dot. */
+    .tl-item::after {
+      content: '';
+      position: absolute;
+      left: calc(0.375rem - 0.5px);
+      width: 1px;
+      height: 0.875rem;
+      background: var(--color-rule);
+    }
+    .tl-item.is-above::after {
+      bottom: -0.875rem;
+    }
+    .tl-item.is-below::after {
+      top: -0.875rem;
+    }
+    .tl-card {
+      margin-top: 0.1rem;
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+    .tl-card p:last-child {
+      font-size: 0.85rem;
     }
   }
 </style>
