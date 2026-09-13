@@ -1,0 +1,75 @@
+---
+// Full factor-by-factor scorecard with rationale and citations. Print version of ScoreTool.
+import { scorecard, balancedScores } from '../../lib/scorecard.js';
+import { formatInText } from '../../lib/bib.js';
+import { RISK_LABELS } from '../../lib/format.js';
+import SampleBadge from '../story/SampleBadge.astro';
+
+const { title = 'Scorecard detail' } = Astro.props;
+const scores = balancedScores();
+const cites = new Map();
+for (const p of scorecard.pillars) {
+  for (const f of p.factors) {
+    for (const c of ['SG', 'VN']) cites.set(`${f.id}-${c}`, await formatInText(f.ratings[c].cite ?? []));
+  }
+}
+---
+
+<section class="scorecard-table">
+  <div class="flex flex-wrap items-baseline justify-between gap-3">
+    <h2 class="font-display text-3xl text-ink">{title}</h2>
+    {scorecard.sample && <SampleBadge />}
+  </div>
+  <div class="mt-6 overflow-x-auto">
+    <table class="w-full min-w-[44rem] border-collapse text-left text-sm">
+      <thead>
+        <tr class="border-b border-ink text-muted">
+          <th scope="col" class="w-[22%] py-2 pr-4 font-normal">Factor</th>
+          <th scope="col" class="py-2 pr-4 font-normal"><span class="mr-1.5 inline-block size-2 rounded-full bg-sg"></span>Singapore</th>
+          <th scope="col" class="py-2 font-normal"><span class="mr-1.5 inline-block size-2 rounded-full bg-vn"></span>Vietnam</th>
+        </tr>
+      </thead>
+      {
+        scorecard.pillars.map((p) => (
+          <tbody>
+            <tr class="border-b border-rule bg-paper-2/60">
+              <th scope="rowgroup" class="py-2 pr-4 font-medium text-ink">{p.label}</th>
+              <td class="num py-2 pr-4 text-ink">Pillar average {scores.SG.pillars[p.id].toFixed(1)}</td>
+              <td class="num py-2 text-ink">Pillar average {scores.VN.pillars[p.id].toFixed(1)}</td>
+            </tr>
+            {p.factors.map((f) => (
+              <tr class="border-b border-rule align-top">
+                <th scope="row" class="py-3 pr-4 font-normal text-ink">{f.label}</th>
+                {(['SG', 'VN']).map((c) => (
+                  <td class:list={['py-3', c === 'SG' && 'pr-4']}>
+                    <span class:list={['num mr-2 inline-grid size-6 place-items-center rounded-full text-xs font-semibold', f.ratings[c].score >= 3 ? 'text-white' : 'text-ink']} style={`background: var(--color-risk-${f.ratings[c].score}); print-color-adjust: exact; -webkit-print-color-adjust: exact`}>
+                      {f.ratings[c].score}
+                    </span>
+                    <span class="font-medium text-ink">{RISK_LABELS[f.ratings[c].score]}.</span>{' '}
+                    <span class="text-ink-2">{f.ratings[c].rationale}</span>{' '}
+                    <span class="text-muted">{cites.get(`${f.id}-${c}`)}</span>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        ))
+      }
+      <tfoot>
+        <tr class="border-t-2 border-ink">
+          <th scope="row" class="py-3 pr-4 font-medium text-ink">Overall (balanced)</th>
+          <td class="num py-3 pr-4 font-medium text-ink">{scores.SG.overall.toFixed(2)}: {scores.SG.band.label}</td>
+          <td class="num py-3 font-medium text-ink">{scores.VN.overall.toFixed(2)}: {scores.VN.band.label}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</section>
+
+<style>
+  @media print {
+    .scorecard-table tr {
+      break-inside: avoid;
+    }
+  }
+</style>

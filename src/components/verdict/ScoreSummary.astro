@@ -1,0 +1,43 @@
+---
+// Headline overall scores (balanced weights) for both countries.
+import AnimatedNumber from '../ui/AnimatedNumber.jsx';
+import SampleBadge from '../story/SampleBadge.astro';
+import { scorecard, balancedScores } from '../../lib/scorecard.js';
+
+const scores = balancedScores();
+const countries = [
+  { code: 'SG', name: 'Singapore', border: 'border-sg', bg: 'bg-sg' },
+  { code: 'VN', name: 'Vietnam', border: 'border-vn', bg: 'bg-vn' },
+];
+---
+
+<div class="grid gap-10 md:grid-cols-2">
+  {
+    countries.map((c) => {
+      const s = scores[c.code];
+      const pct = ((s.overall - 1) / 4) * 100;
+      return (
+        <div class:list={['border-t-2 pt-5', c.border]}>
+          <p class="text-sm font-medium text-ink">{c.name}</p>
+          <p class="mt-3 flex items-baseline gap-3">
+            <span class="num text-6xl font-semibold tracking-tight text-ink md:text-7xl">
+              <span class="screen-only"><AnimatedNumber client:visible value={Number(s.overall.toFixed(2))} decimals={2} /></span>
+              <span class="print-only">{s.overall.toFixed(2)}</span>
+            </span>
+            <span class="text-muted">out of 5 risk</span>
+          </p>
+          <p class="mt-2 font-display text-2xl text-ink">{s.band.label}</p>
+          <p class="mt-1 text-ink-2">{s.band.summary}</p>
+          <div class="relative mt-5 h-2 rounded-full bg-paper-3" role="img" aria-label={`${s.overall.toFixed(2)} on a 1 to 5 risk scale`}>
+            <div class:list={['absolute inset-y-0 left-0 rounded-full', c.bg]} style={`width:${pct}%`} />
+          </div>
+          <div class="mt-1.5 flex justify-between text-xs text-muted"><span>1 very low</span><span>5 very high</span></div>
+        </div>
+      );
+    })
+  }
+</div>
+<p class="mt-6 flex flex-wrap items-center gap-3 text-sm text-muted">
+  Balanced weighting across government, society, security and economy.
+  {scorecard.sample && <SampleBadge />}
+</p>

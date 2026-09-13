@@ -13,7 +13,7 @@ const onNight = tone === 'dark';
   ]}
 >
   <span
-    class:list={['num grid place-items-center rounded-full font-semibold text-white', size === 'lg' ? 'size-8' : 'size-6 text-xs']}
+    class:list={['num grid place-items-center rounded-full font-semibold', score >= 3 ? 'text-white' : 'text-ink', size === 'lg' ? 'size-8' : 'size-6 text-xs']}
     style={`background: var(--color-risk-${score})`}
     aria-hidden="true">{score}</span
   >

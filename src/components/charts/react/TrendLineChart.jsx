@@ -1,4 +1,5 @@
 import { ResponsiveLine } from '@nivo/line';
+import { scaleLinear } from 'd3-scale';
 import { COLORS } from '../../../lib/tokens.js';
 import { formatValue } from '../../../lib/format.js';
 import { nivoTheme, COUNTRY_NAME } from './nivoTheme.js';
@@ -14,6 +15,9 @@ export default function TrendLineChart({ series, unit, height = 320 }) {
   const pad = (max - min) * 0.12 || 1;
   const yMin = isRank ? Math.max(1, Math.floor(min - pad)) : unit === 'percentile' ? Math.max(0, Math.floor(min - pad)) : Math.floor(min - pad);
   const yMax = unit === 'percentile' ? Math.min(100, Math.ceil(max + pad)) : Math.ceil(max + pad);
+  // Ranks start at #1, never #0.
+  let ticks = scaleLinear().domain([yMin, yMax]).ticks(5);
+  if (isRank) ticks = [1, ...ticks.filter((t) => t > 1)];
 
   const EndLabels = ({ series: computed }) => (
     <g>
@@ -42,12 +46,12 @@ export default function TrendLineChart({ series, unit, height = 320 }) {
         curve="monotoneX"
         lineWidth={2}
         pointSize={8}
-        pointColor={{ from: 'seriesColor' }}
+        pointColor={{ from: 'series.color' }}
         pointBorderWidth={2}
         pointBorderColor={COLORS.paper}
         enableGridX={false}
-        gridYValues={5}
-        axisLeft={{ tickValues: 5, tickSize: 0, tickPadding: 8, format: (v) => formatValue(v, unit) }}
+        gridYValues={ticks}
+        axisLeft={{ tickValues: ticks, tickSize: 0, tickPadding: 8, format: (v) => formatValue(v, unit) }}
         axisBottom={{ tickSize: 0, tickPadding: 10 }}
         enableSlices="x"
         sliceTooltip={({ slice }) => (

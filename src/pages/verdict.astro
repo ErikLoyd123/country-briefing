@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ScoreTool from '../components/verdict/ScoreTool.jsx';
+import ScorecardTable from '../components/verdict/ScorecardTable.astro';
+import RiskRadar from '../components/charts/RiskRadar.astro';
+import SampleBadge from '../components/story/SampleBadge.astro';
+import Lorem from '../components/story/Lorem.astro';
+import { scorecard } from '../lib/scorecard.js';
+---
+
+<BaseLayout title="Verdict" description="Go / no-go scorecard for Singapore and Vietnam, weighted by industry.">
+  <section class="container-wide pt-16 pb-10">
+    <p class="kicker text-muted">The verdict</p>
+    <h1 class="mt-2 max-w-3xl text-5xl leading-[1.05] md:text-6xl">Go or no-go, weighted for your industry</h1>
+    <div class="mt-6 max-w-2xl font-display text-xl leading-relaxed text-ink-2">
+      <p>
+        Each risk factor is rated from 1 (very low) to 5 (very high). Choose how much each area matters to your business and
+        the scores update. {scorecard.sample && 'The ratings below are placeholders until the team finishes its research.'}
+      </p>
+    </div>
+    {scorecard.sample && <SampleBadge class="mt-5" />}
+  </section>
+
+  <section class="screen-only border-y border-rule bg-paper-2/60">
+    <div class="container-wide py-12">
+      <ScoreTool client:load scorecard={scorecard} />
+    </div>
+  </section>
+
+  <section class="container-wide grid gap-10 pt-16 lg:grid-cols-2">
+    <RiskRadar />
+    <div class="self-center font-display text-xl leading-relaxed text-ink-2">
+      <h2 class="text-3xl text-ink">Our recommendation</h2>
+      <div class="mt-4 space-y-4"><Lorem paragraphs={2} seed={321} /></div>
+    </div>
+  </section>
+
+  <section class="container-wide pt-12">
+    <ScorecardTable />
+  </section>
+</BaseLayout>
+
+<style is:global>
+  .score-range {
+    appearance: none;
+    height: 1.25rem;
+    background: transparent;
+    cursor: pointer;
+  }
+  .score-range::-webkit-slider-runnable-track {
+    height: 2px;
+    background: var(--color-rule);
+  }
+  .score-range::-moz-range-track {
+    height: 2px;
+    background: var(--color-rule);
+  }
+  .score-range::-webkit-slider-thumb {
+    appearance: none;
+    margin-top: -8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--color-ink);
+    border: 3px solid var(--color-paper);
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+  .score-range::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    background: var(--color-ink);
+    border: 3px solid var(--color-paper);
+  }
+</style>

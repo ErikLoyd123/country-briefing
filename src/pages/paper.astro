@@ -1,0 +1,158 @@
+---
+// The whole chapter as one printable document. `npm run pdf` saves this page as a PDF.
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RatingChip from '../components/story/RatingChip.astro';
+import ScorecardTable from '../components/verdict/ScorecardTable.astro';
+import { mdxComponents } from '../components/mdx.js';
+import { getTopics } from '../lib/topics.js';
+import { getIndicator } from '../lib/data.js';
+import { scorecardCiteKeys } from '../lib/scorecard.js';
+import { formatBibliography } from '../lib/bib.js';
+import { FileDown } from '@lucide/astro';
+
+const topics = await getTopics();
+const [summaryEntry] = await getCollection('paper', (e) => e.id === 'executive-summary');
+if (!summaryEntry) throw new Error('src/content/paper/executive-summary.mdx is missing');
+const summary = await render(summaryEntry);
+const appendices = (await getCollection('appendices')).sort((a, b) => a.data.order - b.data.order);
+const renderedAppendices = await Promise.all(appendices.map(async (a) => ({ entry: a, rendered: await render(a) })));
+
+const renderedTopics = await Promise.all(
+  topics.map(async (t) => {
+    const parts = await Promise.all(['index', 'singapore', 'vietnam'].map((p) => render(t.parts[p])));
+    return { topic: t, parts };
+  }),
+);
+
+const allKeys = [
+  ...(summary.remarkPluginFrontmatter.citeKeys ?? []),
+  ...renderedTopics.flatMap(({ topic, parts }) => [...parts.flatMap((p) => p.remarkPluginFrontmatter.citeKeys ?? []), ...topic.keyStats.map((id) => getIndicator(id).sourceKey)]),
+  ...renderedAppendices.flatMap((a) => a.rendered.remarkPluginFrontmatter.citeKeys ?? []),
+  ...scorecardCiteKeys(),
+];
+const references = await formatBibliography([...new Set(allKeys)]);
+const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout title="Paper" description="The full Politics and Risk chapter as a printable paper.">
+  <div class="paper mx-auto max-w-[52rem] px-[clamp(1rem,4vw,2rem)] py-12">
+    <aside class="screen-only mb-12 flex flex-wrap items-center gap-4 rounded-md border border-rule bg-paper-2 p-5 text-sm text-ink-2">
+      <FileDown size={20} aria-hidden="true" />
+      <p class="flex-1">
+        This is the paper version of the site. To make a PDF, run <code class="rounded bg-paper px-1.5 py-0.5 text-ink">npm run pdf</code>, or use your browser's print dialog and choose Save as PDF.
+      </p>
+    </aside>
+
+    <header class="cover">
+      <p class="text-sm text-muted">EMBA country briefing</p>
+      <h1 class="mt-4 font-display text-5xl leading-[1.05] text-ink md:text-6xl">Doing Business in Singapore and Vietnam: Politics and Risk</h1>
+      <p class="mt-6 font-display text-xl text-ink-2">Team member names · Course name and number · Instructor names</p>
+      <p class="mt-2 text-ink-2">{today}</p>
+    </header>
+
+    <nav class="toc mt-16" aria-labelledby="toc-heading">
+      <h2 id="toc-heading" class="font-display text-3xl text-ink">Contents</h2>
+      <ol class="mt-6 space-y-2 text-ink">
+        <li><a href="#executive-summary" class="hover:underline">Executive summary</a></li>
+        {topics.map((t) => <li><a href={`#${t.slug}`} class="hover:underline">{t.order}. {t.title}</a></li>)}
+        <li><a href="#scorecard" class="hover:underline">Go / no-go scorecard</a></li>
+        {appendices.map((a) => <li><a href={`#${a.id}`} class="hover:underline">{a.data.title}</a></li>)}
+        <li><a href="#references" class="hover:underline">References</a></li>
+      </ol>
+    </nav>
+
+    <section id="executive-summary" class="paper-section briefing-prose">
+      <h2>{summaryEntry.data.title}</h2>
+      <summary.Content components={mdxComponents} />
+    </section>
+
+    {
+      renderedTopics.map(({ topic, parts: [overview, sg, vn] }) => (
+        <section id={topic.slug} class="paper-section">
+          <p class="text-sm text-muted">Briefing {topic.order}</p>
+          <h2 class="mt-1 font-display text-4xl leading-tight text-ink">{topic.title}</h2>
+          <p class="mt-3 font-display text-xl text-ink-2">{topic.thesis}</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <RatingChip country="SG" score={topic.ratings.SG} />
+            <RatingChip country="VN" score={topic.ratings.VN} />
+          </div>
+          <div class="briefing-prose mt-8">
+            <overview.Content components={mdxComponents} />
+          </div>
+          <div class="briefing-prose mt-10">
+            <sg.Content components={mdxComponents} />
+          </div>
+          <div class="briefing-prose mt-10">
+            <vn.Content components={mdxComponents} />
+          </div>
+        </section>
+      ))
+    }
+
+    <section id="scorecard" class="paper-section">
+      <ScorecardTable title="Go / no-go scorecard" />
+    </section>
+
+    {
+      renderedAppendices.map(({ entry, rendered }) => (
+        <section id={entry.id} class="paper-section briefing-prose">
+          <h2>{entry.data.title}</h2>
+          <rendered.Content components={mdxComponents} />
+        </section>
+      ))
+    }
+
+    <section id="references" class="paper-section">
+      <h2 class="font-display text-4xl text-ink">References</h2>
+      <div class="mt-6 text-ink-2" set:html={references} />
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .paper-section {
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--color-rule);
+  }
+  @media print {
+    @page {
+      size: letter;
+      margin: 1in;
+    }
+    .paper {
+      max-width: none;
+      padding: 0;
+    }
+    .cover {
+      min-height: 7in;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .toc {
+      break-before: page;
+    }
+    .paper-section {
+      break-before: page;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+    .paper :global(.briefing-prose) {
+      font-size: 11pt;
+      line-height: 1.55;
+    }
+    .paper :global(.briefing-prose h2) {
+      font-size: 18pt;
+    }
+    .paper :global(.briefing-prose h3) {
+      font-size: 13pt;
+    }
+    .paper :global(a) {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+</style>

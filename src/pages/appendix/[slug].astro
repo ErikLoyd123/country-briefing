@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SourcesList from '../../components/story/SourcesList.astro';
+import { mdxComponents } from '../../components/mdx.js';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('appendices');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title}>
+  <article class="container-text py-16">
+    <p class="kicker text-muted">Appendix</p>
+    <h1 class="mt-2 text-5xl leading-tight">{entry.data.title}</h1>
+    <div class="briefing-prose mt-10">
+      <Content components={mdxComponents} />
+    </div>
+    <div class="mt-16 border-t border-rule pt-10">
+      <SourcesList keys={remarkPluginFrontmatter.citeKeys ?? []} />
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Deck from '../components/present/Deck.jsx';
+import deckRaw from '../data/deck.yaml?raw';
+import timelineRaw from '../data/timeline.yaml?raw';
+import { loadYaml } from '../lib/yaml.js';
+import { getSeries, getLatest } from '../lib/data.js';
+import { scorecard, balancedScores } from '../lib/scorecard.js';
+import { buildRegionMap } from '../lib/regionMap.js';
+import { formatInText } from '../lib/bib.js';
+import { UNIT_LABEL } from '../lib/format.js';
+
+const deck = loadYaml(deckRaw, 'src/data/deck.yaml');
+const scores = balancedScores();
+
+// Resolve data references in deck.yaml into plain props for each scene.
+const resolvers = {
+  async StatDuel(p) {
+    const l = getLatest(p.indicator);
+    return { ...p, label: l.meta.label, unit: l.meta.unit, higherIsBetter: l.meta.higherIsBetter, SG: l.SG, VN: l.VN, sample: l.sample, source: `Source: ${await formatInText([l.meta.sourceKey])}` };
+  },
+  async ChartScene(p) {
+    const s = getSeries(p.indicator);
+    const series = ['SG', 'VN'].map((c) => ({ id: c, data: s.rows.filter((r) => r.country === c).map((r) => ({ x: r.year, y: r.value })) }));
+    return { ...p, title: p.title ?? s.meta.label, subtitle: `${s.meta.label}, ${UNIT_LABEL[s.meta.unit]}`, series, unit: s.meta.unit, sample: s.sample, source: `Source: ${await formatInText([s.meta.sourceKey])}` };
+  },
+  MapScene: (p) => ({ ...p, map: buildRegionMap() }),
+  TimelineScene: (p) => ({ ...p, events: loadYaml(timelineRaw, 'src/data/timeline.yaml').slice(-8) }),
+  ScorecardScene: (p) => ({
+    ...p,
+    sample: scorecard.sample,
+    rows: scorecard.pillars.map((pl) => ({ pillar: pl.label, SG: scores.SG.pillars[pl.id], VN: scores.VN.pillars[pl.id] })),
+  }),
+  Verdict: (p) => ({ ...p, scores, sample: scorecard.sample }),
+};
+
+const KNOWN = ['Title', 'BigQuestion', 'StatDuel', 'ChartScene', 'MapScene', 'TimelineScene', 'ScorecardScene', 'Verdict', 'ImageScene', 'Quote'];
+const scenes = await Promise.all(
+  deck.map(async (s, i) => {
+    if (!KNOWN.includes(s.scene)) throw new Error(`deck.yaml scene ${i + 1} ("${s.id}"): unknown scene type "${s.scene}". Use one of ${KNOWN.join(', ')}.`);
+    const props = resolvers[s.scene] ? await resolvers[s.scene](s.props ?? {}) : (s.props ?? {});
+    return { id: s.id ?? `scene-${i + 1}`, scene: s.scene, presenter: s.presenter ?? '', notes: s.notes ?? '', props };
+  }),
+);
+---
+
+<BaseLayout title="Present" chrome={false} bodyClass="overflow-hidden bg-[#05090c]">
+  <Deck client:load scenes={scenes} />
+  <noscript><p class="p-8 text-on-night">Presenter mode needs JavaScript. Use the briefing pages instead.</p></noscript>
+</BaseLayout>
+
+<style is:global>
+  .stage {
+    width: min(100vw, 177.78vh);
+    height: min(100vh, 56.25vw);
+    container-type: inline-size;
+  }
+  .scene {
+    animation: scene-in 420ms ease-out both;
+  }
+  @keyframes scene-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.6cqw);
+    }
+  }
+  .scene-dark {
+    background: radial-gradient(120% 90% at 20% 10%, var(--color-night-2), var(--color-night));
+    color: var(--color-on-night);
+  }
+  .scene-light {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .placeholder-stage {
+    background: repeating-linear-gradient(135deg, transparent 0 18px, rgb(255 255 255 / 0.03) 18px 19px), radial-gradient(120% 90% at 30% 20%, #1d2e3a, var(--color-night));
+  }
+  .deck .lane {
+    animation: sail 2.2s linear infinite;
+  }
+  @keyframes sail {
+    to {
+      stroke-dashoffset: -22;
+    }
+  }
+</style>

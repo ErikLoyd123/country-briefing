@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Lorem from '../components/story/Lorem.astro';
+import { scorecard } from '../lib/scorecard.js';
+import { credits } from '../lib/credits.js';
+
+const appendices = (await getCollection('appendices')).sort((a, b) => a.data.order - b.data.order);
+const team = ['Team member 1', 'Team member 2', 'Team member 3', 'Team member 4'];
+---
+
+<BaseLayout title="About" description="Team, methodology, and media credits for the briefing.">
+  <div class="container-text py-16">
+    <h1 class="text-5xl">About this briefing</h1>
+    <div class="briefing-prose mt-8">
+      <Lorem paragraphs={1} seed={600} />
+    </div>
+
+    <section class="mt-16">
+      <h2 class="font-display text-3xl">Team</h2>
+      <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+        {team.map((name) => <li class="rounded-md border border-rule px-4 py-3 text-ink">{name}<span class="block text-sm text-muted">Briefing areas owned</span></li>)}
+      </ul>
+    </section>
+
+    <section id="methodology" class="mt-16 scroll-mt-20">
+      <h2 class="font-display text-3xl">How the scorecard works</h2>
+      <div class="briefing-prose mt-5">
+        <p>
+          The team rates each risk factor from 1 (very low risk) to 5 (very high risk), with a short rationale and a citation. Factors are grouped
+          into the four areas from the assignment brief: government, society, security and economy.
+        </p>
+        <ul>
+          <li><strong>Area score</strong> is the average of its factor ratings.</li>
+          <li><strong>Overall score</strong> is the weighted average of the four area scores. Each area's weight (0 to 5) reflects how much it matters to a given industry.</li>
+          <li><strong>Verdict</strong> is the first band the overall score falls into.</li>
+        </ul>
+      </div>
+      <div class="mt-6 grid gap-8 sm:grid-cols-2">
+        <table class="w-full text-sm">
+          <caption class="mb-2 text-left font-medium text-ink">Verdict bands</caption>
+          <tbody>
+            {scorecard.bands.map((b, i) => (
+              <tr class="border-b border-rule">
+                <td class="num py-2 pr-4 text-muted">{i === 0 ? '1.00' : (scorecard.bands[i - 1].max + 0.01).toFixed(2)} to {b.max.toFixed(2)}</td>
+                <th scope="row" class="py-2 text-left font-normal text-ink">{b.label}</th>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <table class="w-full text-sm">
+          <caption class="mb-2 text-left font-medium text-ink">Industry weights (government, society, security, economy)</caption>
+          <tbody>
+            {scorecard.presets.map((p) => (
+              <tr class="border-b border-rule">
+                <th scope="row" class="py-2 pr-4 text-left font-normal text-ink">{p.label}</th>
+                <td class="num py-2 text-right text-muted">{['government', 'society', 'security', 'economy'].map((k) => p.weights[k]).join(' · ')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-16">
+      <h2 class="font-display text-3xl">Draft data notice</h2>
+      <p class="mt-4 text-ink-2">
+        Anything marked <span class="font-medium text-sample">Sample data</span> uses invented placeholder values for layout. Placeholder text is Lorem Ipsum.
+        Both must be replaced with researched, cited content before submission.
+      </p>
+    </section>
+
+    {
+      appendices.length > 0 && (
+        <section class="mt-16">
+          <h2 class="font-display text-3xl">Appendices</h2>
+          <ul class="mt-4 space-y-2">
+            {appendices.map((a) => <li><a class="text-ink underline decoration-rule underline-offset-4 hover:decoration-ink" href={`/appendix/${a.id}`}>{a.data.title}</a></li>)}
+          </ul>
+        </section>
+      )
+    }
+
+    <section id="credits" class="mt-16 scroll-mt-20">
+      <h2 class="font-display text-3xl">Photo and video credits</h2>
+      {
+        credits.length === 0 ? (
+          <p class="mt-4 text-ink-2">No photos or video yet. Every image added to the site needs an entry in <code>credits.yaml</code>; AI-generated images are labeled as illustrative.</p>
+        ) : (
+          <table class="mt-5 w-full text-sm">
+            <thead>
+              <tr class="border-b border-ink text-left text-muted">
+                <th class="py-2 font-normal">File</th><th class="py-2 font-normal">Credit</th><th class="py-2 font-normal">License</th>
+              </tr>
+            </thead>
+            <tbody>
+              {credits.map((c) => (
+                <tr class="border-b border-rule">
+                  <td class="py-2 pr-4 text-ink">{c.file}</td>
+                  <td class="py-2 pr-4 text-ink-2">{c.aiGenerated ? 'Illustrative (AI-generated), ' : ''}{c.author ?? ''} {c.url ? <a href={c.url} class="underline">{c.source}</a> : c.source}</td>
+                  <td class="py-2 text-muted">{c.license}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+      }
+      <p class="mt-6 text-sm text-muted">Map boundaries from Natural Earth via the world-atlas package. Shipping routes are illustrative.</p>
+    </section>
+  </div>
+</BaseLayout>

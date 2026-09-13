@@ -9,15 +9,15 @@ const Icon = isVideo ? Clapperboard : Camera;
 
 <div
   class:list={[
-    'placeholder-media relative flex items-end overflow-hidden',
-    fill ? 'absolute inset-0' : 'aspect-[16/9] w-full rounded-md',
+    'placeholder-media flex overflow-hidden',
+    fill ? 'absolute inset-0 items-start justify-end' : 'relative aspect-[16/9] w-full items-end rounded-md',
     tone === 'dark' ? 'is-dark text-on-night-muted' : 'text-muted',
     className,
   ]}
   role="img"
   aria-label={`Placeholder: ${label}`}
 >
-  <div class="relative flex items-center gap-2 p-4 text-sm">
+  <div class:list={['relative flex items-center gap-2 p-4 text-sm', fill && 'mt-16 mr-2 max-w-md text-right']}>
     <Icon size={16} aria-hidden="true" />
     <span>{label}</span>
   </div>

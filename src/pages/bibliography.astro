@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatBibliography, bibKeys } from '../lib/bib.js';
+
+const html = await formatBibliography('*');
+const count = bibKeys().size;
+---
+
+<BaseLayout title="Sources" description="Every source used in the briefing, in APA style.">
+  <div class="container-text py-16">
+    <p class="kicker text-muted">Sources</p>
+    <h1 class="mt-2 text-5xl">References</h1>
+    <p class="mt-4 text-ink-2">
+      All {count} entries in the shared bibliography, formatted in APA 7th edition. Entries marked "sample entry" are placeholders to replace with the exact report cited.
+    </p>
+    <div class="mt-10 text-ink-2" set:html={html} />
+  </div>
+</BaseLayout>

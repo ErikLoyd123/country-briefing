@@ -1,7 +1,131 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PlaceholderMedia from '../components/story/PlaceholderMedia.astro';
+import RatingChip from '../components/story/RatingChip.astro';
+import Lorem from '../components/story/Lorem.astro';
+import RegionMap from '../components/maps/RegionMap.astro';
+import ScoreSummary from '../components/verdict/ScoreSummary.astro';
+import { getTopics } from '../lib/topics.js';
+import { SlidersHorizontal, Presentation, FileText } from '@lucide/astro';
+
+const topics = await getTopics();
 ---
 
 <BaseLayout title="Overview">
-  <div class="container-wide py-20"><h1 class="text-5xl">Politics &amp; Risk</h1></div>
+  <!-- Split hero: the one bold moment. -->
+  <section data-hero class="relative isolate grid min-h-[calc(100svh-3.5rem)] grid-rows-[1fr_auto] overflow-hidden bg-night text-on-night">
+    <div class="grid grid-cols-1 md:grid-cols-2">
+      <div class="relative flex min-h-[40svh] items-end overflow-hidden">
+        <PlaceholderMedia label="PHOTO: Marina Bay and the CBD skyline at blue hour" tone="dark" fill />
+        <div class="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-transparent" aria-hidden="true"></div>
+        <div class="absolute inset-0 bg-sg/15 mix-blend-color" aria-hidden="true"></div>
+        <p data-hero-name="sg" class="relative px-[clamp(1rem,4vw,2.5rem)] pb-8 font-display text-mega" aria-hidden="true">Singapore</p>
+      </div>
+      <div class="relative flex min-h-[40svh] items-end overflow-hidden md:justify-end">
+        <PlaceholderMedia label="VIDEO LOOP: motorbike traffic on a Ho Chi Minh City boulevard at dusk" tone="dark" fill />
+        <div class="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-transparent" aria-hidden="true"></div>
+        <div class="absolute inset-0 bg-vn/15 mix-blend-color" aria-hidden="true"></div>
+        <p data-hero-name="vn" class="relative px-[clamp(1rem,4vw,2.5rem)] pb-8 font-display text-mega md:text-right" aria-hidden="true">Vietnam</p>
+      </div>
+    </div>
+    <div data-hero-seam class="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px bg-on-night/35 md:block" aria-hidden="true"></div>
+
+    <div data-hero-line class="container-wide relative grid gap-6 border-t border-white/10 py-8 md:grid-cols-[1fr_auto] md:items-end">
+      <div>
+        <h1 class="font-display text-2xl leading-snug md:text-3xl">
+          <span class="sr-only">Singapore and Vietnam: </span>Politics and risk for a go or no-go decision
+        </h1>
+        <p class="mt-2 max-w-2xl text-on-night-muted">A briefing for executives weighing investment in either market: government, society, security, and the economy.</p>
+      </div>
+      <a href="#question" class="inline-flex items-center gap-2 self-start rounded-full border border-white/25 px-5 py-2.5 text-sm hover:bg-white/10 md:self-end">Start the briefing</a>
+    </div>
+  </section>
+
+  <!-- The question -->
+  <section id="question" class="container-wide grid gap-10 py-24 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] md:py-32">
+    <h2 class="text-4xl leading-tight md:text-5xl">What would a company need to know before committing?</h2>
+    <div class="font-display text-xl leading-relaxed text-ink-2">
+      <Lorem paragraphs={2} seed={77} />
+    </div>
+  </section>
+
+  <!-- Headline scores -->
+  <section class="border-y border-rule bg-paper-2/60">
+    <div class="container-wide py-20">
+      <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <h2 class="text-4xl">Overall risk today</h2>
+        <a href="/verdict" class="inline-flex items-center gap-2 text-sm text-ink underline decoration-rule underline-offset-4 hover:decoration-ink">
+          <SlidersHorizontal size={16} aria-hidden="true" /> Adjust the weights for your industry
+        </a>
+      </div>
+      <ScoreSummary />
+    </div>
+  </section>
+
+  <!-- Topic strip (pinned + scrubbed on wide screens) -->
+  <section data-pin-strip class="overflow-hidden py-20 lg:flex lg:h-svh lg:flex-col lg:justify-center lg:py-0">
+    <div class="container-wide mb-10 flex flex-wrap items-end justify-between gap-4">
+      <h2 class="text-4xl">Seven briefings</h2>
+      <p class="max-w-md text-ink-2">Each compares Singapore and Vietnam on one area of risk and ends with what it means for foreign investment.</p>
+    </div>
+    <ol data-pin-track class="container-wide grid gap-5 sm:grid-cols-2 lg:flex lg:w-max lg:max-w-none lg:gap-6 lg:pr-[20vw]">
+      {
+        topics.map((t) => (
+          <li class="lg:w-[26rem]">
+            <a href={`/briefing/${t.slug}`} class="group flex h-full flex-col overflow-hidden rounded-lg border border-rule bg-paper hover:border-ink">
+              <div class="relative aspect-[16/10]">
+                <PlaceholderMedia label={t.hero.label} fill />
+              </div>
+              <div class="flex flex-1 flex-col p-6">
+                <p class="text-sm text-muted">Briefing {t.order}</p>
+                <h3 class="mt-1 text-2xl leading-tight text-ink group-hover:underline group-hover:decoration-rule group-hover:underline-offset-4">{t.title}</h3>
+                <p class="mt-3 flex-1 text-ink-2">{t.thesis}</p>
+                <div class="mt-5 flex flex-wrap gap-2">
+                  <RatingChip country="SG" score={t.ratings.SG} />
+                  <RatingChip country="VN" score={t.ratings.VN} />
+                </div>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Geography -->
+  <section class="bg-night text-on-night">
+    <div class="container-wide grid items-center gap-12 py-24 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+      <div>
+        <h2 class="text-4xl leading-tight md:text-5xl">On the main artery of Asian trade</h2>
+        <div class="mt-6 text-lg leading-relaxed text-on-night-muted">
+          <Lorem paragraphs={1} seed={88} />
+        </div>
+        <a href="/briefing/trade-investment" class="mt-8 inline-block rounded-full border border-white/25 px-5 py-2.5 text-sm hover:bg-white/10">Read the trade briefing</a>
+      </div>
+      <RegionMap compact tone="dark" />
+    </div>
+  </section>
+
+  <!-- Ways to use it -->
+  <section class="container-wide grid gap-6 py-24 md:grid-cols-3">
+    <a href="/verdict" class="rounded-lg border border-rule p-7 hover:border-ink">
+      <SlidersHorizontal size={22} aria-hidden="true" />
+      <h3 class="mt-4 text-2xl">Run the scorecard</h3>
+      <p class="mt-2 text-ink-2">Weight the four risk areas for your industry and see how each country scores.</p>
+    </a>
+    <a href="/present" class="rounded-lg border border-rule p-7 hover:border-ink">
+      <Presentation size={22} aria-hidden="true" />
+      <h3 class="mt-4 text-2xl">Present the briefing</h3>
+      <p class="mt-2 text-ink-2">Full-screen slides built from the same data. Use the arrow keys to move through them.</p>
+    </a>
+    <a href="/paper" class="rounded-lg border border-rule p-7 hover:border-ink">
+      <FileText size={22} aria-hidden="true" />
+      <h3 class="mt-4 text-2xl">Read the paper</h3>
+      <p class="mt-2 text-ink-2">Every briefing in one printable document with APA citations and references.</p>
+    </a>
+  </section>
 </BaseLayout>
+
+<script>
+  import '../scripts/motion.js';
+</script>
