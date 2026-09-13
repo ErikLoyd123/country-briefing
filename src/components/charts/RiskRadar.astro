@@ -1,0 +1,16 @@
+---
+// <RiskRadar />  Pillar risk scores (balanced weights) from scorecard.yaml.
+import ChartFrame from './ChartFrame.astro';
+import DataTable from './DataTable.astro';
+import RiskRadarChart from './react/RiskRadarChart.jsx';
+import { scorecard, balancedScores, scorecardCiteKeys } from '../../lib/scorecard.js';
+
+const { title = 'Risk profile by pillar', subtitle = 'Average factor rating per pillar, 1 (very low risk) to 5 (very high risk).' } = Astro.props;
+const scores = balancedScores();
+const rows = scorecard.pillars.map((p) => ({ pillar: p.label, SG: Number(scores.SG.pillars[p.id].toFixed(2)), VN: Number(scores.VN.pillars[p.id].toFixed(2)) }));
+---
+
+<ChartFrame title={title} subtitle={subtitle} sourceKeys={scorecardCiteKeys()} sample={scorecard.sample} note="Ratings are the team's assessment.">
+  <RiskRadarChart client:visible rows={rows} />
+  <DataTable slot="table" columns={['Pillar', 'Singapore', 'Vietnam']} rows={rows.map((r) => [r.pillar, r.SG.toFixed(1), r.VN.toFixed(1)])} />
+</ChartFrame>

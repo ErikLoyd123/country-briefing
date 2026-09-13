@@ -1,0 +1,34 @@
+---
+// Practical know-before-you-go tips.
+// items: [{ title, body, country: 'SG' | 'VN' | 'both', icon: lucide-name }]
+import Icon from '../ui/Icon.astro';
+
+const { items = [], title = 'Know before you go' } = Astro.props;
+const who = { SG: 'Singapore', VN: 'Vietnam', both: 'Both countries' };
+---
+
+<section class="not-prose my-12">
+  <h3 class="font-display text-2xl text-ink">{title}</h3>
+  <ul class="mt-5 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      items.map((h) => (
+        <li class:list={['hint border-t-2 pt-4', h.country === 'SG' ? 'border-sg' : h.country === 'VN' ? 'border-vn' : 'border-ink']}>
+          <p class="flex items-center gap-2 text-xs text-muted">
+            {h.icon && <Icon name={h.icon} size={15} />}
+            {who[h.country ?? 'both']}
+          </p>
+          <p class="mt-2 font-medium text-ink">{h.title}</p>
+          <p class="mt-1 text-[0.95rem] leading-relaxed text-ink-2">{h.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  @media print {
+    .hint {
+      break-inside: avoid;
+    }
+  }
+</style>

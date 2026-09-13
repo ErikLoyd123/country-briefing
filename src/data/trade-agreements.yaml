@@ -1,0 +1,9 @@
+# Trade agreements relevant to each country. members: which of SG / VN are party to it.
+# Names are real agreements; status, years and notes are placeholders to be verified and cited.
+- { id: asean, name: ASEAN Economic Community, members: [SG, VN], type: regional, note: Lorem ipsum placeholder note., sample: true }
+- { id: rcep, name: Regional Comprehensive Economic Partnership (RCEP), members: [SG, VN], type: mega-regional, note: Lorem ipsum placeholder note., sample: true }
+- { id: cptpp, name: Comprehensive and Progressive Agreement for Trans-Pacific Partnership (CPTPP), members: [SG, VN], type: mega-regional, note: Lorem ipsum placeholder note., sample: true }
+- { id: evfta, name: EU–Vietnam Free Trade Agreement (EVFTA), members: [VN], type: bilateral, note: Lorem ipsum placeholder note., sample: true }
+- { id: eusfta, name: EU–Singapore Free Trade Agreement (EUSFTA), members: [SG], type: bilateral, note: Lorem ipsum placeholder note., sample: true }
+- { id: ussfta, name: US–Singapore Free Trade Agreement, members: [SG], type: bilateral, note: Lorem ipsum placeholder note., sample: true }
+- { id: depa, name: Digital Economy Partnership Agreement (DEPA), members: [SG], type: digital, note: Lorem ipsum placeholder note., sample: true }

@@ -1,0 +1,79 @@
+---
+import { ChevronDown, Menu } from '@lucide/astro';
+import { getTopics } from '../../lib/topics.js';
+
+const topics = await getTopics();
+const path = Astro.url.pathname;
+const links = [
+  { href: '/verdict', label: 'Verdict' },
+  { href: '/present', label: 'Present' },
+  { href: '/paper', label: 'Paper' },
+  { href: '/bibliography', label: 'Sources' },
+  { href: '/about', label: 'About' },
+];
+const isActive = (href) => path === href || path.startsWith(href + '/');
+---
+
+<header class="screen-only sticky top-0 z-40 border-b border-rule bg-paper/92 backdrop-blur supports-[backdrop-filter]:bg-paper/80">
+  <div class="container-wide flex h-14 items-center justify-between gap-6">
+    <a href="/" class="group flex items-baseline gap-2 whitespace-nowrap">
+      <span class="flex h-3 w-6 overflow-hidden rounded-[2px] self-center" aria-hidden="true">
+        <span class="w-1/2 bg-sg"></span><span class="w-1/2 bg-vn"></span>
+      </span>
+      <span class="font-display text-lg leading-none text-ink">Politics &amp; Risk</span>
+      <span class="hidden text-sm text-muted sm:inline">Singapore and Vietnam</span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden items-center gap-1 text-sm md:flex">
+      <details class="nav-menu relative">
+        <summary class:list={['flex cursor-pointer list-none items-center gap-1 rounded px-3 py-2 hover:bg-paper-2', path.startsWith('/briefing') && 'text-ink font-medium']}>
+          Briefings <ChevronDown size={14} aria-hidden="true" />
+        </summary>
+        <ol class="absolute left-0 mt-2 w-80 rounded-md border border-rule bg-paper p-2 shadow-[0_12px_32px_-12px_rgb(14_26_34/0.25)]">
+          {topics.map((t) => (
+            <li>
+              <a href={`/briefing/${t.slug}`} class="flex gap-3 rounded px-3 py-2 hover:bg-paper-2">
+                <span class="num w-4 text-muted">{t.order}</span>
+                <span class="text-ink">{t.title}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </details>
+      {links.map((l) => (
+        <a href={l.href} class:list={['rounded px-3 py-2 hover:bg-paper-2', isActive(l.href) ? 'text-ink font-medium' : 'text-ink-2']} aria-current={isActive(l.href) ? 'page' : undefined}>
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    <details class="nav-menu relative md:hidden">
+      <summary class="flex cursor-pointer list-none items-center rounded p-2 hover:bg-paper-2" aria-label="Open menu">
+        <Menu size={20} aria-hidden="true" />
+      </summary>
+      <div class="absolute right-0 mt-2 w-72 rounded-md border border-rule bg-paper p-2 shadow-lg">
+        <p class="px-3 pt-2 pb-1 text-xs text-muted">Briefings</p>
+        {topics.map((t) => <a href={`/briefing/${t.slug}`} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{t.order}. {t.title}</a>)}
+        <hr class="my-2 border-rule" />
+        {links.map((l) => <a href={l.href} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{l.label}</a>)}
+      </div>
+    </details>
+  </div>
+</header>
+
+<script>
+  // Close open menus when clicking elsewhere or pressing Escape.
+  const menus = [...document.querySelectorAll('details.nav-menu')];
+  document.addEventListener('click', (e) => {
+    for (const m of menus) if (!m.contains(e.target)) m.open = false;
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') for (const m of menus) m.open = false;
+  });
+</script>
+
+<style>
+  summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

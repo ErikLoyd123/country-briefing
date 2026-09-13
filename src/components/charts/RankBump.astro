@@ -1,0 +1,12 @@
+---
+// <RankBump indicator="cpi_rank" />  Global rank over time, #1 at the top.
+import TrendLine from './TrendLine.astro';
+import { getIndicator } from '../../lib/data.js';
+
+const { indicator, title, subtitle } = Astro.props;
+if (getIndicator(indicator).unit !== 'rank') {
+  throw new Error(`RankBump: indicator "${indicator}" must have unit "rank". Use <TrendLine> for other units.`);
+}
+---
+
+<TrendLine indicator={indicator} title={title} subtitle={subtitle} />

@@ -1,0 +1,15 @@
+---
+import { formatBibliography } from '../../lib/bib.js';
+
+const { keys = [], title = 'Sources on this page' } = Astro.props;
+const html = await formatBibliography([...new Set(keys)]);
+---
+
+{
+  html && (
+    <section class="sources" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-display text-2xl text-ink">{title}</h2>
+      <div class="mt-5 text-[0.95rem] text-ink-2" set:html={html} />
+    </section>
+  )
+}

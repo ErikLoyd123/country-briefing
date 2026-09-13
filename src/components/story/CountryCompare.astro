@@ -1,0 +1,19 @@
+---
+// Side-by-side Singapore / Vietnam block for short comparisons inside MDX:
+// <CountryCompare><Fragment slot="sg">…</Fragment><Fragment slot="vn">…</Fragment></CountryCompare>
+const { title } = Astro.props;
+---
+
+<section class="not-prose my-10">
+  {title && <h3 class="mb-4 font-display text-2xl text-ink">{title}</h3>}
+  <div class="grid gap-6 md:grid-cols-2 print:grid-cols-1">
+    <div class="border-t-2 border-sg pt-4">
+      <p class="mb-2 text-sm font-medium text-ink">Singapore</p>
+      <div class="text-ink-2"><slot name="sg" /></div>
+    </div>
+    <div class="border-t-2 border-vn pt-4">
+      <p class="mb-2 text-sm font-medium text-ink">Vietnam</p>
+      <div class="text-ink-2"><slot name="vn" /></div>
+    </div>
+  </div>
+</section>

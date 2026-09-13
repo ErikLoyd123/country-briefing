@@ -1,0 +1,15 @@
+---
+// Renders a Lucide icon by kebab-case name, e.g. <Icon name="hand-coins" />.
+// Browse names at https://lucide.dev/icons. Unknown names fail the build.
+import * as icons from '@lucide/astro';
+
+const { name, size = 18, class: className, ...rest } = Astro.props;
+const pascal = String(name)
+  .split('-')
+  .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+  .join('');
+const Cmp = icons[pascal] ?? icons[`${pascal}Icon`];
+if (!Cmp) throw new Error(`Unknown Lucide icon "${name}". See https://lucide.dev/icons for valid names.`);
+---
+
+<Cmp size={size} class={className} aria-hidden="true" {...rest} />

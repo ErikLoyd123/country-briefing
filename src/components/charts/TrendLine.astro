@@ -1,0 +1,20 @@
+---
+// <TrendLine indicator="cpi_score" title="…" />  Singapore vs Vietnam over time.
+import ChartFrame from './ChartFrame.astro';
+import DataTable from './DataTable.astro';
+import TrendLineChart from './react/TrendLineChart.jsx';
+import { getSeries } from '../../lib/data.js';
+import { formatValue, UNIT_LABEL } from '../../lib/format.js';
+
+const { indicator, title, subtitle } = Astro.props;
+const { meta, rows, sample } = getSeries(indicator);
+const series = ['SG', 'VN'].map((c) => ({ id: c, data: rows.filter((r) => r.country === c).map((r) => ({ x: r.year, y: r.value })) }));
+const years = [...new Set(rows.map((r) => r.year))];
+const value = (c, y) => rows.find((r) => r.country === c && r.year === y)?.value;
+const direction = meta.unit === 'rank' ? 'Rank 1 is best; shown at the top.' : meta.higherIsBetter ? 'Higher is better.' : 'Lower is better.';
+---
+
+<ChartFrame title={title ?? meta.label} subtitle={subtitle ?? `${meta.label}, ${UNIT_LABEL[meta.unit]}. ${direction}`} sourceKeys={[meta.sourceKey]} sample={sample}>
+  <TrendLineChart client:visible series={series} unit={meta.unit} />
+  <DataTable slot="table" columns={['Year', 'Singapore', 'Vietnam']} rows={years.map((y) => [y, formatValue(value('SG', y), meta.unit), formatValue(value('VN', y), meta.unit)])} />
+</ChartFrame>

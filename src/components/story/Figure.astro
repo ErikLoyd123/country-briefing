@@ -1,0 +1,28 @@
+---
+// <Figure src="vietnam/hanoi-street.jpg" caption="…" />  real image (needs a credits.yaml entry)
+// <Figure label="PHOTO: what should go here" caption="…" />  placeholder
+import { Image } from 'astro:assets';
+import PlaceholderMedia from './PlaceholderMedia.astro';
+import { getCredit, creditLine } from '../../lib/credits.js';
+
+const { src, label, caption, alt } = Astro.props;
+const images = import.meta.glob('/src/assets/images/**/*.{jpg,jpeg,png,webp,avif}');
+
+let image;
+let credit;
+if (src) {
+  const loader = images[`/src/assets/images/${src}`];
+  if (!loader) throw new Error(`Figure: image "src/assets/images/${src}" not found.`);
+  image = (await loader()).default;
+  credit = getCredit(src);
+}
+if (!src && !label) throw new Error('Figure needs either src (a real image) or label (a placeholder description).');
+---
+
+<figure class="not-prose my-10">
+  {image ? <Image src={image} alt={alt ?? caption} widths={[640, 1024, 1600]} sizes="(min-width: 1024px) 60rem, 100vw" class="w-full rounded-md" /> : <PlaceholderMedia label={label} />}
+  <figcaption class="mt-3 flex flex-wrap justify-between gap-x-6 gap-y-1 text-sm text-muted">
+    <span class="text-ink-2">{caption}</span>
+    {credit && <span>{creditLine(credit)}</span>}
+  </figcaption>
+</figure>

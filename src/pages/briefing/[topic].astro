@@ -1,0 +1,145 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChapterOpener from '../../components/story/ChapterOpener.astro';
+import StatStrip from '../../components/story/StatStrip.astro';
+import SourcesList from '../../components/story/SourcesList.astro';
+import StatusBadge from '../../components/layout/StatusBadge.astro';
+import { mdxComponents } from '../../components/mdx.js';
+import { getTopics } from '../../lib/topics.js';
+import { getIndicator } from '../../lib/data.js';
+
+export async function getStaticPaths() {
+  const topics = await getTopics();
+  return topics.map((topic, i) => ({
+    params: { topic: topic.slug },
+    props: { topic, prev: topics[i - 1] ?? null, next: topics[i + 1] ?? null, total: topics.length },
+  }));
+}
+
+const { topic, prev, next, total } = Astro.props;
+const [overview, singapore, vietnam] = await Promise.all(['index', 'singapore', 'vietnam'].map((p) => render(topic.parts[p])));
+const citeKeys = [
+  ...overview.remarkPluginFrontmatter.citeKeys ?? [],
+  ...singapore.remarkPluginFrontmatter.citeKeys ?? [],
+  ...vietnam.remarkPluginFrontmatter.citeKeys ?? [],
+  ...topic.keyStats.map((id) => getIndicator(id).sourceKey),
+];
+const sections = [
+  { id: 'overview', label: 'Overview', status: topic.parts.index.data.status },
+  { id: 'singapore', label: 'Singapore', status: topic.parts.singapore.data.status, color: 'bg-sg' },
+  { id: 'vietnam', label: 'Vietnam', status: topic.parts.vietnam.data.status, color: 'bg-vn' },
+  { id: 'sources', label: 'Sources' },
+];
+---
+
+<BaseLayout title={topic.title} description={topic.thesis}>
+  <ChapterOpener topic={topic} total={total} />
+  <StatStrip ids={topic.keyStats} />
+
+  <div class="container-wide grid gap-10 pt-14 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-16">
+    <nav aria-label="On this page" class="screen-only hidden lg:block">
+      <ol class="sticky top-24 space-y-1 border-l border-rule text-sm">
+        {
+          sections.map((s) => (
+            <li>
+              <a href={`#${s.id}`} data-section-link={s.id} class="-ml-px flex items-center gap-2 border-l-2 border-transparent py-1.5 pl-4 text-ink-2 hover:text-ink">
+                {s.color && <span class:list={['size-2 rounded-full', s.color]} aria-hidden="true" />}
+                {s.label}
+              </a>
+              {s.status && <div class="pl-4"><StatusBadge status={s.status} /></div>}
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+
+    <article class="briefing min-w-0 max-w-[52rem]">
+      <section id="overview" class="briefing-prose scroll-mt-24">
+        <overview.Content components={mdxComponents} />
+      </section>
+
+      <section id="singapore" class="briefing-prose country-section mt-20 scroll-mt-24 border-t-2 border-sg pt-2">
+        <singapore.Content components={mdxComponents} />
+      </section>
+
+      <section id="vietnam" class="briefing-prose country-section mt-20 scroll-mt-24 border-t-2 border-vn pt-2">
+        <vietnam.Content components={mdxComponents} />
+      </section>
+
+      <div id="sources" class="mt-20 scroll-mt-24 border-t border-rule pt-10">
+        <SourcesList keys={citeKeys} />
+      </div>
+
+      <nav aria-label="Next and previous briefings" class="screen-only mt-16 grid gap-4 sm:grid-cols-2">
+        {
+          prev ? (
+            <a href={`/briefing/${prev.slug}`} class="group rounded-md border border-rule p-5 hover:border-ink">
+              <span class="text-sm text-muted">Previous briefing</span>
+              <span class="mt-1 block font-display text-xl text-ink">{prev.title}</span>
+            </a>
+          ) : (
+            <a href="/" class="group rounded-md border border-rule p-5 hover:border-ink">
+              <span class="text-sm text-muted">Back to</span>
+              <span class="mt-1 block font-display text-xl text-ink">Overview</span>
+            </a>
+          )
+        }
+        {
+          next ? (
+            <a href={`/briefing/${next.slug}`} class="group rounded-md border border-rule p-5 text-right hover:border-ink">
+              <span class="text-sm text-muted">Next briefing</span>
+              <span class="mt-1 block font-display text-xl text-ink">{next.title}</span>
+            </a>
+          ) : (
+            <a href="/verdict" class="group rounded-md border border-rule p-5 text-right hover:border-ink">
+              <span class="text-sm text-muted">Next</span>
+              <span class="mt-1 block font-display text-xl text-ink">The verdict</span>
+            </a>
+          )
+        }
+      </nav>
+    </article>
+  </div>
+</BaseLayout>
+
+<script>
+  // Highlight the current section in the side rail.
+  const links = new Map([...document.querySelectorAll('[data-section-link]')].map((a) => [a.dataset.sectionLink, a]));
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        for (const [id, a] of links) {
+          const on = id === e.target.id;
+          a.classList.toggle('border-ink', on);
+          a.classList.toggle('text-ink', on);
+          a.classList.toggle('font-medium', on);
+        }
+      }
+    },
+    { rootMargin: '-30% 0px -60% 0px' },
+  );
+  for (const id of links.keys()) {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  }
+</script>
+
+<style>
+  .briefing-prose :global(> p),
+  .briefing-prose :global(> ul),
+  .briefing-prose :global(> ol),
+  .briefing-prose :global(> h2),
+  .briefing-prose :global(> h3) {
+    max-width: 42rem;
+  }
+  .country-section :global(> h2:first-child) {
+    margin-top: 1.25rem;
+  }
+  @media print {
+    .country-section {
+      break-before: page;
+    }
+  }
+</style>

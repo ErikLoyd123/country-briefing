@@ -1,0 +1,39 @@
+---
+// Stand-in for a photo or video that hasn't been sourced yet. The label says what should go here.
+import { Camera, Clapperboard } from '@lucide/astro';
+
+const { label, tone = 'light', class: className, fill = false } = Astro.props;
+const isVideo = /^video/i.test(label);
+const Icon = isVideo ? Clapperboard : Camera;
+---
+
+<div
+  class:list={[
+    'placeholder-media relative flex items-end overflow-hidden',
+    fill ? 'absolute inset-0' : 'aspect-[16/9] w-full rounded-md',
+    tone === 'dark' ? 'is-dark text-on-night-muted' : 'text-muted',
+    className,
+  ]}
+  role="img"
+  aria-label={`Placeholder: ${label}`}
+>
+  <div class="relative flex items-center gap-2 p-4 text-sm">
+    <Icon size={16} aria-hidden="true" />
+    <span>{label}</span>
+  </div>
+</div>
+
+<style>
+  .placeholder-media {
+    background:
+      repeating-linear-gradient(135deg, transparent 0 14px, rgb(22 33 43 / 0.035) 14px 15px),
+      linear-gradient(160deg, var(--color-paper-2), var(--color-paper-3));
+    border: 1px dashed var(--color-rule);
+  }
+  .placeholder-media.is-dark {
+    background:
+      repeating-linear-gradient(135deg, transparent 0 18px, rgb(255 255 255 / 0.03) 18px 19px),
+      radial-gradient(120% 90% at 30% 20%, var(--color-night-2), var(--color-night));
+    border: 0;
+  }
+</style>

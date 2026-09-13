@@ -1,0 +1,13 @@
+# Every image or video used on the site needs an entry here (the build fails otherwise).
+# file: path relative to src/assets/images/ (images) or public/media/ (video)
+# source: unsplash | pexels | flux | team | other
+# aiGenerated: true for Flux (or any AI) images; they are captioned "Illustrative (AI-generated)".
+#
+# Example:
+# - file: singapore/marina-bay-dusk.jpg
+#   source: unsplash
+#   author: Jane Photographer
+#   url: https://unsplash.com/photos/abc123
+#   license: Unsplash License
+#   aiGenerated: false
+[]

@@ -1,0 +1,100 @@
+# Indicator metadata. Values live in indicators.csv (one row per indicator/country/year).
+# unit: score | rank | percentile | usd_bn | per_100k | percent | index | years
+# higherIsBetter tells charts which direction is "good" (ranks: lower is better).
+# sourceKey must exist in src/references.bib.
+
+- id: cpi_score
+  label: Corruption Perceptions Index score
+  short: CPI score
+  unit: score
+  higherIsBetter: true
+  sourceKey: sample-ti-cpi
+  description: 0 (highly corrupt) to 100 (very clean).
+
+- id: cpi_rank
+  label: Corruption Perceptions Index rank
+  short: CPI rank
+  unit: rank
+  higherIsBetter: false
+  sourceKey: sample-ti-cpi
+  description: Global rank out of ~180 countries.
+
+- id: wgi_political_stability
+  label: Political stability & absence of violence
+  short: Political stability
+  unit: percentile
+  higherIsBetter: true
+  sourceKey: sample-wb-wgi
+  description: Percentile rank among all countries (0–100).
+
+- id: wgi_rule_of_law
+  label: Rule of law
+  short: Rule of law
+  unit: percentile
+  higherIsBetter: true
+  sourceKey: sample-wb-wgi
+  description: Percentile rank among all countries (0–100).
+
+- id: wgi_control_of_corruption
+  label: Control of corruption
+  short: Control of corruption
+  unit: percentile
+  higherIsBetter: true
+  sourceKey: sample-wb-wgi
+  description: Percentile rank among all countries (0–100).
+
+- id: gpi_rank
+  label: Global Peace Index rank
+  short: Peace rank
+  unit: rank
+  higherIsBetter: false
+  sourceKey: sample-iep-gpi
+  description: Global rank out of ~163 countries.
+
+- id: fdi_inflow_usd_bn
+  label: FDI inflows
+  short: FDI inflows
+  unit: usd_bn
+  higherIsBetter: true
+  sourceKey: sample-unctad-wir
+  description: Foreign direct investment inflows, US$ billions.
+
+- id: inform_risk
+  label: INFORM disaster & humanitarian risk
+  short: Disaster risk
+  unit: score
+  higherIsBetter: false
+  sourceKey: sample-inform-risk
+  description: 0 (very low) to 10 (very high).
+
+- id: homicide_rate
+  label: Intentional homicide rate
+  short: Homicide rate
+  unit: per_100k
+  higherIsBetter: false
+  sourceKey: sample-unodc-homicide
+  description: Victims per 100,000 people.
+
+- id: trade_openness
+  label: Trade openness
+  short: Trade / GDP
+  unit: percent
+  higherIsBetter: true
+  sourceKey: sample-wb-wdi
+  description: Exports plus imports as a share of GDP.
+
+- id: hdi
+  label: Human Development Index
+  short: HDI
+  unit: index
+  higherIsBetter: true
+  sourceKey: sample-undp-hdr
+  description: 0 to 1 composite of health, education and income.
+
+- id: life_expectancy
+  label: Life expectancy at birth
+  short: Life expectancy
+  unit: years
+  higherIsBetter: true
+  sourceKey: sample-wb-wdi
+  description: Years.

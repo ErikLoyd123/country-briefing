@@ -1,0 +1,124 @@
+---
+// Two-lane political timeline from src/data/timeline.yaml: Singapore left, Vietnam right.
+import raw from '../../data/timeline.yaml?raw';
+import { loadYaml } from '../../lib/yaml.js';
+import SampleBadge from './SampleBadge.astro';
+
+const { title = 'Key political events', from } = Astro.props;
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const events = loadYaml(raw, 'src/data/timeline.yaml')
+  .map((e) => {
+    if (!/^\d{4}-\d{2}$/.test(e.date)) throw new Error(`timeline.yaml: date "${e.date}" must be YYYY-MM`);
+    if (!['SG', 'VN', 'both'].includes(e.country)) throw new Error(`timeline.yaml: "${e.title}" country must be SG, VN or both`);
+    return e;
+  })
+  .filter((e) => !from || e.date >= from)
+  .sort((a, b) => a.date.localeCompare(b.date));
+const anySample = events.some((e) => e.sample);
+const label = (d) => `${MONTHS[Number(d.slice(5)) - 1]} ${d.slice(0, 4)}`;
+---
+
+<section class="not-prose my-14">
+  <div class="flex flex-wrap items-baseline justify-between gap-3">
+    <h3 class="font-display text-2xl text-ink">{title}</h3>
+    {anySample && <SampleBadge />}
+  </div>
+  <div class="mt-3 hidden grid-cols-[1fr_5.5rem_1fr] text-sm font-medium md:grid" aria-hidden="true">
+    <span class="text-right text-ink">Singapore</span><span></span><span class="text-ink">Vietnam</span>
+  </div>
+  <ol class="timeline relative mt-4">
+    {
+      events.map((e) => (
+        <li class:list={['tl-item', `is-${e.country.toLowerCase()}`]}>
+          <time class="tl-date num" datetime={e.date}>{label(e.date)}</time>
+          <div class="tl-card">
+            <p class="md:hidden text-xs text-muted">{e.country === 'SG' ? 'Singapore' : e.country === 'VN' ? 'Vietnam' : 'Both countries'}</p>
+            <p class="font-medium text-ink">{e.title}</p>
+            <p class="mt-1 text-[0.95rem] text-ink-2">{e.detail}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.35rem;
+    width: 1px;
+    background: var(--color-rule);
+  }
+  .tl-item {
+    position: relative;
+    padding: 0 0 1.5rem 1.75rem;
+    break-inside: avoid;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.3rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 999px;
+    box-shadow: 0 0 0 2px var(--color-paper);
+    background: var(--color-ink);
+  }
+  .tl-item.is-sg::before {
+    background: var(--color-sg);
+  }
+  .tl-item.is-vn::before {
+    background: var(--color-vn);
+  }
+  .tl-date {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+  .tl-card {
+    margin-top: 0.15rem;
+  }
+
+  @media (min-width: 768px) {
+    .timeline::before {
+      left: 50%;
+    }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 1fr 5.5rem 1fr;
+      padding: 0 0 1.25rem;
+    }
+    .tl-item::before {
+      left: calc(50% - 0.375rem);
+    }
+    .tl-date {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: center;
+      padding-top: 1.1rem;
+    }
+    .tl-item.is-sg .tl-card {
+      grid-column: 1;
+      grid-row: 1;
+      text-align: right;
+    }
+    .tl-item.is-vn .tl-card {
+      grid-column: 3;
+      grid-row: 1;
+    }
+    .tl-item.is-both .tl-card {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-self: center;
+      text-align: center;
+      max-width: 28rem;
+      background: var(--color-paper);
+      padding: 0.25rem 0.75rem;
+      position: relative;
+    }
+  }
+</style>

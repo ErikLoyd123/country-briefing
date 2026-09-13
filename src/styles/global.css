@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
+@import "@fontsource/be-vietnam-pro/400.css";
+@import "@fontsource/be-vietnam-pro/500.css";
+@import "@fontsource/be-vietnam-pro/600.css";
+
+/*
+ * Design tokens. Components use these via Tailwind classes (bg-paper, text-sg, …).
+ * Country + risk colors were validated with the dataviz palette validator against
+ * the paper surface (#f3f4f0): SG/VN pass chroma, CVD and contrast; the risk ramp
+ * (lacquer crimson) is single-hue, monotone, and clears 2:1 at its light end.
+ * Be Vietnam Pro (UI) and Newsreader (reading) both cover Vietnamese diacritics.
+ */
+@theme {
+  --font-display: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #f3f4f0;
+  --color-paper-2: #e8ebe6;
+  --color-paper-3: #dce1dc;
+  --color-ink: #16212b;
+  --color-ink-2: #34414d;
+  --color-muted: #5d6873;
+  --color-rule: #d3d8d4;
+  --color-night: #0e1a22;
+  --color-night-2: #172631;
+  --color-on-night: #eef1ee;
+  --color-on-night-muted: #9fb0ba;
+
+  --color-sg: #00809a;
+  --color-sg-soft: #d5ebef;
+  --color-vn: #b7791f;
+  --color-vn-soft: #f3e5cb;
+
+  --color-risk-1: #d99aa6;
+  --color-risk-2: #c2717f;
+  --color-risk-3: #a24a5c;
+  --color-risk-4: #7c2e40;
+  --color-risk-5: #551c2b;
+
+  --color-sample: #6b4fbb;
+
+  --text-mega: clamp(3rem, 8vw, 7.5rem);
+  --text-mega--line-height: 0.95;
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 450;
+    font-optical-sizing: auto;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  ::selection {
+    background: var(--color-sg-soft);
+  }
+}
+
+@layer components {
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  .kicker {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .container-wide {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 2.5rem);
+  }
+  .container-text {
+    width: 100%;
+    max-width: 44rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 1.5rem);
+  }
+
+  /* Long-form reading: serif body, restrained headings. */
+  .briefing-prose {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--color-ink-2);
+  }
+  .briefing-prose > * + * {
+    margin-top: 1.1em;
+  }
+  .briefing-prose h2 {
+    font-size: 2.1rem;
+    line-height: 1.15;
+    color: var(--color-ink);
+    margin-top: 2.2em;
+  }
+  .briefing-prose h3 {
+    font-size: 1.45rem;
+    line-height: 1.25;
+    color: var(--color-ink);
+    margin-top: 1.8em;
+  }
+  .briefing-prose a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-rule);
+    text-underline-offset: 3px;
+  }
+  .briefing-prose ul {
+    list-style: disc;
+    padding-left: 1.25em;
+  }
+  .briefing-prose strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  /* Components embedded in MDX reset to the sans UI font. */
+  .briefing-prose .not-prose {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .cite {
+    font-family: var(--font-sans);
+    font-size: 0.78em;
+    color: var(--color-muted);
+    white-space: nowrap;
+    cursor: help;
+  }
+
+  .csl-bib-body .csl-entry {
+    padding-left: 2em;
+    text-indent: -2em;
+    margin-bottom: 0.8em;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .print-only {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .print-only {
+    display: block;
+  }
+  .screen-only {
+    display: none !important;
+  }
+  html, body {
+    background: white;
+  }
+}

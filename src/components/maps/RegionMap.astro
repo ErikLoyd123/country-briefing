@@ -1,0 +1,121 @@
+---
+// <RegionMap title="…" />  Southeast Asia with Singapore and Vietnam highlighted and
+// illustrative shipping lanes. Rendered to static SVG at build time.
+import { geoMercator, geoPath } from 'd3-geo';
+import { feature } from 'topojson-client';
+import world from 'world-atlas/countries-50m.json';
+import lanes from '../../data/geo/shipping-lanes.json';
+
+const { title = 'Southeast Asia shipping lanes', subtitle = 'Singapore and Vietnam sit on the main sea route between the Indian Ocean and East Asia.', lanesOn = true, compact = false, tone = 'light' } = Astro.props;
+
+const W = 960;
+const H = 760;
+const ISO = { SG: '702', VN: '704' };
+const bbox = { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[92, -6], [124, -6], [124, 25], [92, 25], [92, -6]]] } };
+
+const projection = geoMercator().fitExtent([[0, 0], [W, H]], bbox).clipExtent([[0, 0], [W, H]]);
+const path = geoPath(projection);
+const countries = feature(world, world.objects.countries).features.filter((f) => {
+  const [[x0, y0], [x1, y1]] = path.bounds(f);
+  return x1 > 0 && x0 < W && y1 > 0 && y0 < H;
+});
+
+const cities = [
+  { name: 'Singapore', lonlat: [103.82, 1.35], country: 'SG', anchor: 'start', dx: 14, dy: 18 },
+  { name: 'Hanoi', lonlat: [105.85, 21.03], country: 'VN', anchor: 'end', dx: -12, dy: 4 },
+  { name: 'Ho Chi Minh City', lonlat: [106.7, 10.78], country: 'VN', anchor: 'end', dx: -12, dy: 4 },
+];
+const seas = [
+  { name: 'South China Sea', lonlat: [114, 13] },
+  { name: 'Strait of Malacca', lonlat: [97.6, 3.6] },
+  { name: 'Gulf of Thailand', lonlat: [101.5, 9.8] },
+];
+const fillFor = (f) => (f.id === ISO.SG ? 'var(--color-sg)' : f.id === ISO.VN ? 'var(--color-vn)' : 'var(--map-land)');
+const dark = tone === 'dark';
+---
+
+<figure class:list={['region-map not-prose', compact ? 'my-0' : 'my-12', dark && 'is-dark']}>
+  {
+    !compact && (
+      <figcaption class="mb-4">
+        <h3 class="font-display text-2xl leading-tight text-ink">{title}</h3>
+        <p class="mt-1 text-[0.95rem] text-muted">{subtitle}</p>
+      </figcaption>
+    )
+  }
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Map of Southeast Asia highlighting Singapore and Vietnam with major shipping routes" class="block h-auto w-full rounded-md">
+    <rect width={W} height={H} fill="var(--map-sea)"></rect>
+    <g>
+      {countries.map((f) => <path d={path(f)} fill={fillFor(f)} stroke="var(--map-border)" stroke-width="0.8"><title>{f.properties.name}</title></path>)}
+    </g>
+    {
+      lanesOn && (
+        <g fill="none">
+          {lanes.features.map((l) => (
+            <>
+              <path d={path(l)} stroke="var(--map-lane-halo)" stroke-width="6" stroke-linecap="round" />
+              <path class="lane" d={path(l)} stroke="var(--map-lane)" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round">
+                <title>{l.properties.name} (illustrative)</title>
+              </path>
+            </>
+          ))}
+        </g>
+      )
+    }
+    <g class="sea-labels" font-style="italic">
+      {seas.map((s) => { const [x, y] = projection(s.lonlat); return <text x={x} y={y} text-anchor="middle" fill="var(--map-sea-label)" font-size="17" font-family="var(--font-display)">{s.name}</text>; })}
+    </g>
+    <g>
+      {cities.map((c) => {
+        const [x, y] = projection(c.lonlat);
+        return (
+          <g>
+            <circle cx={x} cy={y} r="6" fill={c.country === 'SG' ? 'var(--color-sg)' : 'var(--color-vn)'} stroke="var(--map-sea)" stroke-width="2.5" />
+            {c.country === 'SG' && <circle cx={x} cy={y} r="16" fill="none" stroke="var(--color-sg)" stroke-width="1.5" />}
+            <text x={x + c.dx} y={y + c.dy} text-anchor={c.anchor} font-size="19" font-weight="500" fill="var(--map-label)" stroke="var(--map-sea)" stroke-width="4" paint-order="stroke" font-family="var(--font-sans)">{c.name}</text>
+          </g>
+        );
+      })}
+    </g>
+  </svg>
+  {!compact && <p class="mt-3 text-xs text-muted">Routes are illustrative, not navigational. Boundaries: Natural Earth via world-atlas.</p>}
+</figure>
+
+<style>
+  .region-map {
+    --map-sea: #e4ebea;
+    --map-land: #fbfbf8;
+    --map-border: #c5cdca;
+    --map-lane: var(--color-ink-2);
+    --map-lane-halo: rgb(255 255 255 / 0.6);
+    --map-sea-label: #7d8b92;
+    --map-label: var(--color-ink);
+  }
+  .region-map.is-dark {
+    --map-sea: var(--color-night);
+    --map-land: #1f2f3a;
+    --map-border: #34495a;
+    --map-lane: #d6e1e4;
+    --map-lane-halo: rgb(14 26 34 / 0.6);
+    --map-sea-label: #6f8795;
+    --map-label: var(--color-on-night);
+  }
+  .lane {
+    animation: sail 2.2s linear infinite;
+  }
+  @keyframes sail {
+    to {
+      stroke-dashoffset: -22;
+    }
+  }
+  @media print {
+    .lane {
+      animation: none;
+    }
+    .region-map {
+      break-inside: avoid;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+  }
+</style>

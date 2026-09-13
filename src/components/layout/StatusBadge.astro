@@ -1,0 +1,7 @@
+---
+// Shown only in `npm run dev` so the team can see which sections still need work.
+const { status } = Astro.props;
+const styles = { draft: 'bg-risk-1/25 text-risk-4', review: 'bg-vn-soft text-ink', final: 'bg-sg-soft text-ink' };
+---
+
+{import.meta.env.DEV && <span class:list={['screen-only inline-block rounded px-2 py-0.5 text-xs font-medium', styles[status]]}>Status: {status}</span>}

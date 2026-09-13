@@ -1,0 +1,19 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="screen-only mt-24 border-t border-rule">
+  <div class="container-wide grid gap-6 py-10 text-sm text-muted md:grid-cols-[1fr_auto]">
+    <div class="max-w-xl">
+      <p class="font-display text-base text-ink">Doing business in Singapore and Vietnam: Politics and Risk</p>
+      <p class="mt-2">An EMBA country briefing. Team member names and course details go here. Draft content uses placeholder text and sample data, marked where it appears.</p>
+    </div>
+    <nav aria-label="Footer" class="flex flex-wrap items-start gap-x-5 gap-y-2">
+      <a href="/about#methodology" class="hover:text-ink">Methodology</a>
+      <a href="/about#credits" class="hover:text-ink">Photo credits</a>
+      <a href="/bibliography" class="hover:text-ink">Sources</a>
+      <a href="/paper" class="hover:text-ink">Paper version</a>
+      <span>{year}</span>
+    </nav>
+  </div>
+</footer>

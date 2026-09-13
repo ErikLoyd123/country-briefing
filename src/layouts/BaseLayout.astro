@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+
+const { title, description = 'Politics and risk briefing: doing business in Singapore and Vietnam.', bodyClass = '', chrome = true } = Astro.props;
+const fullTitle = title ? `${title} | Singapore & Vietnam: Politics and Risk` : 'Singapore & Vietnam: Politics and Risk';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='16' height='32' fill='%2300809a'/><rect x='16' width='16' height='32' fill='%23b7791f'/></svg>" />
+    <title>{fullTitle}</title>
+    <slot name="head" />
+  </head>
+  <body class:list={['min-h-screen flex flex-col', bodyClass]}>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-ink focus:text-paper focus:px-3 focus:py-2 focus:rounded">Skip to content</a>
+    {chrome && <SiteHeader />}
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    {chrome && <SiteFooter />}
+  </body>
+</html>
+
+<style is:global>
+  :focus-visible {
+    outline: 2px solid var(--color-sg);
+    outline-offset: 2px;
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+// <CompareBar indicators={['wgi_rule_of_law', 'wgi_control_of_corruption']} title="…" />
+// Latest value per indicator, Singapore vs Vietnam. All indicators must share a unit.
+import ChartFrame from './ChartFrame.astro';
+import DataTable from './DataTable.astro';
+import CompareBarChart from './react/CompareBarChart.jsx';
+import { getLatest } from '../../lib/data.js';
+import { formatValue, UNIT_LABEL } from '../../lib/format.js';
+
+const { indicators = [], title, subtitle } = Astro.props;
+if (indicators.length === 0) throw new Error('CompareBar needs at least one indicator id.');
+const latest = indicators.map(getLatest);
+const units = new Set(latest.map((l) => l.meta.unit));
+if (units.size > 1) {
+  throw new Error(`CompareBar: indicators ${indicators.join(', ')} mix units (${[...units].join(', ')}). Use one chart per unit.`);
+}
+const unit = latest[0].meta.unit;
+const rows = latest.map((l) => ({ label: l.meta.short ?? l.meta.label, SG: l.SG?.value ?? 0, VN: l.VN?.value ?? 0 }));
+const years = [...new Set(latest.flatMap((l) => [l.SG?.year, l.VN?.year]).filter(Boolean))];
+const max = unit === 'percentile' ? 100 : undefined;
+---
+
+<ChartFrame
+  title={title ?? latest[0].meta.label}
+  subtitle={subtitle ?? `Latest available (${years.join(', ')}), ${UNIT_LABEL[unit]}.`}
+  sourceKeys={latest.map((l) => l.meta.sourceKey)}
+  sample={latest.some((l) => l.sample)}
+>
+  <CompareBarChart client:visible rows={rows} unit={unit} max={max} />
+  <DataTable slot="table" columns={['Indicator', 'Singapore', 'Vietnam']} rows={rows.map((r) => [r.label, formatValue(r.SG, unit), formatValue(r.VN, unit)])} />
+</ChartFrame>
