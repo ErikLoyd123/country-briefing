@@ -1,13 +1,13 @@
 // Hex mirrors of the CSS tokens in src/styles/global.css, for chart libraries that
 // animate colors and can't use CSS variables. Keep the two files in sync.
 export const COLORS = {
-  paper: '#f3f4f0',
-  paper2: '#e8ebe6',
+  paper: '#ffffff',
+  paper2: '#f2f4f6',
   ink: '#16212b',
   ink2: '#34414d',
   muted: '#5d6873',
-  rule: '#d3d8d4',
-  grid: '#e1e5e1',
+  rule: '#dfe3e8',
+  grid: '#e9ecf0',
   SG: '#00809a',
   VN: '#b7791f',
 };

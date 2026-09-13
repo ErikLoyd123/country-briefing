@@ -10,21 +10,21 @@
 /*
  * Design tokens. Components use these via Tailwind classes (bg-paper, text-sg, …).
  * Country + risk colors were validated with the dataviz palette validator against
- * the paper surface (#f3f4f0): SG/VN pass chroma, CVD and contrast; the risk ramp
- * (lacquer crimson) is single-hue, monotone, and clears 2:1 at its light end.
+ * the white paper surface: SG/VN pass chroma, CVD and contrast; the risk ramp
+ * (lacquer crimson) is single-hue, monotone, and clears 2:1 at its light end (always shown with its number).
  * Be Vietnam Pro (UI) and Newsreader (reading) both cover Vietnamese diacritics.
  */
 @theme static {
   --font-display: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
   --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
 
-  --color-paper: #f3f4f0;
-  --color-paper-2: #e8ebe6;
-  --color-paper-3: #dce1dc;
+  --color-paper: #ffffff;
+  --color-paper-2: #f2f4f6;
+  --color-paper-3: #e5e9ed;
   --color-ink: #16212b;
   --color-ink-2: #34414d;
   --color-muted: #5d6873;
-  --color-rule: #d3d8d4;
+  --color-rule: #dfe3e8;
   --color-night: #0e1a22;
   --color-night-2: #172631;
   --color-on-night: #eef1ee;
