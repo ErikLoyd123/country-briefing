@@ -15,8 +15,7 @@ const { Content, remarkPluginFrontmatter } = await render(entry);
 
 <BaseLayout title={entry.data.title}>
   <article class="container-text py-16">
-    <p class="kicker text-muted">Appendix</p>
-    <h1 class="mt-2 text-5xl leading-tight">{entry.data.title}</h1>
+    <h1 class="text-5xl leading-tight">{entry.data.title}</h1>
     <div class="briefing-prose mt-10">
       <Content components={mdxComponents} />
     </div>

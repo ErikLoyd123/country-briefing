@@ -37,17 +37,17 @@ const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '
 
 <BaseLayout title="Paper" description="The full Politics and Risk chapter as a printable paper.">
   <div class="paper mx-auto max-w-[52rem] px-[clamp(1rem,4vw,2rem)] py-12">
-    <aside class="screen-only mb-12 flex flex-wrap items-center gap-4 rounded-md border border-rule bg-paper-2 p-5 text-sm text-ink-2">
-      <FileDown size={20} aria-hidden="true" />
+    <aside class="screen-only mb-14 flex items-start gap-3 border-b border-rule pb-5 text-sm text-ink-2">
+      <FileDown size={18} class="mt-0.5 shrink-0 text-muted" aria-hidden="true" />
       <p class="flex-1">
-        This is the paper version of the site. To make a PDF, run <code class="rounded bg-paper px-1.5 py-0.5 text-ink">npm run pdf</code>, or use your browser's print dialog and choose Save as PDF.
+        This is the paper version of the site. To make a PDF, run <code class="rounded bg-paper-2 px-1.5 py-0.5 text-ink">npm run pdf</code>, or use your browser's print dialog and choose Save as PDF.
       </p>
     </aside>
 
     <header class="cover">
       <p class="text-sm text-muted">EMBA country briefing</p>
       <h1 class="mt-4 font-display text-5xl leading-[1.05] text-ink md:text-6xl">Doing Business in Singapore and Vietnam: Politics and Risk</h1>
-      <p class="mt-6 font-display text-xl text-ink-2">Team member names · Course name and number · Instructor names</p>
+      <p class="mt-6 font-display text-xl leading-relaxed text-ink-2">Team member names<br />Course name and number<br />Instructor names</p>
       <p class="mt-2 text-ink-2">{today}</p>
     </header>
 

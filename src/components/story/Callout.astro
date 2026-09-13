@@ -5,12 +5,12 @@ const { title, icon = 'info' } = Astro.props;
 const Icon = { briefcase: Briefcase, alert: TriangleAlert, info: Info }[icon] ?? Info;
 ---
 
-<aside class="callout not-prose my-12 rounded-md border border-rule bg-paper-2 p-6 md:p-8">
+<aside class="callout not-prose my-14 border-t-2 border-ink pt-5">
   <p class="flex items-center gap-2 text-sm font-medium text-ink">
     <Icon size={18} aria-hidden="true" />
     {title}
   </p>
-  <div class="callout-body mt-3 font-display text-xl leading-relaxed text-ink">
+  <div class="callout-body mt-3 font-display text-2xl leading-snug text-ink">
     <slot />
   </div>
 </aside>

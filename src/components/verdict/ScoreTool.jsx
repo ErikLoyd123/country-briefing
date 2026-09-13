@@ -1,16 +1,20 @@
 import { useMemo, useState } from 'react';
 import NumberFlow from '@number-flow/react';
 import { scoreAll } from '../../lib/scoring.js';
-import { COLORS } from '../../lib/tokens.js';
 
 const COUNTRIES = [
-  { code: 'SG', name: 'Singapore' },
-  { code: 'VN', name: 'Vietnam' },
+  { code: 'SG', name: 'Singapore', dot: 'bg-sg', bar: 'bg-sg' },
+  { code: 'VN', name: 'Vietnam', dot: 'bg-vn', bar: 'bg-vn' },
 ];
 
+// Bars share one 0–5 scale; 2.75rem of each half is kept free for the value label.
+const barWidth = (v) => `calc((100% - 2.75rem) * ${v / 5})`;
+
 // Interactive go / no-go: pick an industry preset or set each pillar's weight (0–5).
+// Laid out on the site's center seam: scores mirror either side of it, each area's weight
+// control sits on it, and the area bars grow outward from it.
 export default function ScoreTool({ scorecard }) {
-  const { pillars, presets, bands } = scorecard;
+  const { pillars, presets } = scorecard;
   const [presetId, setPresetId] = useState('balanced');
   const [weights, setWeights] = useState(() => ({ ...presets.find((p) => p.id === 'balanced').weights }));
 
@@ -26,10 +30,13 @@ export default function ScoreTool({ scorecard }) {
   };
 
   return (
-    <div className="score-tool">
-      <fieldset>
-        <legend className="text-sm font-medium text-ink">Industry weighting</legend>
-        <div className="mt-3 flex flex-wrap gap-2" role="radiogroup" aria-label="Industry preset">
+    <div className="score-tool relative">
+      <div className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px bg-ink/15 md:block" aria-hidden="true" />
+
+      <fieldset className="relative mx-auto w-fit bg-paper px-4 py-2 text-center">
+        <legend className="sr-only">Industry weighting</legend>
+        <p className="text-sm text-muted" aria-hidden="true">Industry weighting</p>
+        <div className="mt-2 flex flex-wrap justify-center gap-x-5 gap-y-1" role="radiogroup" aria-label="Industry preset">
           {presets.map((p) => (
             <button
               key={p.id}
@@ -37,96 +44,81 @@ export default function ScoreTool({ scorecard }) {
               role="radio"
               aria-checked={presetId === p.id}
               onClick={() => choosePreset(p)}
-              className={`rounded-full border px-4 py-2 text-sm transition-colors ${
-                presetId === p.id ? 'border-ink bg-ink text-paper' : 'border-rule bg-paper text-ink hover:border-ink'
+              className={`border-b-2 py-1.5 transition-colors ${
+                presetId === p.id ? 'border-ink text-ink' : 'border-transparent text-muted hover:text-ink'
               }`}
             >
               {p.label}
             </button>
           ))}
-          {presetId === 'custom' && (
-            <span className="rounded-full border border-dashed border-ink px-4 py-2 text-sm text-ink">Custom</span>
-          )}
+          {presetId === 'custom' && <span className="border-b-2 border-dashed border-ink py-1.5 text-ink">Custom</span>}
         </div>
       </fieldset>
 
-      <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <div>
-          <p className="text-sm font-medium text-ink">How much each area matters</p>
-          <p className="mt-1 text-sm text-muted">0 ignores an area; 5 makes it count five times as much as an area set to 1.</p>
-          <div className="mt-6 space-y-6">
-            {pillars.map((p) => (
-              <div key={p.id}>
-                <div className="flex items-baseline justify-between">
-                  <label htmlFor={`w-${p.id}`} className="text-ink">
-                    {p.label}
-                  </label>
-                  <span className="num text-sm text-muted">weight {weights[p.id]}</span>
-                </div>
+      <div className="mt-12 grid grid-cols-2 md:mt-16">
+        {COUNTRIES.map((c) => {
+          const s = scores[c.code];
+          const vn = c.code === 'VN';
+          return (
+            <div key={c.code} className={`min-w-0 ${vn ? 'pl-4 text-right md:pl-10' : 'pr-4 md:pr-10'}`} aria-live="polite">
+              <p className={`flex items-center gap-2 font-medium text-ink ${vn ? 'justify-end' : ''}`}>
+                <span className={`size-2.5 rounded-full ${c.dot}`} aria-hidden="true" />
+                {c.name}
+              </p>
+              <p className="type-heavy num mt-2 text-[clamp(3.25rem,11vw,9rem)] leading-[0.9] text-ink">
+                <span className="sr-only">Overall risk </span>
+                <NumberFlow value={Number(s.overall.toFixed(2))} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
+                <span className="sr-only"> out of 5</span>
+              </p>
+              <p className="mt-4 font-display text-2xl leading-tight text-ink md:text-3xl">{s.band.label}</p>
+              <p className={`mt-2 max-w-xs text-sm text-ink-2 md:text-base ${vn ? 'ml-auto' : ''}`}>{s.band.summary}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      <ul className="mx-auto mt-16 max-w-5xl space-y-8 md:mt-20">
+        {pillars.map((p) => {
+          const w = weights[p.id];
+          const sg = scores.SG.pillars[p.id];
+          const vn = scores.VN.pillars[p.id];
+          return (
+            <li key={p.id}>
+              <div className="relative mx-auto flex w-fit flex-col items-center bg-paper px-4 text-center">
+                <label htmlFor={`w-${p.id}`} className="text-sm text-ink md:text-base">
+                  {p.label} <span className="num text-muted">weight {w}</span>
+                </label>
                 <input
                   id={`w-${p.id}`}
                   type="range"
                   min="0"
                   max="5"
                   step="1"
-                  value={weights[p.id]}
+                  value={w}
+                  aria-valuetext={`weight ${w}`}
                   onChange={(e) => setWeight(p.id, Number(e.target.value))}
-                  className="score-range mt-2 w-full"
+                  className="score-range mt-1 w-44"
                 />
-                <div className="mt-2 grid grid-cols-2 gap-3 text-sm">
-                  {COUNTRIES.map((c) => (
-                    <PillarBar key={c.code} country={c} value={scores[c.code].pillars[p.id]} />
-                  ))}
+                <span className="sr-only">Singapore {sg.toFixed(1)}, Vietnam {vn.toFixed(1)}</span>
+              </div>
+              <div className={`mt-2 grid grid-cols-2 gap-x-1.5 transition-opacity ${w === 0 ? 'opacity-30' : ''}`} aria-hidden="true">
+                <div className="flex items-center justify-end gap-3" title={`Singapore, ${p.label}: ${sg.toFixed(1)} of 5`}>
+                  <span className="num text-sm font-semibold text-ink">{sg.toFixed(1)}</span>
+                  <span className="h-2.5 shrink-0 rounded-l bg-sg" style={{ width: barWidth(sg) }} />
+                </div>
+                <div className="flex items-center gap-3" title={`Vietnam, ${p.label}: ${vn.toFixed(1)} of 5`}>
+                  <span className="h-2.5 shrink-0 rounded-r bg-vn" style={{ width: barWidth(vn) }} />
+                  <span className="num text-sm font-semibold text-ink">{vn.toFixed(1)}</span>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+            </li>
+          );
+        })}
+      </ul>
 
-        <div className="grid content-start gap-6 sm:grid-cols-2">
-          {COUNTRIES.map((c) => {
-            const s = scores[c.code];
-            const bandIndex = bands.indexOf(s.band);
-            return (
-              <div key={c.code} className="rounded-lg border border-rule bg-paper p-6" aria-live="polite">
-                <p className="flex items-center gap-2 text-sm font-medium text-ink">
-                  <span className="size-2.5 rounded-full" style={{ background: COLORS[c.code] }} />
-                  {c.name}
-                </p>
-                <p className="num mt-4 text-6xl font-semibold tracking-tight text-ink">
-                  <NumberFlow value={Number(s.overall.toFixed(2))} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
-                </p>
-                <p className="text-sm text-muted">out of 5 risk</p>
-                <p className="mt-4 font-display text-2xl leading-tight text-ink">{s.band.label}</p>
-                <p className="mt-1 text-sm text-ink-2">{s.band.summary}</p>
-                <ol className="mt-5 grid grid-cols-4 gap-1" aria-label="Verdict bands">
-                  {bands.map((b, i) => (
-                    <li
-                      key={b.label}
-                      className="h-1.5 rounded-full"
-                      style={{ background: i === bandIndex ? COLORS[c.code] : COLORS.rule }}
-                      title={`${b.label} (up to ${b.max})`}
-                    />
-                  ))}
-                </ol>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PillarBar({ country, value }) {
-  const pct = ((value - 1) / 4) * 100;
-  return (
-    <div className="flex items-center gap-2" title={`${country.name}: ${value.toFixed(1)} out of 5`}>
-      <span className="w-6 text-muted">{country.code}</span>
-      <span className="relative h-1.5 flex-1 rounded-full" style={{ background: COLORS.paper2 }}>
-        <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${Math.max(pct, 2)}%`, background: COLORS[country.code] }} />
-      </span>
-      <span className="num w-7 text-right text-ink">{value.toFixed(1)}</span>
+      <p className="relative mx-auto mt-10 w-fit bg-paper px-4 py-2 text-center text-sm text-muted">
+        Area risk from 1, very low, to 5, very high. A weight of 0 leaves the area out.
+      </p>
     </div>
   );
 }

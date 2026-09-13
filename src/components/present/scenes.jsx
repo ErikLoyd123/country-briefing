@@ -23,7 +23,7 @@ function Title({ kicker, title, subtitle, media }) {
         </>
       )}
       <p className="relative text-[1.4cqw] text-on-night-muted">{kicker}</p>
-      <h1 className="relative mt-[1cqw] max-w-[70cqw] font-display text-[6.2cqw] leading-[1.02]">{title}</h1>
+      <h1 className="type-heavy relative mt-[1cqw] max-w-[82cqw] text-[6.2cqw] leading-[1]">{title}</h1>
       <p className="relative mt-[2cqw] max-w-[55cqw] font-display text-[2.2cqw] text-on-night/80">{subtitle}</p>
       <div className="relative mt-[4cqw] flex h-[0.5cqw] w-[12cqw] overflow-hidden rounded-full">
         <span className="w-1/2 bg-sg" />
@@ -35,8 +35,9 @@ function Title({ kicker, title, subtitle, media }) {
 
 function BigQuestion({ text }) {
   return (
-    <div className="scene-dark flex h-full items-center p-[8cqw]">
-      <p className="max-w-[75cqw] font-display text-[5.4cqw] leading-[1.08]">{text}</p>
+    <div className="scene-light relative flex h-full items-center justify-center p-[8cqw]">
+      <span className="absolute inset-y-0 left-1/2 w-px bg-ink/15" aria-hidden="true" />
+      <p className="relative max-w-[70cqw] bg-paper py-[2cqw] text-center font-display text-[5cqw] leading-[1.08] text-ink">{text}</p>
     </div>
   );
 }
@@ -102,25 +103,25 @@ function ChartScene({ title, subtitle, series, unit, sample, source }) {
 }
 
 function MapScene({ title, text, map }) {
-  const fill = (c) => (c === 'SG' ? COLORS.SG : c === 'VN' ? COLORS.VN : '#1f2f3a');
+  const fill = (c) => (c === 'SG' ? COLORS.SG : c === 'VN' ? COLORS.VN : '#ffffff');
   return (
-    <div className="scene-dark grid h-full grid-cols-[0.8fr_1.2fr] items-center gap-[3cqw] p-[5cqw]">
+    <div className="scene-light grid h-full grid-cols-[0.8fr_1.2fr] items-center gap-[3cqw] p-[5cqw]">
       <div>
-        <h2 className="font-display text-[4.2cqw] leading-[1.05]">{title}</h2>
-        <p className="mt-[2cqw] text-[1.7cqw] leading-relaxed text-on-night-muted">{text}</p>
+        <h2 className="font-display text-[4.2cqw] leading-[1.05] text-ink">{title}</h2>
+        <p className="mt-[2cqw] text-[1.7cqw] leading-relaxed text-ink-2">{text}</p>
       </div>
       <svg viewBox={`0 0 ${map.width} ${map.height}`} className="h-full max-h-[46cqw] w-full" role="img" aria-label="Map of Southeast Asia">
-        <rect width={map.width} height={map.height} fill="#0e1a22" />
+        <rect width={map.width} height={map.height} fill="#eaeff3" />
         {map.countries.map((c, i) => (
-          <path key={i} d={c.d} fill={fill(c.country)} stroke="#34495a" strokeWidth="0.8" />
+          <path key={i} d={c.d} fill={fill(c.country)} stroke="#c9d1d8" strokeWidth="0.8" />
         ))}
         {map.lanes.map((l) => (
-          <path key={l.name} className="lane" d={l.d} fill="none" stroke="#d6e1e4" strokeWidth="2" strokeDasharray="2 9" strokeLinecap="round" />
+          <path key={l.name} className="lane" d={l.d} fill="none" stroke={COLORS.ink2} strokeWidth="2" strokeDasharray="2 9" strokeLinecap="round" />
         ))}
         {map.cities.map((c) => (
           <g key={c.name}>
-            <circle cx={c.xy[0]} cy={c.xy[1]} r="6" fill={COLORS[c.country]} stroke="#0e1a22" strokeWidth="2.5" />
-            <text x={c.xy[0] + c.dx} y={c.xy[1] + c.dy} textAnchor={c.anchor} fontSize="20" fill="#eef1ee" stroke="#0e1a22" strokeWidth="4" paintOrder="stroke">
+            <circle cx={c.xy[0]} cy={c.xy[1]} r="6" fill={COLORS[c.country]} stroke="#eaeff3" strokeWidth="2.5" />
+            <text x={c.xy[0] + c.dx} y={c.xy[1] + c.dy} textAnchor={c.anchor} fontSize="20" fontWeight="500" fill={COLORS.ink} stroke="#eaeff3" strokeWidth="4" paintOrder="stroke">
               {c.name}
             </text>
           </g>
@@ -184,22 +185,27 @@ function ScorecardScene({ title, rows, sample }) {
 
 function Verdict({ title, scores, sample }) {
   return (
-    <div className="scene-dark flex h-full flex-col p-[5cqw]">
-      <div className="flex items-start justify-between">
-        <h2 className="font-display text-[4cqw]">{title}</h2>
+    <div className="scene-light relative flex h-full flex-col px-[5cqw] pt-[4cqw] pb-[7cqw]">
+      <span className="absolute inset-y-0 left-1/2 w-px bg-ink/15" aria-hidden="true" />
+      <div className="relative mx-auto flex flex-col items-center gap-[1cqw] bg-paper px-[2cqw] py-[0.5cqw]">
+        <h2 className="font-display text-[3.4cqw] text-ink">{title}</h2>
         <Sample show={sample} />
       </div>
-      <div className="mt-auto grid grid-cols-2 gap-[5cqw]">
+      <div className="mt-auto grid grid-cols-2">
         {[
-          ['SG', 'Singapore'],
-          ['VN', 'Vietnam'],
-        ].map(([code, name]) => (
-          <div key={code} className="border-t-[0.35cqw] pt-[1.5cqw]" style={{ borderColor: COLORS[code] }}>
-            <p className="text-[1.6cqw] text-on-night-muted">{name}</p>
-            <p className="mt-[0.5cqw] font-display text-[5.6cqw] leading-none">{scores[code].band.label}</p>
-            <p className="num mt-[1.2cqw] text-[1.8cqw] text-on-night-muted">
-              <AnimatedNumber value={Number(scores[code].overall.toFixed(2))} decimals={2} /> out of 5 risk
+          ['SG', 'Singapore', 'pr-[4cqw]'],
+          ['VN', 'Vietnam', 'pl-[4cqw] text-right'],
+        ].map(([code, name, side]) => (
+          <div key={code} className={side}>
+            <p className="text-[1.6cqw] text-ink">
+              <span className="mr-[0.6cqw] inline-block size-[0.9cqw] rounded-full" style={{ background: COLORS[code] }} />
+              {name}
             </p>
+            <p className="type-heavy num mt-[0.8cqw] text-[11cqw] leading-[0.9] text-ink">
+              <AnimatedNumber value={Number(scores[code].overall.toFixed(2))} decimals={2} />
+            </p>
+            <p className="mt-[1cqw] text-[1.4cqw] text-muted">out of 5 risk</p>
+            <p className="mt-[2cqw] font-display text-[3.4cqw] leading-none text-ink">{scores[code].band.label}</p>
           </div>
         ))}
       </div>
@@ -219,9 +225,9 @@ function ImageScene({ caption, media }) {
 
 function Quote({ text, attribution }) {
   return (
-    <div className="scene-dark flex h-full flex-col items-start justify-center p-[8cqw]">
-      <p className="font-display text-[9cqw] leading-none">{text}</p>
-      <p className="mt-[3cqw] text-[1.8cqw] text-on-night-muted">{attribution}</p>
+    <div className="scene-light flex h-full flex-col items-start justify-center p-[8cqw]">
+      <p className="font-display text-[9cqw] leading-none text-ink">{text}</p>
+      <p className="mt-[3cqw] text-[1.8cqw] text-muted">{attribution}</p>
     </div>
   );
 }
