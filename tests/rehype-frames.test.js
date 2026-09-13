@@ -17,13 +17,19 @@ const run = (children, file = BRIEFING) => {
 };
 
 it('groups prose, gives visuals their own frame, and starts a frame at each heading', () => {
-  const tree = run([jsx('Lorem'), nl(), el('p'), jsx('TrendLine'), el('p'), el('h3'), el('p'), el('ul'), jsx('Callout'), jsx('HintCards')]);
-  expect(frames(tree)).toEqual([['Lorem', 'p'], ['TrendLine'], ['p'], ['h3', 'p', 'ul'], ['Callout'], ['HintCards']]);
+  const tree = run([el('p'), nl(), el('table'), jsx('Risk'), el('p'), el('h3'), el('p'), el('ul'), jsx('Callout'), jsx('HintCards')]);
+  expect(frames(tree)).toEqual([['p', 'table'], ['Risk'], ['p'], ['h3', 'p', 'ul'], ['Callout'], ['HintCards']]);
 });
 
-it('keeps a visual with the heading directly above it, and stacked headings together', () => {
-  const tree = run([el('h2'), el('h3'), jsx('RegionMap'), el('p')]);
-  expect(frames(tree)).toEqual([['h2', 'h3', 'RegionMap'], ['p']]);
+it('keeps a visual with the h3 directly above it, and stacked headings together', () => {
+  const tree = run([el('h3'), jsx('RegionMap'), el('p')]);
+  expect(frames(tree)).toEqual([['h3', 'RegionMap'], ['p']]);
+});
+
+it('gives an h2 divider its own frame when a visual follows it, but not when prose does', () => {
+  expect(frames(run([el('h2'), jsx('HintCards')]))).toEqual([['h2'], ['HintCards']]);
+  expect(frames(run([el('h2'), el('h3'), jsx('Risk')]))).toEqual([['h2', 'h3'], ['Risk']]);
+  expect(frames(run([el('h2'), el('p'), jsx('Risk')]))).toEqual([['h2', 'p'], ['Risk']]);
 });
 
 it('leaves module code outside frames', () => {
@@ -32,6 +38,6 @@ it('leaves module code outside frames', () => {
 });
 
 it('only frames briefing files', () => {
-  const tree = run([el('p'), jsx('TrendLine')], { path: '/repo/src/content/paper/executive-summary.mdx' });
-  expect(tree.children.map((n) => n.tagName ?? n.name)).toEqual(['p', 'TrendLine']);
+  const tree = run([el('p'), jsx('Risk')], { path: '/repo/src/content/paper/executive-summary.mdx' });
+  expect(tree.children.map((n) => n.tagName ?? n.name)).toEqual(['p', 'Risk']);
 });

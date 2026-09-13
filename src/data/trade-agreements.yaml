@@ -1,9 +1,9 @@
-# Trade agreements relevant to each country. members: which of SG / VN are party to it.
-# Names are real agreements; status, years and notes are placeholders to be verified and cited.
-- { id: asean, name: ASEAN Economic Community, members: [SG, VN], type: regional, note: Lorem ipsum placeholder note., sample: true }
-- { id: rcep, name: Regional Comprehensive Economic Partnership (RCEP), members: [SG, VN], type: mega-regional, note: Lorem ipsum placeholder note., sample: true }
-- { id: cptpp, name: Comprehensive and Progressive Agreement for Trans-Pacific Partnership (CPTPP), members: [SG, VN], type: mega-regional, note: Lorem ipsum placeholder note., sample: true }
-- { id: evfta, name: EU–Vietnam Free Trade Agreement (EVFTA), members: [VN], type: bilateral, note: Lorem ipsum placeholder note., sample: true }
-- { id: eusfta, name: EU–Singapore Free Trade Agreement (EUSFTA), members: [SG], type: bilateral, note: Lorem ipsum placeholder note., sample: true }
-- { id: ussfta, name: US–Singapore Free Trade Agreement, members: [SG], type: bilateral, note: Lorem ipsum placeholder note., sample: true }
-- { id: depa, name: Digital Economy Partnership Agreement (DEPA), members: [SG], type: digital, note: Lorem ipsum placeholder note., sample: true }
+# Trade agreements in force for each country. members: which of SG / VN are party to it.
+# note: one short sentence; cite: claim IDs from src/data/sources.csv that support the row.
+- { id: cptpp, name: CPTPP (Trans-Pacific Partnership), members: [SG, VN], note: 12 economies; in force for Vietnam since 2019., cite: [SG-68, VN-64] }
+- { id: rcep, name: RCEP (Regional Comprehensive Economic Partnership), members: [SG, VN], note: 15 Asia-Pacific countries including China; in force for Vietnam since 2022., cite: [SG-68, VN-64] }
+- { id: eusfta, name: EU–Singapore FTA, members: [SG], note: One of Singapore's 29 free trade agreements in force., cite: [SG-68] }
+- { id: evfta, name: EU–Vietnam FTA (EVFTA), members: [VN], note: In force since 2020., cite: [VN-64] }
+- { id: ukvn, name: UK–Vietnam CEPA, members: [VN], note: In force since 2025., cite: [VN-64] }
+- { id: ussfta, name: US–Singapore FTA, members: [SG], note: In force since 2004; the first US free trade agreement with an Asian country., cite: [SG-63] }
+- { id: csfta, name: China–Singapore FTA, members: [SG], note: Further upgrade in force from 31 December 2024., cite: [SG-72] }

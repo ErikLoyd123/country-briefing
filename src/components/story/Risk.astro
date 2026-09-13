@@ -1,0 +1,57 @@
+---
+// One risk, one screen.
+// <Risk area="government" level="high" title="…">
+// What is happening, with citations [@VN-24].
+//
+// <Fragment slot="means">What it means for a foreign company [@VN-66].</Fragment>
+// <Fragment slot="seen">Optional example from Crocs or Mastercard [@CR-1].</Fragment>
+// </Risk>
+// seenAt names the company in the "seen" slot. Homepage risk lists read area, level and title.
+import RiskLevel from './RiskLevel.astro';
+import { AREAS, riskAnchor } from '../../lib/format.js';
+
+const { area, level, title, seenAt } = Astro.props;
+if (!AREAS[area]) throw new Error(`Risk "${title}": area "${area}" should be one of ${Object.keys(AREAS).join(', ')}`);
+if (Astro.slots.has('seen') && !seenAt) throw new Error(`Risk "${title}": the "seen" slot needs a seenAt company name`);
+---
+
+<article id={riskAnchor(title)} class="risk not-prose my-14 scroll-mt-24">
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+    <p class="kicker text-muted">{AREAS[area]}</p>
+    <RiskLevel level={level} />
+  </div>
+  <h3 class="mt-4 max-w-[30ch] font-display text-[clamp(1.75rem,3vw,2.4rem)] leading-[1.12] text-ink">{title}</h3>
+  <div class="mt-6 grid gap-x-10 gap-y-6 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+    <div class="risk-what font-display text-[1.15rem] leading-relaxed text-ink-2">
+      <slot />
+    </div>
+    <div class="risk-means border-t-2 pt-4 md:border-t-0 md:border-l-2 md:pt-0 md:pl-6">
+      <p class="text-sm font-medium text-ink">For a foreign company</p>
+      <div class="mt-1.5 font-display text-[1.15rem] leading-relaxed text-ink"><slot name="means" /></div>
+      {
+        Astro.slots.has('seen') && (
+          <>
+            <p class="mt-5 text-sm font-medium text-ink">Seen at {seenAt}</p>
+            <div class="mt-1.5 text-[0.95rem] leading-relaxed text-ink-2">
+              <slot name="seen" />
+            </div>
+          </>
+        )
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .risk-means {
+    border-color: var(--country, var(--color-ink));
+  }
+  .risk-what :global(p + p) {
+    margin-top: 0.8em;
+  }
+  @media print {
+    .risk {
+      break-inside: avoid;
+    }
+  }
+</style>

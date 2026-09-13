@@ -1,19 +1,18 @@
 ---
-const year = new Date().getFullYear();
+import { TEAM } from '../../lib/team.js';
 ---
 
 <footer class="screen-only mt-24 border-t border-rule">
   <div class="container-wide grid gap-6 py-10 text-sm text-muted md:grid-cols-[1fr_auto]">
     <div class="max-w-xl">
-      <p class="font-display text-base text-ink">Doing business in Singapore and Vietnam: Politics and Risk</p>
-      <p class="mt-2">An EMBA country briefing. Team member names and course details go here. Draft content uses placeholder text and sample data, marked where it appears.</p>
+      <p class="font-display text-base text-ink">Politics and Risk Desk: Singapore and Vietnam</p>
+      <p class="mt-2">{TEAM.course}. {TEAM.name}: {TEAM.members.join(', ')}. Sources retrieved {TEAM.retrieved}; every claim is checked by a team member. Not affiliated with Lonely Planet.</p>
     </div>
     <nav aria-label="Footer" class="flex flex-wrap items-start gap-x-5 gap-y-2">
-      <a href="/about#methodology" class="hover:text-ink">Methodology</a>
+      <a href="/about#risk-levels" class="hover:text-ink">How we rate risk</a>
       <a href="/about#credits" class="hover:text-ink">Photo credits</a>
-      <a href="/bibliography" class="hover:text-ink">Sources</a>
+      <a href="/sources" class="hover:text-ink">Sources</a>
       <a href="/paper" class="hover:text-ink">Paper version</a>
-      <span>{year}</span>
     </nav>
   </div>
 </footer>

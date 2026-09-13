@@ -1,0 +1,30 @@
+---
+// One visit inside <Stops>. The default slot says what the stop reveals; slot "ask" is the question to bring.
+const { when, name } = Astro.props;
+---
+
+<li class="stop border-t-2 pt-4">
+  <p class="num text-sm text-muted">{when}</p>
+  <h4 class="mt-1 font-display text-[1.35rem] leading-tight text-ink">{name}</h4>
+  <div class="stop-body mt-2 text-[0.95rem] leading-relaxed text-ink-2"><slot /></div>
+  {
+    Astro.slots.has('ask') && (
+      <div class="mt-4">
+        <p class="text-xs font-semibold tracking-wide text-ink uppercase">Ask this</p>
+        <div class="mt-1 font-display text-[1.1rem] leading-snug text-ink italic">
+          <slot name="ask" />
+        </div>
+      </div>
+    )
+  }
+</li>
+
+<style>
+  .stop {
+    border-color: var(--country, var(--color-ink));
+    break-inside: avoid;
+  }
+  .stop-body :global(p + p) {
+    margin-top: 0.6em;
+  }
+</style>

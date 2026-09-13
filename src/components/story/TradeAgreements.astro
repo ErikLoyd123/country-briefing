@@ -2,45 +2,41 @@
 import { Check, Minus } from '@lucide/astro';
 import raw from '../../data/trade-agreements.yaml?raw';
 import { loadYaml } from '../../lib/yaml.js';
-import SampleBadge from './SampleBadge.astro';
+import { withCitation } from '../../lib/sources.js';
 
 const { title = 'Trade agreements in force' } = Astro.props;
 const agreements = loadYaml(raw, 'src/data/trade-agreements.yaml');
-const anySample = agreements.some((a) => a.sample);
 ---
 
 <section class="not-prose my-12">
-  <div class="flex flex-wrap items-baseline justify-between gap-3">
-    <h3 class="font-display text-2xl text-ink">{title}</h3>
-    {anySample && <SampleBadge />}
-  </div>
+  <h3 class="font-display text-2xl text-ink">{title}</h3>
   <div class="mt-4 overflow-x-auto">
-    <table class="w-full min-w-[34rem] border-collapse text-left text-[0.95rem]">
+    <table class="w-full min-w-[36rem] border-collapse text-left text-[0.95rem]">
       <thead>
         <tr class="border-b border-ink text-sm text-muted">
           <th scope="col" class="py-2 pr-4 font-normal">Agreement</th>
           <th scope="col" class="w-24 px-2 py-2 text-center font-normal">Singapore</th>
           <th scope="col" class="w-24 px-2 py-2 text-center font-normal">Vietnam</th>
-          <th scope="col" class="py-2 pl-4 font-normal">Type</th>
+          <th scope="col" class="py-2 pl-4 font-normal">Note</th>
         </tr>
       </thead>
       <tbody>
         {
           agreements.map((a) => (
-            <tr class="border-b border-rule">
+            <tr class="border-b border-rule align-top">
               <th scope="row" class="py-3 pr-4 font-medium text-ink">{a.name}</th>
-              {(['SG', 'VN']).map((c) => (
+              {['SG', 'VN'].map((c) => (
                 <td class="px-2 py-3 text-center">
                   {a.members.includes(c) ? (
                     <span class:list={['inline-grid size-6 place-items-center rounded-full text-white', c === 'SG' ? 'bg-sg' : 'bg-vn']}>
-                      <Check size={14} aria-label="Member" />
+                      <Check size={14} aria-label="Party to it" />
                     </span>
                   ) : (
-                    <Minus size={14} class="inline text-muted" aria-label="Not a member" />
+                    <Minus size={14} class="inline text-muted" aria-label="Not a party" />
                   )}
                 </td>
               ))}
-              <td class="py-3 pl-4 text-muted capitalize">{a.type}</td>
+              <td class="py-3 pl-4 text-ink-2" set:html={withCitation(a.note, a.cite, undefined, `trade-agreements.yaml (${a.id})`)} />
             </tr>
           ))
         }

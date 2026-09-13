@@ -1,16 +1,19 @@
 ---
-import { Briefcase, TriangleAlert, Info } from '@lucide/astro';
+// A boxed takeaway. tone="warn" marks a caution (a hard rule, a trap) with a crimson rule and warning icon.
+// size="sm" sets the body in reading size instead of the large display size, for longer boxes.
+import { Briefcase, TriangleAlert, Info, Telescope } from '@lucide/astro';
 
-const { title, icon = 'info' } = Astro.props;
-const Icon = { briefcase: Briefcase, alert: TriangleAlert, info: Info }[icon] ?? Info;
+const { title, icon, tone = 'default', size = 'lg' } = Astro.props;
+const warn = tone === 'warn';
+const Icon = { briefcase: Briefcase, alert: TriangleAlert, info: Info, outlook: Telescope }[icon ?? (warn ? 'alert' : 'info')] ?? Info;
 ---
 
-<aside class="callout not-prose my-14 border-t-2 border-ink pt-5">
-  <p class="flex items-center gap-2 text-sm font-medium text-ink">
+<aside class:list={['callout not-prose my-14 border-t-2 pt-5', warn ? 'border-risk-4' : 'border-ink']}>
+  <p class:list={['flex items-center gap-2 text-sm font-medium', warn ? 'text-risk-4' : 'text-ink']}>
     <Icon size={18} aria-hidden="true" />
     {title}
   </p>
-  <div class="callout-body mt-3 font-display text-2xl leading-snug text-ink">
+  <div class:list={['callout-body mt-3 font-display text-ink', size === 'sm' ? 'text-[1.2rem] leading-relaxed' : 'text-2xl leading-snug']}>
     <slot />
   </div>
 </aside>

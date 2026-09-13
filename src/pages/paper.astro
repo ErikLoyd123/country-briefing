@@ -1,14 +1,11 @@
 ---
-// The whole chapter as one printable document. `npm run pdf` saves this page as a PDF.
+// The whole briefing as one printable document. `npm run pdf` saves this page as a PDF.
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import RatingChip from '../components/story/RatingChip.astro';
-import ScorecardTable from '../components/verdict/ScorecardTable.astro';
 import { mdxComponents } from '../components/mdx.js';
 import { getTopics } from '../lib/topics.js';
-import { getIndicator } from '../lib/data.js';
-import { scorecardCiteKeys } from '../lib/scorecard.js';
-import { formatBibliography } from '../lib/bib.js';
+import { loadIndex, citedClaimIds } from '../lib/sources.js';
+import { TEAM } from '../lib/team.js';
 import { FileDown } from '@lucide/astro';
 
 const topics = await getTopics();
@@ -25,17 +22,14 @@ const renderedTopics = await Promise.all(
   }),
 );
 
-const allKeys = [
-  ...(summary.remarkPluginFrontmatter.citeKeys ?? []),
-  ...renderedTopics.flatMap(({ topic, parts }) => [...parts.flatMap((p) => p.remarkPluginFrontmatter.citeKeys ?? []), ...topic.keyStats.map((id) => getIndicator(id).sourceKey)]),
-  ...renderedAppendices.flatMap((a) => a.rendered.remarkPluginFrontmatter.citeKeys ?? []),
-  ...scorecardCiteKeys(),
-];
-const references = await formatBibliography([...new Set(allKeys)]);
+// References: every source behind a claim cited in the briefing's content or data files.
+const index = loadIndex();
+const cited = citedClaimIds(index);
+const references = index.sources.filter((s) => s.claims.some((id) => cited.has(id)));
 const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<BaseLayout title="Paper" description="The full Politics and Risk chapter as a printable paper.">
+<BaseLayout title="Paper" description="The full Politics and Risk briefing as a printable paper.">
   <div class="paper mx-auto max-w-[52rem] px-[clamp(1rem,4vw,2rem)] py-12">
     <aside class="screen-only mb-14 flex items-start gap-3 border-b border-rule pb-5 text-sm text-ink-2">
       <FileDown size={18} class="mt-0.5 shrink-0 text-muted" aria-hidden="true" />
@@ -45,9 +39,9 @@ const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '
     </aside>
 
     <header class="cover">
-      <p class="text-sm text-muted">EMBA country briefing</p>
-      <h1 class="mt-4 font-display text-5xl leading-[1.05] text-ink md:text-6xl">Doing Business in Singapore and Vietnam: Politics and Risk</h1>
-      <p class="mt-6 font-display text-xl leading-relaxed text-ink-2">Team member names<br />Course name and number<br />Instructor names</p>
+      <p class="text-sm text-muted">{TEAM.course} · {TEAM.series}</p>
+      <h1 class="mt-4 font-display text-5xl leading-[1.05] text-ink md:text-6xl">Politics and Risk Desk: Singapore and Vietnam</h1>
+      <p class="mt-6 font-display text-xl leading-relaxed text-ink-2">{TEAM.name}: {TEAM.members.join(', ')}</p>
       <p class="mt-2 text-ink-2">{today}</p>
     </header>
 
@@ -56,7 +50,6 @@ const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '
       <ol class="mt-6 space-y-2 text-ink">
         <li><a href="#executive-summary" class="hover:underline">Executive summary</a></li>
         {topics.map((t) => <li><a href={`#${t.slug}`} class="hover:underline">{t.order}. {t.title}</a></li>)}
-        <li><a href="#scorecard" class="hover:underline">Go / no-go scorecard</a></li>
         {appendices.map((a) => <li><a href={`#${a.id}`} class="hover:underline">{a.data.title}</a></li>)}
         <li><a href="#references" class="hover:underline">References</a></li>
       </ol>
@@ -70,29 +63,21 @@ const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '
     {
       renderedTopics.map(({ topic, parts: [overview, sg, vn] }) => (
         <section id={topic.slug} class="paper-section">
-          <p class="text-sm text-muted">Briefing {topic.order}</p>
+          <p class="text-sm text-muted">Section {topic.order}</p>
           <h2 class="mt-1 font-display text-4xl leading-tight text-ink">{topic.title}</h2>
           <p class="mt-3 font-display text-xl text-ink-2">{topic.thesis}</p>
-          <div class="mt-4 flex flex-wrap gap-2">
-            <RatingChip country="SG" score={topic.ratings.SG} />
-            <RatingChip country="VN" score={topic.ratings.VN} />
-          </div>
           <div class="briefing-prose mt-8">
             <overview.Content components={mdxComponents} />
           </div>
-          <div class="briefing-prose mt-10">
+          <div class="briefing-prose is-sg mt-10">
             <sg.Content components={mdxComponents} />
           </div>
-          <div class="briefing-prose mt-10">
+          <div class="briefing-prose is-vn mt-10">
             <vn.Content components={mdxComponents} />
           </div>
         </section>
       ))
     }
-
-    <section id="scorecard" class="paper-section">
-      <ScorecardTable title="Go / no-go scorecard" />
-    </section>
 
     {
       renderedAppendices.map(({ entry, rendered }) => (
@@ -105,12 +90,26 @@ const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '
 
     <section id="references" class="paper-section">
       <h2 class="font-display text-4xl text-ink">References</h2>
-      <div class="mt-6 text-ink-2" set:html={references} />
+      <ol class="reference-list mt-6 text-ink-2">
+        {
+          references.map((s) => (
+            <li>
+              {s.reference} <span class="break-all">{s.url}</span>
+            </li>
+          ))
+        }
+      </ol>
     </section>
   </div>
 </BaseLayout>
 
 <style>
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
   .paper-section {
     margin-top: 5rem;
     padding-top: 3rem;

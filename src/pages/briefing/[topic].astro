@@ -2,7 +2,6 @@
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChapterOpener from '../../components/story/ChapterOpener.astro';
-import StatStrip from '../../components/story/StatStrip.astro';
 import StatusBadge from '../../components/layout/StatusBadge.astro';
 import { mdxComponents } from '../../components/mdx.js';
 import { getTopics } from '../../lib/topics.js';
@@ -28,7 +27,6 @@ const sections = [
   <!-- On laptop-sized screens the page reads like a deck: the opener and every .frame fill one screen. -->
   <div class="opener-frame" data-frame>
     <ChapterOpener topic={topic} total={total} class="opener-media" />
-    <StatStrip ids={topic.keyStats} />
   </div>
 
   <div class="container-wide grid gap-10 pt-14 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-16 lg:pt-0">
@@ -64,11 +62,11 @@ const sections = [
         <vietnam.Content components={mdxComponents} />
       </section>
 
-      <nav aria-label="Next and previous briefings" class="screen-only mt-20 mb-4 grid gap-8 border-t border-ink pt-6 sm:grid-cols-2">
+      <nav aria-label="Next and previous sections" class="screen-only mt-20 mb-4 grid gap-8 border-t border-ink pt-6 sm:grid-cols-2">
         {
           [
-            prev ? { href: `/briefing/${prev.slug}`, label: 'Previous briefing', title: prev.title } : { href: '/', label: 'Back to', title: 'Overview' },
-            next ? { href: `/briefing/${next.slug}`, label: 'Next briefing', title: next.title } : { href: '/verdict', label: 'Next', title: 'The verdict' },
+            prev ? { href: `/briefing/${prev.slug}`, label: 'Previous', title: prev.short } : { href: '/', label: 'Back to', title: 'Overview' },
+            next ? { href: `/briefing/${next.slug}`, label: 'Next', title: next.short } : { href: '/sources', label: 'Next', title: 'Sources' },
           ].map((l, i) => (
             <a href={l.href} class:list={['group block', i === 1 && 'sm:text-right']}>
               <span class="text-sm text-muted">{l.label}</span>
@@ -140,12 +138,25 @@ const sections = [
 </script>
 
 <style>
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
   .briefing-prose :global(> :is(p, ul, ol, h2, h3)),
   .briefing-prose :global(> .frame > :is(p, ul, ol, h2, h3)) {
     max-width: 42rem;
   }
   .country-section :global(> .frame:first-child > h2:first-child) {
     margin-top: 1.25rem;
+  }
+  /* An overview that opens with a lone paragraph reads it as the section's lede. */
+  #overview :global(> .frame:first-child > p:only-child) {
+    max-width: 40rem;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    line-height: 1.4;
+    color: var(--color-ink);
   }
 
   /* Keep in sync with FRAME_QUERY in the script above. */
@@ -222,12 +233,6 @@ const sections = [
       height: 4px;
       margin-bottom: 1.25rem;
       background: var(--country);
-    }
-    .is-sg {
-      --country: var(--color-sg);
-    }
-    .is-vn {
-      --country: var(--color-vn);
     }
 
     /* Dev-only overflow flag, set by the script above. */

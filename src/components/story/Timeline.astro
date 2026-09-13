@@ -2,7 +2,7 @@
 // Two-lane political timeline from src/data/timeline.yaml: Singapore left, Vietnam right.
 import raw from '../../data/timeline.yaml?raw';
 import { loadYaml } from '../../lib/yaml.js';
-import SampleBadge from './SampleBadge.astro';
+import { citationHtml } from '../../lib/sources.js';
 
 const { title = 'Key political events', from } = Astro.props;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -15,14 +15,12 @@ const events = loadYaml(raw, 'src/data/timeline.yaml')
   })
   .filter((e) => !from || e.date >= from)
   .sort((a, b) => a.date.localeCompare(b.date));
-const anySample = events.some((e) => e.sample);
 const label = (d) => `${MONTHS[Number(d.slice(5)) - 1]} ${d.slice(0, 4)}`;
 ---
 
 <section class="not-prose my-14">
   <div class="flex flex-wrap items-baseline justify-between gap-3">
     <h3 class="font-display text-2xl text-ink">{title}</h3>
-    {anySample && <SampleBadge />}
   </div>
   <div class="mt-3 hidden grid-cols-[1fr_5.5rem_1fr] text-sm font-medium md:grid lg:hidden" aria-hidden="true">
     <span class="text-right text-ink">Singapore</span><span></span><span class="text-ink">Vietnam</span>
@@ -40,7 +38,7 @@ const label = (d) => `${MONTHS[Number(d.slice(5)) - 1]} ${d.slice(0, 4)}`;
           <div class="tl-card">
             <p class="tl-country text-xs text-muted">{e.country === 'SG' ? 'Singapore' : e.country === 'VN' ? 'Vietnam' : 'Both countries'}</p>
             <p class="font-medium text-ink">{e.title}</p>
-            <p class="mt-1 text-[0.95rem] text-ink-2">{e.detail}</p>
+            <p class="mt-1 text-[0.95rem] text-ink-2">{e.detail} <Fragment set:html={citationHtml(e.cite, undefined, `timeline.yaml (${e.title})`)} /></p>
           </div>
         </li>
       ))

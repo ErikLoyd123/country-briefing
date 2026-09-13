@@ -1,9 +1,8 @@
-// Build-time only. Assembles briefing topics from src/content/briefings/NN-slug/{index,singapore,vietnam}.mdx
+// Build-time only. Assembles briefing sections from src/content/briefings/NN-slug/{index,singapore,vietnam}.mdx
 import { getCollection } from 'astro:content';
-import { getIndicator } from './data.js';
 
 const PART_FILES = { index: 'index', singapore: 'singapore', vietnam: 'vietnam' };
-const REQUIRED_INDEX_FIELDS = ['title', 'thesis', 'ratings', 'hero'];
+const REQUIRED_INDEX_FIELDS = ['title', 'thesis', 'hero'];
 
 let cache;
 
@@ -36,17 +35,14 @@ export async function getTopics() {
     if (!d.hero.image && !d.hero.video && !d.hero.label) {
       throw new Error(`briefings/${folder}/index.mdx: hero needs image, video, or a placeholder label`);
     }
-    d.keyStats.forEach(getIndicator); // throws on unknown indicator ids
     return {
       folder,
       slug: t.slug,
       order: t.order,
       title: d.title,
+      short: d.short ?? d.title,
       thesis: d.thesis,
-      ratings: d.ratings,
       hero: d.hero,
-      pillars: d.pillars,
-      keyStats: d.keyStats,
       status: d.status,
       parts: t.parts,
     };

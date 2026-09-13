@@ -1,8 +1,7 @@
 ---
-// Full-bleed opener for a briefing topic. Uses hero.video / hero.image when present,
+// Full-bleed opener for a briefing section. Uses hero.video / hero.image when present,
 // otherwise a labeled placeholder describing the shot we still need.
 import HeroMedia from './HeroMedia.astro';
-import RatingChip from './RatingChip.astro';
 import { findCredit } from '../../lib/credits.js';
 
 const { topic, total, class: className } = Astro.props;
@@ -19,13 +18,9 @@ const aiGenerated = media ? Boolean(findCredit(media)?.aiGenerated) : false;
   <div class="absolute inset-0 -z-10 bg-gradient-to-r from-night/60 to-transparent" aria-hidden="true"></div>
 
   <div class="container-wide pt-32 pb-14 md:pb-20">
-    <p class="kicker text-on-night-muted">Briefing {topic.order} of {total}</p>
+    <p class="kicker text-on-night-muted">Section {topic.order} of {total}</p>
     <h1 class="mt-3 max-w-4xl text-5xl leading-[1.02] md:text-7xl">{topic.title}</h1>
     <p class="mt-6 max-w-2xl font-display text-xl leading-snug text-on-night/85 md:text-2xl">{topic.thesis}</p>
-    <div class="mt-8 flex flex-wrap gap-x-8 gap-y-3">
-      <RatingChip country="SG" score={topic.ratings.SG} tone="dark" size="lg" plain />
-      <RatingChip country="VN" score={topic.ratings.VN} tone="dark" size="lg" plain />
-    </div>
     {aiGenerated && <p class="mt-8 text-xs text-on-night-muted">Illustrative image (AI-generated)</p>}
   </div>
 </section>

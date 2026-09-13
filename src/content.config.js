@@ -2,21 +2,20 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-// Entry ids are the file path without extension, e.g. "01-political-stability/index".
-// Topic slug, order, and country are derived from folder/file names in src/lib/topics.js,
+// Entry ids are the file path without extension, e.g. "01-need-to-know/index".
+// Section slug, order, and country are derived from folder/file names in src/lib/topics.js,
 // so teammates only fill in the fields below.
 const pathId = ({ entry }) => entry.replace(/\.mdx?$/, '');
 
 const status = z.enum(['draft', 'review', 'final']).default('draft');
-const rating = z.number().int().min(1).max(5);
 
 const briefings = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/briefings', generateId: pathId }),
   schema: z.object({
     title: z.string().optional(),
+    // Short name for menus and cards, e.g. "Local Knowledge" for "Local Knowledge: Crocs and Mastercard".
+    short: z.string().optional(),
     thesis: z.string().optional(),
-    pillars: z.array(z.enum(['government', 'society', 'security', 'economy'])).default([]),
-    ratings: z.object({ SG: rating, VN: rating }).optional(),
     hero: z
       .object({
         label: z.string().optional(),
@@ -26,7 +25,6 @@ const briefings = defineCollection({
         poster: z.string().optional(),
       })
       .optional(),
-    keyStats: z.array(z.string()).default([]),
     status,
   }),
 });

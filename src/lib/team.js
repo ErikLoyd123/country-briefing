@@ -1,0 +1,8 @@
+// Who made the briefing, shown in the footer, the paper cover and the About page.
+export const TEAM = {
+  name: 'Team Poesis',
+  members: ['Allison', 'Eric', 'Zach', 'Terese'],
+  course: 'DU EMBA Cohort 84 · Global Business',
+  series: 'Country Briefing 1 of 5',
+  retrieved: '13 September 2026',
+};

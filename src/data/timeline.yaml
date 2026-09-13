@@ -1,12 +1,14 @@
-# Political & risk events. date: YYYY-MM. country: SG | VN | both.
-# All entries below are Lorem placeholders; replace with researched, cited events.
-- { date: "2016-01", country: VN, title: Lorem ipsum congress, detail: Dolor sit amet consectetur adipiscing elit., cite: [sample-news], sample: true }
-- { date: "2017-09", country: SG, title: Consectetur election milestone, detail: Sed do eiusmod tempor incididunt ut labore., cite: [sample-news], sample: true }
-- { date: "2019-05", country: both, title: Adipiscing trade agreement, detail: Ut enim ad minim veniam quis nostrud exercitation., cite: [sample-news], sample: true }
-- { date: "2020-03", country: both, title: Tempor public health emergency, detail: Duis aute irure dolor in reprehenderit in voluptate., cite: [sample-news], sample: true }
-- { date: "2020-10", country: VN, title: Incididunt flood season, detail: Excepteur sint occaecat cupidatat non proident., cite: [sample-news], sample: true }
-- { date: "2021-01", country: VN, title: Labore leadership transition, detail: Sunt in culpa qui officia deserunt mollit anim., cite: [sample-news], sample: true }
-- { date: "2023-03", country: VN, title: Magna anti-corruption campaign, detail: Nemo enim ipsam voluptatem quia voluptas sit., cite: [sample-news], sample: true }
-- { date: "2024-05", country: SG, title: Aliqua leadership handover, detail: Neque porro quisquam est qui dolorem ipsum., cite: [sample-news], sample: true }
-- { date: "2025-04", country: both, title: Veniam tariff shock, detail: Quis autem vel eum iure reprehenderit qui in ea., cite: [sample-news], sample: true }
-- { date: "2025-07", country: VN, title: Nostrud administrative restructuring, detail: At vero eos et accusamus et iusto odio dignissimos., cite: [sample-news], sample: true }
+# Political and risk events. date: YYYY-MM. country: SG | VN | both.
+# cite: claim IDs from src/data/sources.csv. Keep to about a dozen so it fits one screen.
+- { date: "2013-12", country: SG, title: Little India riot, detail: The worst public violence in Singapore in four decades., cite: [SG-73] }
+- { date: "2014-05", country: VN, title: Anti-China factory riots, detail: At least 20 dead after China moved an oil rig into disputed waters., cite: [VN-67] }
+- { date: "2018-06", country: VN, title: Land lease and cyber law protests, detail: About 200 arrested., cite: [VN-68] }
+- { date: "2024-03", country: VN, title: President resigns, detail: The anti-corruption campaign reaches the top., cite: [VN-24] }
+- { date: "2024-09", country: VN, title: Typhoon Yagi, detail: 318 dead and about US$3.3 billion in damage., cite: [VN-36] }
+- { date: "2024-10", country: SG, title: Ex-minister jailed, detail: First political corruption trial in nearly 50 years., cite: [SG-66] }
+- { date: "2025-04", country: SG, title: 10% US tariff, detail: The free trade agreement did not shield exporters., cite: [SG-46] }
+- { date: "2025-05", country: SG, title: General election, detail: PAP wins 87 of 97 seats., cite: [SG-17] }
+- { date: "2025-07", country: VN, title: 20% and 40% US tariffs, detail: 40% on goods judged transshipped., cite: [VN-43] }
+- { date: "2026-01", country: VN, title: 14th Party Congress, detail: Growth target of at least 10% a year., cite: [VN-75] }
+- { date: "2026-03", country: VN, title: National Assembly election, detail: Communist Party takes 482 of 500 seats., cite: [VN-13] }
+- { date: "2026-09", country: VN, title: FTSE emerging-market upgrade, detail: About US$6 billion of passive inflows expected., cite: [VN-91] }

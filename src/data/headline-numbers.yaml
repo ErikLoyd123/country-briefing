@@ -1,0 +1,18 @@
+# The homepage's side-by-side numbers. value is shown large; detail is the small line under it.
+# cite: claim IDs from src/data/sources.csv.
+- label: Corruption Perceptions Index
+  note: 0 to 100, higher is cleaner
+  SG: { value: "84", detail: 3rd of 182 countries, cite: [SG-19] }
+  VN: { value: "41", detail: 81st of 182 countries, cite: [VN-15] }
+- label: Credit rating
+  SG: { value: AAA, detail: Stable, cite: [SG-21] }
+  VN: { value: BB+, detail: "Fitch, stable", cite: [VN-16] }
+- label: Coface country risk
+  SG: { value: A2, detail: Business climate A1, cite: [SG-51] }
+  VN: { value: A4, detail: Business climate A4, cite: [VN-20] }
+- label: US tariff on exports
+  SG: { value: 10%, detail: Since April 2025, cite: [SG-46] }
+  VN: { value: 20%, detail: 40% on goods judged transshipped, cite: [VN-43] }
+- label: GDP per person
+  SG: { value: "US$84,734", detail: "2023", cite: [SG-23] }
+  VN: { value: "US$5,026", detail: "2025, now upper-middle income", cite: [VN-18, VN-19] }

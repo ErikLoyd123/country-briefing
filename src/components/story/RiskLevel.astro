@@ -1,0 +1,17 @@
+---
+// The team's read on how much a risk should change what a company does.
+// level: high | mid | low
+import { RISK_LEVELS } from '../../lib/format.js';
+
+const { level, class: className } = Astro.props;
+const meta = RISK_LEVELS[level];
+if (!meta) throw new Error(`RiskLevel: level "${level}" should be high, mid or low`);
+---
+
+<span
+  class:list={['inline-flex items-center gap-2 rounded-full py-1 pr-3 pl-2 text-sm font-medium whitespace-nowrap', meta.dark ? 'text-white' : 'text-ink', className]}
+  style={`background: var(--color-risk-${meta.step})`}
+>
+  <span class:list={['size-2 rounded-full', meta.dark ? 'bg-white/80' : 'bg-ink/60']} aria-hidden="true"></span>
+  {meta.label}
+</span>

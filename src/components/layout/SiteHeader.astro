@@ -5,10 +5,8 @@ import { getTopics } from '../../lib/topics.js';
 const topics = await getTopics();
 const path = Astro.url.pathname;
 const links = [
-  { href: '/verdict', label: 'Verdict' },
-  { href: '/present', label: 'Present' },
   { href: '/paper', label: 'Paper' },
-  { href: '/bibliography', label: 'Sources' },
+  { href: '/sources', label: 'Sources' },
   { href: '/about', label: 'About' },
 ];
 const isActive = (href) => path === href || path.startsWith(href + '/');
@@ -27,14 +25,14 @@ const isActive = (href) => path === href || path.startsWith(href + '/');
     <nav aria-label="Primary" class="hidden items-center gap-1 text-sm md:flex">
       <details class="nav-menu relative">
         <summary class:list={['flex cursor-pointer list-none items-center gap-1 rounded px-3 py-2 hover:bg-paper-2', path.startsWith('/briefing') && 'text-ink font-medium']}>
-          Briefings <ChevronDown size={14} aria-hidden="true" />
+          Briefing <ChevronDown size={14} aria-hidden="true" />
         </summary>
-        <ol class="absolute left-0 mt-2 w-80 rounded-md border border-rule bg-paper p-2 shadow-[0_12px_32px_-12px_rgb(14_26_34/0.25)]">
+        <ol class="absolute left-0 mt-2 w-72 rounded-md border border-rule bg-paper p-2 shadow-[0_12px_32px_-12px_rgb(14_26_34/0.25)]">
           {topics.map((t) => (
             <li>
               <a href={`/briefing/${t.slug}`} class="flex gap-3 rounded px-3 py-2 hover:bg-paper-2">
                 <span class="num w-4 text-muted">{t.order}</span>
-                <span class="text-ink">{t.title}</span>
+                <span class="text-ink">{t.short}</span>
               </a>
             </li>
           ))}
@@ -52,8 +50,8 @@ const isActive = (href) => path === href || path.startsWith(href + '/');
         <Menu size={20} aria-hidden="true" />
       </summary>
       <div class="absolute right-0 mt-2 w-72 rounded-md border border-rule bg-paper p-2 shadow-lg">
-        <p class="px-3 pt-2 pb-1 text-xs text-muted">Briefings</p>
-        {topics.map((t) => <a href={`/briefing/${t.slug}`} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{t.order}. {t.title}</a>)}
+        <p class="px-3 pt-2 pb-1 text-xs text-muted">Briefing</p>
+        {topics.map((t) => <a href={`/briefing/${t.slug}`} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{t.order}. {t.short}</a>)}
         <hr class="my-2 border-rule" />
         {links.map((l) => <a href={l.href} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{l.label}</a>)}
       </div>

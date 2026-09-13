@@ -1,34 +1,48 @@
 ---
-// Practical know-before-you-go tips.
-// items: [{ title, body, country: 'SG' | 'VN' | 'both', icon: lucide-name }]
-import Icon from '../ui/Icon.astro';
-
-const { items = [], title = 'Know before you go' } = Astro.props;
-const who = { SG: 'Singapore', VN: 'Vietnam', both: 'Both countries' };
+// Practical tips as a grid of cards. Write a normal Markdown list inside; a bold lead-in becomes the card title.
+// <HintCards title="Ten things to know on arrival">
+// - **No visa for short visits.** US citizens can stay 90 days; keep six months on your passport [@SG-2].
+// </HintCards>
+// The card rule takes the country color of the section it sits in.
+const { title = 'Know before you go' } = Astro.props;
 ---
 
-<section class="not-prose my-12">
-  <h3 class="font-display text-2xl text-ink">{title}</h3>
-  <ul class="mt-5 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
-    {
-      items.map((h) => (
-        <li class:list={['hint border-t-2 pt-4', h.country === 'SG' ? 'border-sg' : h.country === 'VN' ? 'border-vn' : 'border-ink']}>
-          <p class="flex items-center gap-2 text-xs text-muted">
-            {h.icon && <Icon name={h.icon} size={15} />}
-            {who[h.country ?? 'both']}
-          </p>
-          <p class="mt-2 font-medium text-ink">{h.title}</p>
-          <p class="mt-1 text-[0.95rem] leading-relaxed text-ink-2">{h.body}</p>
-        </li>
-      ))
-    }
-  </ul>
+<section class="hint-cards not-prose my-12">
+  {title && <h3 class="font-display text-2xl text-ink">{title}</h3>}
+  <div class="mt-5"><slot /></div>
 </section>
 
 <style>
-  @media print {
-    .hint {
-      break-inside: avoid;
+  .hint-cards :global(ul),
+  .hint-cards :global(ol) {
+    display: grid;
+    gap: 1.25rem 2rem;
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 640px) {
+    .hint-cards :global(:is(ul, ol)) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+  }
+  @media (min-width: 1024px) {
+    .hint-cards :global(:is(ul, ol)) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .hint-cards :global(li) {
+    border-top: 2px solid var(--country, var(--color-ink));
+    padding-top: 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+    break-inside: avoid;
+  }
+  .hint-cards :global(li > strong:first-child),
+  .hint-cards :global(li > p:first-child > strong:first-child) {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-weight: 500;
+    color: var(--color-ink);
   }
 </style>

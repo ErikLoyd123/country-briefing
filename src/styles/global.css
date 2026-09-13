@@ -137,6 +137,70 @@
     list-style: disc;
     padding-left: 1.25em;
   }
+  :is(.briefing-prose, .briefing-prose > .frame) > ol {
+    list-style: decimal;
+    padding-left: 1.25em;
+  }
+  :is(.briefing-prose, .briefing-prose > .frame) > :is(ul, ol) > li + li {
+    margin-top: 0.4em;
+  }
+
+  /* Markdown tables: a Singapore / Vietnam comparison. The first column labels the row;
+     header cells two and three get the country dots. Scoped to tables written in Markdown,
+     not tables inside components. */
+  :is(.briefing-prose, .briefing-prose > .frame) > table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  :is(.briefing-prose, .briefing-prose > .frame) > table th {
+    padding: 0.5rem 1rem 0.5rem 0;
+    border-bottom: 1px solid var(--color-ink);
+    text-align: left;
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+  :is(.briefing-prose, .briefing-prose > .frame) > table thead th:is(:nth-child(2), :nth-child(3))::before {
+    content: '';
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-right: 0.4rem;
+    border-radius: 999px;
+    background: var(--color-sg);
+  }
+  :is(.briefing-prose, .briefing-prose > .frame) > table thead th:nth-child(3)::before {
+    background: var(--color-vn);
+  }
+  :is(.briefing-prose, .briefing-prose > .frame) > table td {
+    padding: 0.6rem 1rem 0.6rem 0;
+    border-bottom: 1px solid var(--color-rule);
+    vertical-align: top;
+    color: var(--color-ink-2);
+  }
+  :is(.briefing-prose, .briefing-prose > .frame) > table td:first-child {
+    width: 11rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  :is(.briefing-prose, .briefing-prose > .frame) > table td:not(:first-child) {
+    width: calc((100% - 11rem) / 2);
+  }
+  @media (max-width: 639.98px) {
+    :is(.briefing-prose, .briefing-prose > .frame) > table {
+      display: block;
+      overflow-x: auto;
+    }
+    :is(.briefing-prose, .briefing-prose > .frame) > table td {
+      min-width: 12rem;
+    }
+    :is(.briefing-prose, .briefing-prose > .frame) > table td:first-child {
+      min-width: 7rem;
+    }
+  }
+
   .briefing-prose strong {
     color: var(--color-ink);
     font-weight: 600;
@@ -148,15 +212,24 @@
     line-height: 1.5;
   }
 
+  /* APA in-text citations from src/plugins/remark-claims.mjs and lib/sources.js. */
   .cite {
     font-family: var(--font-sans);
     font-size: 0.78em;
     color: var(--color-muted);
-    white-space: nowrap;
-    cursor: help;
+  }
+  .cite a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .cite a:hover {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
-  .csl-bib-body .csl-entry {
+  /* APA reference list: hanging indent. */
+  .reference-list > li {
     padding-left: 2em;
     text-indent: -2em;
     margin-bottom: 0.8em;
