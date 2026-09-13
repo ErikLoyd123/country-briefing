@@ -1,41 +1,22 @@
 ---
 // Full-bleed opener for a briefing topic. Uses hero.video / hero.image when present,
 // otherwise a labeled placeholder describing the shot we still need.
-import { Image } from 'astro:assets';
-import PlaceholderMedia from './PlaceholderMedia.astro';
+import HeroMedia from './HeroMedia.astro';
 import RatingChip from './RatingChip.astro';
-import { getCredit, creditLine } from '../../lib/credits.js';
+import { findCredit } from '../../lib/credits.js';
 
 const { topic, total } = Astro.props;
 const { hero } = topic;
-const images = import.meta.glob('/src/assets/images/**/*.{jpg,jpeg,png,webp,avif}');
-
-let image;
-let credit;
-if (hero.image) {
-  const loader = images[`/src/assets/images/${hero.image}`];
-  if (!loader) throw new Error(`${topic.folder}/index.mdx hero.image "${hero.image}" not found in src/assets/images/`);
-  image = (await loader()).default;
-  credit = getCredit(hero.image);
-}
-if (hero.video) credit = getCredit(hero.video);
+const media = hero.video ?? hero.image;
+const aiGenerated = media ? Boolean(findCredit(media)?.aiGenerated) : false;
 ---
 
 <section class="chapter-opener relative isolate flex min-h-[78svh] items-end overflow-hidden bg-night text-on-night">
-  {
-    hero.video ? (
-      <video class="absolute inset-0 -z-10 h-full w-full object-cover" autoplay muted loop playsinline poster={hero.poster} aria-label={hero.alt}>
-        <source src={`/media/${hero.video}`} />
-      </video>
-    ) : image ? (
-      <Image src={image} alt={hero.alt} widths={[960, 1600, 2400]} sizes="100vw" class="absolute inset-0 -z-10 h-full w-full object-cover" loading="eager" />
-    ) : (
-      <div class="absolute inset-0 -z-10">
-        <PlaceholderMedia label={hero.label} tone="dark" fill />
-      </div>
-    )
-  }
-  <div class="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/60 to-night/10" aria-hidden="true"></div>
+  <div class="absolute inset-0 -z-10">
+    <HeroMedia image={hero.image} video={hero.video} alt={hero.alt} label={hero.label} eager />
+  </div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/55 to-night/5" aria-hidden="true"></div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-r from-night/60 to-transparent" aria-hidden="true"></div>
 
   <div class="container-wide pt-32 pb-14 md:pb-20">
     <p class="kicker text-on-night-muted">Briefing {topic.order} of {total}</p>
@@ -45,26 +26,22 @@ if (hero.video) credit = getCredit(hero.video);
       <RatingChip country="SG" score={topic.ratings.SG} tone="dark" size="lg" />
       <RatingChip country="VN" score={topic.ratings.VN} tone="dark" size="lg" />
     </div>
-    {credit && <p class="mt-8 text-xs text-on-night-muted">{creditLine(credit)}</p>}
+    {aiGenerated && <p class="mt-8 text-xs text-on-night-muted">Illustrative image (AI-generated)</p>}
   </div>
 </section>
 
 <style>
-  @media (prefers-reduced-motion: reduce) {
-    video {
-      display: none;
-    }
-  }
   @media print {
     .chapter-opener {
       min-height: 0;
       background: none;
       color: var(--color-ink);
     }
-    .chapter-opener video,
-    .chapter-opener img,
-    .chapter-opener [role='img'] {
+    .chapter-opener > div:not(.container-wide) {
       display: none;
+    }
+    .chapter-opener .container-wide {
+      padding: 0;
     }
   }
 </style>

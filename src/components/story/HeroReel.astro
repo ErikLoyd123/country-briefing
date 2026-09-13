@@ -1,0 +1,144 @@
+---
+// Split-screen video reel: Singapore clips on the left, Vietnam on the right, crossfading together.
+// pairs: [{ sg: { video, place }, vn: { video, place } }]   video paths are under public/media/
+// Only the current pair plays; the next pair starts loading shortly before it's shown.
+// Under prefers-reduced-motion the first pair's poster frames are shown and nothing cycles.
+import { findCredit } from '../../lib/credits.js';
+
+const { pairs, interval = 8000 } = Astro.props;
+if (!pairs?.length) throw new Error('HeroReel needs at least one pair');
+const poster = (video) => `/media/${video.replace(/\.mp4$/, '.jpg')}`;
+const sides = [
+  { key: 'sg', name: 'Singapore', tint: 'bg-sg/20', align: '' },
+  { key: 'vn', name: 'Vietnam', tint: 'bg-vn/20', align: 'md:justify-end md:text-right' },
+];
+---
+
+<div class="hero-reel relative grid grid-cols-1 md:grid-cols-2" data-hero-reel data-interval={interval}>
+  <div data-hero-seam class="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-px bg-on-night/35 md:block" aria-hidden="true"></div>
+  {
+    sides.map((side) => (
+      <div class:list={['relative flex min-h-[40svh] items-end overflow-hidden', side.align]}>
+        {pairs.map((pair, i) => {
+          const clip = pair[side.key];
+          return (
+            <div class:list={['reel-clip absolute inset-0', i === 0 && 'is-active']} data-reel-index={i}>
+              <img src={poster(clip.video)} alt="" class="absolute inset-0 h-full w-full object-cover" loading={i === 0 ? 'eager' : 'lazy'} />
+              <video
+                class="reel-video absolute inset-0 h-full w-full object-cover"
+                muted
+                loop
+                playsinline
+                preload={i === 0 ? 'auto' : 'none'}
+                poster={poster(clip.video)}
+                aria-label={findCredit(clip.video)?.alt ?? clip.place}
+              >
+                <source src={`/media/${clip.video}`} type="video/mp4" />
+              </video>
+            </div>
+          );
+        })}
+        <div class="absolute inset-0 bg-gradient-to-t from-night via-night/35 to-night/10" aria-hidden="true" />
+        <div class:list={['absolute inset-0 mix-blend-multiply', side.tint]} aria-hidden="true" />
+        <p class:list={['reel-place absolute top-5 px-[clamp(1rem,4vw,2.5rem)] text-sm text-on-night/80', side.key === 'vn' ? 'right-0' : 'left-0']} aria-live="off">
+          {pairs.map((pair, i) => (
+            <span class:list={['reel-place-label', i === 0 && 'is-active']} data-reel-index={i}>
+              {pair[side.key].place}
+            </span>
+          ))}
+        </p>
+        <p data-hero-name={side.key} class="relative px-[clamp(1rem,4vw,2.5rem)] pb-8 font-display text-mega" aria-hidden="true">
+          {side.name}
+        </p>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  const FADE_MS = 1200;
+  for (const reel of document.querySelectorAll('[data-hero-reel]')) {
+    const interval = Number(reel.dataset.interval) || 8000;
+    const clips = [...reel.querySelectorAll('.reel-clip')];
+    const labels = [...reel.querySelectorAll('.reel-place-label')];
+    const count = Math.max(...clips.map((c) => Number(c.dataset.reelIndex))) + 1;
+    const at = (list, i) => list.filter((el) => Number(el.dataset.reelIndex) === i);
+    const videosAt = (i) => at(clips, i).map((c) => c.querySelector('video'));
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const play = (i) =>
+      videosAt(i).forEach((v) => {
+        v.preload = 'auto';
+        v.currentTime = 0;
+        v.play().catch(() => {});
+      });
+
+    if (reduced) continue;
+    play(0);
+    if (count < 2) continue;
+
+    let current = 0;
+    let timer;
+    const advance = () => {
+      const next = (current + 1) % count;
+      play(next);
+      for (const el of [...clips, ...labels]) el.classList.toggle('is-active', Number(el.dataset.reelIndex) === next);
+      const prev = current;
+      setTimeout(() => videosAt(prev).forEach((v) => v.pause()), FADE_MS);
+      current = next;
+      schedule();
+    };
+    const schedule = () => {
+      clearTimeout(timer);
+      const upcoming = (current + 1) % count;
+      // Start buffering the next pair ~2.5s before it fades in.
+      setTimeout(() => videosAt(upcoming).forEach((v) => { v.preload = 'auto'; v.load(); }), Math.max(0, interval - 2500));
+      timer = setTimeout(advance, interval);
+    };
+    // Pause the reel while the tab is hidden.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        clearTimeout(timer);
+        videosAt(current).forEach((v) => v.pause());
+      } else {
+        videosAt(current).forEach((v) => v.play().catch(() => {}));
+        schedule();
+      }
+    });
+    schedule();
+  }
+</script>
+
+<style>
+  .reel-clip {
+    opacity: 0;
+    transition: opacity 1200ms ease;
+  }
+  .reel-clip.is-active {
+    opacity: 1;
+  }
+  .reel-place-label {
+    position: absolute;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 900ms ease;
+  }
+  .reel-place {
+    min-height: 1.25rem;
+    min-width: 12rem;
+  }
+  .reel-place.right-0 .reel-place-label {
+    right: clamp(1rem, 4vw, 2.5rem);
+  }
+  .reel-place-label.is-active {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reel-video {
+      display: none;
+    }
+    .reel-clip {
+      transition: none;
+    }
+  }
+</style>

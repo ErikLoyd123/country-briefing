@@ -4,15 +4,26 @@ import { loadYaml } from './yaml.js';
 
 export const credits = loadYaml(raw, 'credits.yaml') ?? [];
 
-export function getCredit(file) {
-  const c = credits.find((x) => x.file === file);
-  if (!c) {
-    throw new Error(`No credit entry for "${file}". Add it to credits.yaml (source, author, url, license, aiGenerated).`);
-  }
-  return c;
+// Credits are listed once on /about (the Creative Commons photos require attribution);
+// pages don't show per-image credits. Returns null when a file has no entry.
+export function findCredit(file) {
+  return credits.find((x) => x.file === file) ?? null;
 }
 
+const SOURCE_NAMES = {
+  unsplash: 'Unsplash',
+  'pexels-photo': 'Pexels',
+  'pexels-video': 'Pexels',
+  pexels: 'Pexels',
+  wikimedia: 'Wikimedia Commons',
+  flux: 'Flux',
+  team: 'Team photo',
+};
+
+// e.g. "Mike Enerio / Unsplash" or "Icepinner / Wikimedia Commons, CC BY 4.0"
 export function creditLine(c) {
-  const who = c.author ? `${c.author} / ${c.source}` : c.source;
-  return c.aiGenerated ? `Illustrative (AI-generated) · ${who}` : `Photo: ${who}`;
+  const source = SOURCE_NAMES[c.source] ?? c.source;
+  const who = c.author ? `${c.author} / ${source}` : source;
+  const license = /^CC /.test(c.license ?? '') ? `, ${c.license}` : '';
+  return `${who}${license}`;
 }

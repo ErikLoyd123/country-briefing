@@ -21,6 +21,7 @@ npm run dev      # http://localhost:4321
 | `npm test` | Unit tests (scoring math, data and citation parsing) |
 | `npm run build` | Static build to `dist/`; fails on invalid content |
 | `npm run check` | Tests + build |
+| `npm run media` | Downloads photos/videos listed in `media-sources.yaml` and writes `credits.yaml` (needs `.env`, see `.env.example`) |
 | `npm run pdf` | Builds, then saves `/paper` as `dist/country-briefing-politics-risk.pdf` (first run: `npx playwright install chromium`) |
 
 ## Routes

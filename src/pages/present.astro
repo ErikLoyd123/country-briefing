@@ -9,12 +9,28 @@ import { scorecard, balancedScores } from '../lib/scorecard.js';
 import { buildRegionMap } from '../lib/regionMap.js';
 import { formatInText } from '../lib/bib.js';
 import { UNIT_LABEL } from '../lib/format.js';
+import { getImage } from 'astro:assets';
+import { findCredit } from '../lib/credits.js';
+
+const imageModules = import.meta.glob('/src/assets/images/**/*.{jpg,jpeg,png,webp,avif}');
+async function slideImage(path) {
+  const loader = imageModules[`/src/assets/images/${path}`];
+  if (!loader) throw new Error(`deck.yaml: image "src/assets/images/${path}" not found`);
+  const img = await getImage({ src: (await loader()).default, width: 1920, format: 'webp' });
+  return { src: img.src, alt: findCredit(path)?.alt ?? '' };
+}
 
 const deck = loadYaml(deckRaw, 'src/data/deck.yaml');
 const scores = balancedScores();
 
 // Resolve data references in deck.yaml into plain props for each scene.
 const resolvers = {
+  async Title(p) {
+    return p.image ? { ...p, media: await slideImage(p.image) } : p;
+  },
+  async ImageScene(p) {
+    return { ...p, media: await slideImage(p.image) };
+  },
   async StatDuel(p) {
     const l = getLatest(p.indicator);
     return { ...p, label: l.meta.label, unit: l.meta.unit, higherIsBetter: l.meta.higherIsBetter, SG: l.SG, VN: l.VN, sample: l.sample, source: `Source: ${await formatInText([l.meta.sourceKey])}` };

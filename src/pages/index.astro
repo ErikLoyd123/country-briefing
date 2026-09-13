@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PlaceholderMedia from '../components/story/PlaceholderMedia.astro';
+import HeroMedia from '../components/story/HeroMedia.astro';
+import HeroReel from '../components/story/HeroReel.astro';
 import RatingChip from '../components/story/RatingChip.astro';
 import Lorem from '../components/story/Lorem.astro';
 import RegionMap from '../components/maps/RegionMap.astro';
@@ -14,21 +15,13 @@ const topics = await getTopics();
 <BaseLayout title="Overview">
   <!-- Split hero: the one bold moment. -->
   <section data-hero class="relative isolate grid min-h-[calc(100svh-3.5rem)] grid-rows-[1fr_auto] overflow-hidden bg-night text-on-night">
-    <div class="relative grid grid-cols-1 md:grid-cols-2">
-      <div data-hero-seam class="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px bg-on-night/35 md:block" aria-hidden="true"></div>
-      <div class="relative flex min-h-[40svh] items-end overflow-hidden">
-        <PlaceholderMedia label="PHOTO: Marina Bay and the CBD skyline at blue hour" tone="dark" fill />
-        <div class="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-transparent" aria-hidden="true"></div>
-        <div class="absolute inset-0 bg-sg/15 mix-blend-color" aria-hidden="true"></div>
-        <p data-hero-name="sg" class="relative px-[clamp(1rem,4vw,2.5rem)] pb-8 font-display text-mega" aria-hidden="true">Singapore</p>
-      </div>
-      <div class="relative flex min-h-[40svh] items-end overflow-hidden md:justify-end">
-        <PlaceholderMedia label="VIDEO LOOP: motorbike traffic on a Ho Chi Minh City boulevard at dusk" tone="dark" fill />
-        <div class="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-transparent" aria-hidden="true"></div>
-        <div class="absolute inset-0 bg-vn/15 mix-blend-color" aria-hidden="true"></div>
-        <p data-hero-name="vn" class="relative px-[clamp(1rem,4vw,2.5rem)] pb-8 font-display text-mega md:text-right" aria-hidden="true">Vietnam</p>
-      </div>
-    </div>
+    <HeroReel
+      pairs={[
+        { sg: { video: 'video/reel/sg-marina-bay-aerial.mp4', place: 'Marina Bay' }, vn: { video: 'video/reel/vn-limestone-mountains-aerial.mp4', place: 'Limestone mountains' } },
+        { sg: { video: 'video/reel/sg-gardens-by-the-bay-aerial.mp4', place: 'Gardens by the Bay' }, vn: { video: 'video/reel/vn-ha-long-bay-aerial.mp4', place: 'Ha Long Bay' } },
+        { sg: { video: 'video/reel/sg-skyline-dusk-aerial.mp4', place: 'Downtown Core at dusk' }, vn: { video: 'video/reel/vn-mountain-landscape-aerial.mp4', place: 'Mountain landscape' } },
+      ]}
+    />
 
     <div data-hero-line class="container-wide relative grid gap-6 border-t border-white/10 py-8 md:grid-cols-[1fr_auto] md:items-end">
       <div>
@@ -73,8 +66,8 @@ const topics = await getTopics();
         topics.map((t) => (
           <li class="lg:w-[26rem]">
             <a href={`/briefing/${t.slug}`} class="group flex h-full flex-col overflow-hidden rounded-lg border border-rule bg-paper hover:border-ink">
-              <div class="relative aspect-[16/10]">
-                <PlaceholderMedia label={t.hero.label} fill compact />
+              <div class="relative aspect-[16/10] overflow-hidden bg-night">
+                <HeroMedia image={t.hero.image} video={t.hero.video} alt={t.hero.alt} label={t.hero.label} sizes="(min-width: 1024px) 26rem, (min-width: 640px) 50vw, 100vw" tone="light" compact />
               </div>
               <div class="flex flex-1 flex-col p-6">
                 <p class="text-sm text-muted">Briefing {t.order}</p>

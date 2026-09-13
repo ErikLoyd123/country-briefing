@@ -5,6 +5,7 @@
   scene: Title
   presenter: Team
   props:
+    image: singapore/marina-bay-night.jpg
     kicker: EMBA country briefing
     title: "Singapore and Vietnam: politics and risk"
     subtitle: What a global enterprise needs to know before a go or no-go decision
@@ -60,8 +61,8 @@
   scene: ImageScene
   presenter: Presenter 3
   props:
-    label: "PHOTO: flooded street in Ho Chi Minh City during monsoon season"
-    caption: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    image: vietnam/hoi-an-flood.jpg
+    caption: Rainy-season flooding in Hoi An. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
   notes: Nemo enim ipsam voluptatem.
 
 - id: fdi

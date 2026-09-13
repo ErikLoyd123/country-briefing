@@ -7,7 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "pdf": "node scripts/export-pdf.mjs",
-    "check": "vitest run && astro build"
+    "check": "vitest run && astro build",
+    "media": "node scripts/fetch-media.mjs"
   },
   "type": "module",
   "dependencies": {
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "playwright": "^1.63.0",
+    "sharp": "^0.35.4",
     "vitest": "^5.0.0"
   },
   "private": true

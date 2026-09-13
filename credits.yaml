@@ -10,4 +10,125 @@
 #   url: https://unsplash.com/photos/abc123
 #   license: Unsplash License
 #   aiGenerated: false
-[]
+- file: singapore/marina-bay-night.jpg
+  source: unsplash
+  author: Mike Enerio
+  url: https://unsplash.com/photos/san-marina-bay-singapore-7ryPpZK1qV8?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Marina Bay, Singapore, at night
+  aiGenerated: false
+- file: video/reel/sg-marina-bay-aerial.mp4
+  source: pexels-video
+  author: Florian Delée
+  url: https://www.pexels.com/video/aerial-footage-of-singapore-marina-bay-skyline-34862468/
+  license: Pexels License
+  alt: Aerial view of the Marina Bay skyline, Singapore
+  aiGenerated: false
+- file: video/reel/vn-limestone-mountains-aerial.mp4
+  source: pexels-video
+  author: Florian Delée
+  url: https://www.pexels.com/video/stunning-drone-view-of-vietnam-limestone-mountains-35325029/
+  license: Pexels License
+  alt: Aerial view of limestone mountains in Vietnam
+  aiGenerated: false
+- file: video/reel/sg-gardens-by-the-bay-aerial.mp4
+  source: pexels-video
+  author: Florian Delée
+  url: https://www.pexels.com/video/aerial-view-of-singapore-s-iconic-gardens-by-the-bay-36713080/
+  license: Pexels License
+  alt: Aerial view of Gardens by the Bay, Singapore
+  aiGenerated: false
+- file: video/reel/vn-ha-long-bay-aerial.mp4
+  source: pexels-video
+  author: Giste Producciones
+  url: https://www.pexels.com/video/aerial-view-of-ha-long-bay-s-majestic-karsts-37887192/
+  license: Pexels License
+  alt: Aerial view of the karst islands of Ha Long Bay, Vietnam
+  aiGenerated: false
+- file: video/reel/sg-skyline-dusk-aerial.mp4
+  source: pexels-video
+  author: Florian Delée
+  url: https://www.pexels.com/video/aerial-view-of-singapore-skyline-at-dusk-34862466/
+  license: Pexels License
+  alt: Aerial view of the Singapore skyline at dusk
+  aiGenerated: false
+- file: video/reel/vn-mountain-landscape-aerial.mp4
+  source: pexels-video
+  author: Anh Tuan
+  url: https://www.pexels.com/video/aerial-view-of-stunning-vietnam-mountain-landscape-38012481/
+  license: Pexels License
+  alt: Aerial view of a mountain landscape in Vietnam
+  aiGenerated: false
+- file: video/hcmc-night-intersection.mp4
+  source: pexels-video
+  author: R Georges
+  url: https://www.pexels.com/video/busy-night-intersection-in-ho-chi-minh-city-33486917/
+  license: Pexels License
+  alt: Night traffic at a busy intersection in Ho Chi Minh City
+  aiGenerated: false
+- file: vietnam/national-assembly-hanoi.jpg
+  source: wikimedia
+  author: Grayswoodsurrey
+  url: https://commons.wikimedia.org/wiki/File:National_Assembly_of_Vietnam.JPG
+  license: CC BY-SA 4.0
+  licenseUrl: https://creativecommons.org/licenses/by-sa/4.0
+  alt: National Assembly Building of Vietnam, Hanoi
+  aiGenerated: false
+- file: singapore/supreme-court-night.jpg
+  source: unsplash
+  author: Shawnn Tan
+  url: https://unsplash.com/photos/city-buildings-VWLQe2Xfk0M?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Singapore's Supreme Court, Marina Bay Sands and the Downtown Core at night
+  aiGenerated: false
+- file: singapore/pasir-panjang-terminal.jpg
+  source: wikimedia
+  author: Icepinner
+  url: https://commons.wikimedia.org/wiki/File:Crepuscular_rays_at_Pasir_Panjang_Container_Terminal.png
+  license: CC BY 4.0
+  licenseUrl: https://creativecommons.org/licenses/by/4.0
+  alt: Light breaking through clouds over Pasir Panjang Container Terminal, Singapore
+  aiGenerated: false
+- file: vietnam/hanoi-market.jpg
+  source: unsplash
+  author: Mauro Lima
+  url: https://unsplash.com/photos/fresh-produce-on-display-at-a-vibrant-market--ts92kxGCLk?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Fresh produce at a market in Hanoi
+  aiGenerated: false
+- file: video/rainy-day-traffic.mp4
+  source: pexels-video
+  author: Quang Anh Nguyễn
+  url: https://www.pexels.com/video/traffic-on-a-rainy-day-in-urban-setting-39347052/
+  license: Pexels License
+  alt: Motorbike and car traffic on a city street in heavy rain
+  aiGenerated: false
+- file: vietnam/saigon-skyline.jpg
+  source: unsplash
+  author: Peter Nguyen
+  url: https://unsplash.com/photos/high-rise-building-near-body-of-water-during-daytime-soYzQJvctKI?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Ho Chi Minh City skyline beside the Saigon River
+  aiGenerated: false
+- file: vietnam/industrial-welding.jpg
+  source: pexels-photo
+  author: Hoang NC
+  url: https://www.pexels.com/photo/men-working-on-a-construction-site-15947588/
+  license: Pexels License
+  alt: Workers welding metal structures in an industrial workshop
+  aiGenerated: false
+- file: vietnam/cho-ray-hospital.jpg
+  source: wikimedia
+  author: trungydang
+  url: https://commons.wikimedia.org/wiki/File:Benh_vien_Cho_Ray_-ph%C6%B0%E1%BB%9Dng_12,_Qu%E1%BA%ADn_5,_TPHCM,_Vi%E1%BB%87t_Nam_-_panoramio.jpg
+  license: CC BY 3.0
+  licenseUrl: https://creativecommons.org/licenses/by/3.0
+  alt: Cho Ray Hospital, District 5, Ho Chi Minh City
+  aiGenerated: false
+- file: vietnam/hoi-an-flood.jpg
+  source: unsplash
+  author: Toomas Tartes
+  url: https://unsplash.com/photos/two-women-riding-boat-beside-brown-house-27HacQwqvA0?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: A boat on a flooded street in Hoi An during rainy season
+  aiGenerated: false

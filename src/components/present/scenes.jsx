@@ -13,13 +13,19 @@ const Sample = ({ show }) =>
     <span className="rounded-full border border-sample/40 px-[0.8cqw] py-[0.2cqw] text-[1cqw] text-sample">Sample data</span>
   ) : null;
 
-function Title({ kicker, title, subtitle }) {
+function Title({ kicker, title, subtitle, media }) {
   return (
-    <div className="scene-dark flex h-full flex-col justify-end p-[6cqw]">
-      <p className="text-[1.4cqw] text-on-night-muted">{kicker}</p>
-      <h1 className="mt-[1cqw] max-w-[70cqw] font-display text-[6.2cqw] leading-[1.02]">{title}</h1>
-      <p className="mt-[2cqw] max-w-[55cqw] font-display text-[2.2cqw] text-on-night/80">{subtitle}</p>
-      <div className="mt-[4cqw] flex h-[0.5cqw] w-[12cqw] overflow-hidden rounded-full">
+    <div className="scene-dark relative flex h-full flex-col justify-end p-[6cqw]">
+      {media && (
+        <>
+          <img src={media.src} alt={media.alt} className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1a22] via-[#0e1a22]/70 to-[#0e1a22]/10" />
+        </>
+      )}
+      <p className="relative text-[1.4cqw] text-on-night-muted">{kicker}</p>
+      <h1 className="relative mt-[1cqw] max-w-[70cqw] font-display text-[6.2cqw] leading-[1.02]">{title}</h1>
+      <p className="relative mt-[2cqw] max-w-[55cqw] font-display text-[2.2cqw] text-on-night/80">{subtitle}</p>
+      <div className="relative mt-[4cqw] flex h-[0.5cqw] w-[12cqw] overflow-hidden rounded-full">
         <span className="w-1/2 bg-sg" />
         <span className="w-1/2 bg-vn" />
       </div>
@@ -201,10 +207,11 @@ function Verdict({ title, scores, sample }) {
   );
 }
 
-function ImageScene({ label, caption }) {
+function ImageScene({ caption, media }) {
   return (
     <div className="scene-dark relative flex h-full items-end">
-      <div className="placeholder-stage absolute inset-0 flex items-start justify-end p-[3cqw] text-[1.3cqw] text-on-night-muted">{label}</div>
+      <img src={media.src} alt={media.alt} className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0e1a22]/90 via-[#0e1a22]/20 to-transparent" />
       <p className="relative m-[5cqw] max-w-[60cqw] font-display text-[3cqw] leading-tight">{caption}</p>
     </div>
   );

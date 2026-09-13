@@ -16,7 +16,7 @@ This guide is for everyone on the team, whether or not you use git. You only eve
 | Add a political event to the timeline | `src/data/timeline.yaml` |
 | Update trade agreements | `src/data/trade-agreements.yaml` |
 | Edit presenter slides | `src/data/deck.yaml` |
-| Credit a photo or video | `credits.yaml` |
+| Add a photo or video | `media-sources.yaml`, then `npm run media` |
 
 ## Topics
 
@@ -145,20 +145,32 @@ Icon names come from [lucide.dev/icons](https://lucide.dev/icons) (use the kebab
 
 ## Adding images and video
 
-1. Put images in `src/assets/images/singapore/`, `vietnam/`, or `shared/`. JPG or PNG works; the site converts and resizes them automatically.
-2. Put short video loops (5–10 seconds, muted, under ~8 MB) in `public/media/video/`, with a poster image.
-3. Add an entry to `credits.yaml` for every file. The build fails without one.
+Photos and videos are listed in **`media-sources.yaml`**. Credits are generated from that file and listed once on the About page (some Wikimedia photos are Creative Commons and require attribution); pages themselves don't show credits.
+
+1. Find the image or video:
+   - **Unsplash:** the photo ID is the last part of the URL (`unsplash.com/photos/…-7ryPpZK1qV8` → `7ryPpZK1qV8`)
+   - **Pexels:** the number at the end of the URL
+   - **Wikimedia Commons:** the `File:…` page title
+2. Add an entry to `media-sources.yaml`:
 
    ```yaml
-   - file: singapore/marina-bay-dusk.jpg
-     source: unsplash        # unsplash | pexels | flux | team | other
-     author: Photographer Name
-     url: https://unsplash.com/photos/…
-     license: Unsplash License
-     aiGenerated: false      # true for Flux / AI images: captioned "Illustrative (AI-generated)"
+   - file: vietnam/hanoi-old-quarter.jpg   # images → src/assets/images/, videos → public/media/
+     source: unsplash                      # unsplash | pexels-photo | pexels-video | wikimedia
+     id: abc123XYZ
+     alt: What the photo verifiably shows (and where)
    ```
 
-Don't use AI-generated images to depict real events, protests, or people. Use them only for illustrative scenes.
+3. Run `npm run media`. It downloads anything missing, resizes photos to 2400px JPEGs, picks a video rendition under ~8 MB (with a poster frame), and rewrites `credits.yaml`.
+4. Use it:
+   - as a topic banner: `hero: { image: vietnam/hanoi-old-quarter.jpg, alt: "…" }` (or `video: video/clip.mp4`)
+   - inside text: `<Figure src="vietnam/hanoi-old-quarter.jpg" caption="…" />`
+   - on a slide: an `ImageScene` in `deck.yaml` with `image: vietnam/hanoi-old-quarter.jpg`
+
+`npm run media` needs API keys in `.env` for Unsplash and Pexels. Copy `.env.example` to `.env` and follow the steps in it. Wikimedia needs no key.
+
+**Flux / team photos:** put the file in `src/assets/images/` and add a credit to `credits.yaml` by hand with `source: flux` (or `team`) and `aiGenerated: true` for AI images, which are labeled "Illustrative image (AI-generated)" where they appear. Hand-written entries are kept when `npm run media` runs.
+
+Only write captions and `alt` text you can verify: the place and what is shown. Don't use AI-generated images to depict real events, protests, or people.
 
 ## Previewing your changes
 
@@ -191,5 +203,4 @@ The build stops on purpose when something would silently be wrong. The error nam
 | `data does not match collection schema` | A frontmatter field is missing or invalid (e.g. a rating of 7) |
 | `Unknown indicator "xyz"` | A chart or `keyStats` uses an id not in `indicators.yaml` |
 | `indicators.csv line N: …` | A bad row in the CSV (wrong country code, non-number value) |
-| `No credit entry for "…"` | An image or video is missing from `credits.yaml` |
 | `scorecard.yaml: …` | A rating outside 1–5 or a cite key that doesn't exist |

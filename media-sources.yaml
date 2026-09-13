@@ -1,0 +1,103 @@
+# Where every photo and video on the site comes from. `npm run media` downloads anything
+# missing and rewrites the matching entries in credits.yaml (attribution is automatic).
+#
+# file:   images → path under src/assets/images/   videos → path under public/media/ (poster saved next to it as .jpg)
+# source: unsplash (id = photo id from the URL)       needs UNSPLASH_ACCESS_KEY in .env
+#         pexels-photo / pexels-video (id = number)   needs PEXELS_API_KEY in .env
+#         wikimedia (id = "File:…" title)             no key
+# alt:    what the image shows (screen readers + default caption). Only describe what is verifiably in it.
+#
+# Images are resized to at most 2400px wide and saved as JPEG. Videos use the largest rendition
+# up to 1280px wide (or `maxWidth`) that is under ~8 MB.
+
+- file: singapore/marina-bay-night.jpg
+  source: unsplash
+  id: 7ryPpZK1qV8
+  alt: Marina Bay, Singapore, at night
+
+# Home page hero reel: Singapore and Vietnam clips in pairs, all soft daylight aerials.
+- file: video/reel/sg-marina-bay-aerial.mp4
+  source: pexels-video
+  id: 34862468
+  maxWidth: 960
+  alt: Aerial view of the Marina Bay skyline, Singapore
+
+- file: video/reel/vn-limestone-mountains-aerial.mp4
+  source: pexels-video
+  id: 35325029
+  maxWidth: 960
+  alt: Aerial view of limestone mountains in Vietnam
+
+- file: video/reel/sg-gardens-by-the-bay-aerial.mp4
+  source: pexels-video
+  id: 36713080
+  maxWidth: 960
+  alt: Aerial view of Gardens by the Bay, Singapore
+
+- file: video/reel/vn-ha-long-bay-aerial.mp4
+  source: pexels-video
+  id: 37887192
+  maxWidth: 960
+  alt: Aerial view of the karst islands of Ha Long Bay, Vietnam
+
+- file: video/reel/sg-skyline-dusk-aerial.mp4
+  source: pexels-video
+  id: 34862466
+  maxWidth: 960
+  alt: Aerial view of the Singapore skyline at dusk
+
+- file: video/reel/vn-mountain-landscape-aerial.mp4
+  source: pexels-video
+  id: 38012481
+  maxWidth: 960
+  alt: Aerial view of a mountain landscape in Vietnam
+
+- file: video/hcmc-night-intersection.mp4
+  source: pexels-video
+  id: 33486917
+  alt: Night traffic at a busy intersection in Ho Chi Minh City
+
+- file: vietnam/national-assembly-hanoi.jpg
+  source: wikimedia
+  id: "File:National Assembly of Vietnam.JPG"
+  alt: National Assembly Building of Vietnam, Hanoi
+
+- file: singapore/supreme-court-night.jpg
+  source: unsplash
+  id: VWLQe2Xfk0M
+  alt: Singapore's Supreme Court, Marina Bay Sands and the Downtown Core at night
+
+- file: singapore/pasir-panjang-terminal.jpg
+  source: wikimedia
+  id: "File:Crepuscular rays at Pasir Panjang Container Terminal.png"
+  alt: Light breaking through clouds over Pasir Panjang Container Terminal, Singapore
+
+- file: vietnam/hanoi-market.jpg
+  source: unsplash
+  id: -ts92kxGCLk
+  alt: Fresh produce at a market in Hanoi
+
+- file: video/rainy-day-traffic.mp4
+  source: pexels-video
+  id: 39347052
+  alt: Motorbike and car traffic on a city street in heavy rain
+
+- file: vietnam/saigon-skyline.jpg
+  source: unsplash
+  id: soYzQJvctKI
+  alt: Ho Chi Minh City skyline beside the Saigon River
+
+- file: vietnam/industrial-welding.jpg
+  source: pexels-photo
+  id: 15947588
+  alt: Workers welding metal structures in an industrial workshop
+
+- file: vietnam/cho-ray-hospital.jpg
+  source: wikimedia
+  id: "File:Benh vien Cho Ray -phường 12, Quận 5, TPHCM, Việt Nam - panoramio.jpg"
+  alt: Cho Ray Hospital, District 5, Ho Chi Minh City
+
+- file: vietnam/hoi-an-flood.jpg
+  source: unsplash
+  id: 27HacQwqvA0
+  alt: A boat on a flooded street in Hoi An during rainy season

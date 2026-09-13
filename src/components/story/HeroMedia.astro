@@ -1,0 +1,53 @@
+---
+// Full-bleed background media: an optimized image, or a muted looping video with its poster.
+// image: path under src/assets/images/   video: path under public/media/ (poster = same name .jpg)
+// playbackRate slows (or speeds) a video, e.g. 0.5 for half speed.
+// Falls back to a labeled placeholder when neither is set.
+import { Image } from 'astro:assets';
+import PlaceholderMedia from './PlaceholderMedia.astro';
+
+const { image, video, alt, label, sizes = '100vw', tone = 'dark', eager = false, compact = false, playbackRate = 1 } = Astro.props;
+const images = import.meta.glob('/src/assets/images/**/*.{jpg,jpeg,png,webp,avif}');
+
+let img;
+if (image) {
+  const loader = images[`/src/assets/images/${image}`];
+  if (!loader) throw new Error(`Image "src/assets/images/${image}" not found. Run npm run media or check the path.`);
+  img = (await loader()).default;
+}
+const poster = video ? `/media/${video.replace(/\.mp4$/, '.jpg')}` : null;
+---
+
+{
+  video ? (
+    <>
+      <img src={poster} alt={alt} class="hero-poster absolute inset-0 h-full w-full object-cover" loading={eager ? 'eager' : 'lazy'} />
+      <video class="hero-video absolute inset-0 h-full w-full object-cover" data-playback-rate={playbackRate !== 1 ? playbackRate : undefined} autoplay muted loop playsinline preload={eager ? 'auto' : 'metadata'} poster={poster} aria-hidden="true">
+        <source src={`/media/${video}`} type="video/mp4" />
+      </video>
+    </>
+  ) : img ? (
+    <Image src={img} alt={alt} widths={[640, 960, 1600, 2400]} sizes={sizes} class="absolute inset-0 h-full w-full object-cover" loading={eager ? 'eager' : 'lazy'} />
+  ) : (
+    <PlaceholderMedia label={label ?? 'PHOTO: to be sourced'} tone={tone} fill compact={compact} />
+  )
+}
+
+<script>
+  // Browsers reset playbackRate when a video (re)loads, so apply it on every load.
+  for (const v of document.querySelectorAll('video[data-playback-rate]')) {
+    const rate = Number(v.dataset.playbackRate);
+    const apply = () => (v.playbackRate = rate);
+    apply();
+    v.addEventListener('loadedmetadata', apply);
+    v.addEventListener('play', apply);
+  }
+</script>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video {
+      display: none;
+    }
+  }
+</style>

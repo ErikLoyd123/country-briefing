@@ -8,7 +8,8 @@ const REQUIRED_INDEX_FIELDS = ['title', 'thesis', 'ratings', 'hero'];
 let cache;
 
 export async function getTopics() {
-  if (cache) return cache;
+  // Cache only in production builds; in dev, frontmatter edits must show up on refresh.
+  if (cache && import.meta.env.PROD) return cache;
   const entries = await getCollection('briefings');
   const byFolder = new Map();
 
@@ -31,6 +32,9 @@ export async function getTopics() {
     const d = t.parts.index.data;
     for (const f of REQUIRED_INDEX_FIELDS) {
       if (d[f] === undefined) throw new Error(`briefings/${folder}/index.mdx: frontmatter field "${f}" is required`);
+    }
+    if (!d.hero.image && !d.hero.video && !d.hero.label) {
+      throw new Error(`briefings/${folder}/index.mdx: hero needs image, video, or a placeholder label`);
     }
     d.keyStats.forEach(getIndicator); // throws on unknown indicator ids
     return {

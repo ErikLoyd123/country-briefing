@@ -19,7 +19,7 @@ const briefings = defineCollection({
     ratings: z.object({ SG: rating, VN: rating }).optional(),
     hero: z
       .object({
-        label: z.string(),
+        label: z.string().optional(),
         alt: z.string(),
         image: z.string().optional(),
         video: z.string().optional(),

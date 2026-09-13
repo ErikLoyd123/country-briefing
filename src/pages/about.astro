@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Lorem from '../components/story/Lorem.astro';
 import { scorecard } from '../lib/scorecard.js';
-import { credits } from '../lib/credits.js';
+import { credits, creditLine } from '../lib/credits.js';
 
 const appendices = (await getCollection('appendices')).sort((a, b) => a.data.order - b.data.order);
 const team = ['Team member 1', 'Team member 2', 'Team member 3', 'Team member 4'];
@@ -85,7 +85,7 @@ const team = ['Team member 1', 'Team member 2', 'Team member 3', 'Team member 4'
       <h2 class="font-display text-3xl">Photo and video credits</h2>
       {
         credits.length === 0 ? (
-          <p class="mt-4 text-ink-2">No photos or video yet. Every image added to the site needs an entry in <code>credits.yaml</code>; AI-generated images are labeled as illustrative.</p>
+          <p class="mt-4 text-ink-2">No photos or video yet.</p>
         ) : (
           <table class="mt-5 w-full text-sm">
             <thead>
@@ -97,7 +97,7 @@ const team = ['Team member 1', 'Team member 2', 'Team member 3', 'Team member 4'
               {credits.map((c) => (
                 <tr class="border-b border-rule">
                   <td class="py-2 pr-4 text-ink">{c.file}</td>
-                  <td class="py-2 pr-4 text-ink-2">{c.aiGenerated ? 'Illustrative (AI-generated), ' : ''}{c.author ?? ''} {c.url ? <a href={c.url} class="underline">{c.source}</a> : c.source}</td>
+                  <td class="py-2 pr-4 text-ink-2">{c.aiGenerated ? 'Illustrative (AI-generated), ' : ''}{c.url ? <a href={c.url} class="underline decoration-rule underline-offset-2 hover:decoration-ink">{creditLine(c)}</a> : creditLine(c)}</td>
                   <td class="py-2 text-muted">{c.license}</td>
                 </tr>
               ))}
