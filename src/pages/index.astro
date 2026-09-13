@@ -14,7 +14,8 @@ const topics = await getTopics();
 <BaseLayout title="Overview">
   <!-- Split hero: the one bold moment. -->
   <section data-hero class="relative isolate grid min-h-[calc(100svh-3.5rem)] grid-rows-[1fr_auto] overflow-hidden bg-night text-on-night">
-    <div class="grid grid-cols-1 md:grid-cols-2">
+    <div class="relative grid grid-cols-1 md:grid-cols-2">
+      <div data-hero-seam class="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px bg-on-night/35 md:block" aria-hidden="true"></div>
       <div class="relative flex min-h-[40svh] items-end overflow-hidden">
         <PlaceholderMedia label="PHOTO: Marina Bay and the CBD skyline at blue hour" tone="dark" fill />
         <div class="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-transparent" aria-hidden="true"></div>
@@ -28,7 +29,6 @@ const topics = await getTopics();
         <p data-hero-name="vn" class="relative px-[clamp(1rem,4vw,2.5rem)] pb-8 font-display text-mega md:text-right" aria-hidden="true">Vietnam</p>
       </div>
     </div>
-    <div data-hero-seam class="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px bg-on-night/35 md:block" aria-hidden="true"></div>
 
     <div data-hero-line class="container-wide relative grid gap-6 border-t border-white/10 py-8 md:grid-cols-[1fr_auto] md:items-end">
       <div>
@@ -68,13 +68,13 @@ const topics = await getTopics();
       <h2 class="text-4xl">Seven briefings</h2>
       <p class="max-w-md text-ink-2">Each compares Singapore and Vietnam on one area of risk and ends with what it means for foreign investment.</p>
     </div>
-    <ol data-pin-track class="container-wide grid gap-5 sm:grid-cols-2 lg:flex lg:w-max lg:max-w-none lg:gap-6 lg:pr-[20vw]">
+    <ol data-pin-track class="container-wide grid gap-5 sm:grid-cols-2 lg:mx-0 lg:flex lg:w-max lg:max-w-none lg:gap-6 lg:pr-[20vw] lg:pl-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))]">
       {
         topics.map((t) => (
           <li class="lg:w-[26rem]">
             <a href={`/briefing/${t.slug}`} class="group flex h-full flex-col overflow-hidden rounded-lg border border-rule bg-paper hover:border-ink">
               <div class="relative aspect-[16/10]">
-                <PlaceholderMedia label={t.hero.label} fill />
+                <PlaceholderMedia label={t.hero.label} fill compact />
               </div>
               <div class="flex flex-1 flex-col p-6">
                 <p class="text-sm text-muted">Briefing {t.order}</p>

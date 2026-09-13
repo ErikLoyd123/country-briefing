@@ -28,5 +28,11 @@ export default defineConfig({
     // MDX inherits this processor.
     processor: unified({ remarkPlugins: [remarkCiteKeys], rehypePlugins: [citation] }),
   },
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    // Pre-bundle client libraries so the dev server doesn't reload on first use.
+    optimizeDeps: {
+      include: ['gsap', 'gsap/ScrollTrigger', 'lenis', '@nivo/line', '@nivo/bar', '@nivo/radar', '@number-flow/react', 'd3-scale'],
+    },
+  },
 });

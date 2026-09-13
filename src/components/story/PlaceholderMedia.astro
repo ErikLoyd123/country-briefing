@@ -2,7 +2,7 @@
 // Stand-in for a photo or video that hasn't been sourced yet. The label says what should go here.
 import { Camera, Clapperboard } from '@lucide/astro';
 
-const { label, tone = 'light', class: className, fill = false } = Astro.props;
+const { label, tone = 'light', class: className, fill = false, compact = false } = Astro.props;
 const isVideo = /^video/i.test(label);
 const Icon = isVideo ? Clapperboard : Camera;
 ---
@@ -10,15 +10,15 @@ const Icon = isVideo ? Clapperboard : Camera;
 <div
   class:list={[
     'placeholder-media flex overflow-hidden',
-    fill ? 'absolute inset-0 items-start justify-end' : 'relative aspect-[16/9] w-full items-end rounded-md',
+    fill ? (compact ? 'absolute inset-0 items-end' : 'absolute inset-0 items-start justify-end') : 'relative aspect-[16/9] w-full items-end rounded-md',
     tone === 'dark' ? 'is-dark text-on-night-muted' : 'text-muted',
     className,
   ]}
   role="img"
   aria-label={`Placeholder: ${label}`}
 >
-  <div class:list={['relative flex items-center gap-2 p-4 text-sm', fill && 'mt-16 mr-2 max-w-md text-right']}>
-    <Icon size={16} aria-hidden="true" />
+  <div class:list={['relative flex items-center gap-2 p-4 text-sm', fill && !compact && 'mt-16 mr-2 max-w-md items-start justify-end text-right']}>
+    <Icon size={16} aria-hidden="true" class="mt-0.5 shrink-0" />
     <span>{label}</span>
   </div>
 </div>

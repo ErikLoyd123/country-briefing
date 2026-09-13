@@ -1,5 +1,5 @@
 // Saves /paper as a PDF: builds if needed, starts `astro preview`, prints with Playwright.
-// Usage: npm run pdf   (first time: npx playwright install chromium)
+// Usage: npm run pdf   (first time: npx playwright install chromium; add -- --no-build to skip rebuilding)
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { chromium } from 'playwright';
@@ -8,15 +8,21 @@ const PORT = 4329;
 const BASE = `http://127.0.0.1:${PORT}`;
 const OUT = 'dist/country-briefing-politics-risk.pdf';
 
-if (!existsSync('dist/paper/index.html') || process.argv.includes('--build')) {
+if (!process.argv.includes('--no-build') || !existsSync('dist/paper/index.html')) {
   console.log('Building site…');
   const build = spawnSync('npx', ['astro', 'build'], { stdio: 'inherit' });
   if (build.status !== 0) process.exit(build.status ?? 1);
 }
 
+// Astro 7 runs `astro preview` as a background daemon; stop any old one so we serve this build,
+// and stop ours when done.
+const stopPreview = () => spawnSync('npx', ['astro', 'preview', 'stop'], { stdio: 'ignore' });
+stopPreview();
 const server = spawn('npx', ['astro', 'preview', '--port', String(PORT), '--host', '127.0.0.1'], { stdio: 'ignore' });
-const stop = () => server.kill('SIGTERM');
-process.on('exit', stop);
+const stop = () => {
+  server.kill('SIGTERM');
+  stopPreview();
+};
 
 async function waitForServer(timeoutMs = 30000) {
   const start = Date.now();
