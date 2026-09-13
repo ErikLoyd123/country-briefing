@@ -1,0 +1,66 @@
+---
+// A single number that carries an event: <BigStat when="May 2014" value="20+" unit="dead">What happened [@VN-67].</BigStat>
+// size="sm" for several figures side by side.
+const { when, value, unit, size = 'lg' } = Astro.props;
+---
+
+<div class:list={['bigstat', size === 'sm' && 'is-sm']}>
+  {when && <p class="bigstat-when num">{when}</p>}
+  <p class="bigstat-value">
+    <span class="type-heavy num">{value}</span>
+    {unit && <span class="bigstat-unit">{unit}</span>}
+  </p>
+  <div class="bigstat-text"><slot /></div>
+</div>
+
+<style>
+  .bigstat-when {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .bigstat-value {
+    margin-top: 0.1rem;
+    font-family: var(--font-sans);
+    line-height: 1;
+  }
+  .bigstat-value .type-heavy {
+    font-size: clamp(2.75rem, 5vw, 4.25rem);
+    color: var(--color-ink);
+  }
+  .is-sm .bigstat-value .type-heavy {
+    font-size: clamp(2rem, 3.2vw, 2.75rem);
+  }
+  .is-sm .bigstat-unit {
+    font-size: 0.95rem;
+  }
+  .is-sm .bigstat-text {
+    font-size: 1rem;
+  }
+  .bigstat-unit {
+    margin-left: 0.35rem;
+    font-size: 1.1rem;
+    color: var(--color-ink-2);
+  }
+  .bigstat-text {
+    margin-top: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.45;
+    color: var(--color-ink-2);
+  }
+
+  @media (min-width: 768px) and (max-height: 820px) {
+    .bigstat-value .type-heavy {
+      font-size: 2.75rem;
+    }
+    .is-sm .bigstat-value .type-heavy {
+      font-size: 2rem;
+    }
+    .bigstat-text {
+      margin-top: 0.35rem;
+      font-size: 1rem;
+    }
+  }
+</style>

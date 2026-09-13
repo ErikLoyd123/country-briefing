@@ -1,0 +1,115 @@
+---
+// One politically exposed industry: a photo, the headline figure, and why it is exposed.
+// <Industry name="Electronics" image="vietnam/binh-duong-industrial-park.jpg" figure="US$42bn" figureLabel="to the US in 2025"
+//   bar={42.09} barMax={42.09}>
+// 23 percent of all exports [@VN-70].
+// </Industry>
+// bar / barMax (optional): draw the figure as a bar on a scale shared with the other rows.
+import { Image } from 'astro:assets';
+import { findCredit } from '../../lib/credits.js';
+
+const { name, image, figure, figureLabel, bar, barMax } = Astro.props;
+const images = import.meta.glob('/src/assets/images/**/*.{jpg,jpeg,png,webp,avif}');
+let img;
+if (image) {
+  const loader = images[`/src/assets/images/${image}`];
+  if (!loader) throw new Error(`Industry "${name}": image "src/assets/images/${image}" not found.`);
+  img = (await loader()).default;
+}
+const alt = image ? (findCredit(image)?.alt ?? '') : '';
+---
+
+<div class:list={['industry', !img && 'no-image']}>
+  {img && <Image src={img} alt={alt} widths={[160, 320]} sizes="7rem" class="industry-img" />}
+  <div class="min-w-0">
+    <p class="industry-name">{name}</p>
+    {
+      figure && (
+        <p class="industry-figure">
+          <span class="type-heavy num text-ink">{figure}</span> <span class="industry-figure-label">{figureLabel}</span>
+        </p>
+      )
+    }
+    {
+      bar !== undefined && (
+        <div class="industry-bar" aria-hidden="true">
+          <span style={`width:${(bar / barMax) * 100}%`} />
+        </div>
+      )
+    }
+    <div class="industry-text"><slot /></div>
+  </div>
+</div>
+
+<style>
+  .industry {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 1.1rem;
+    align-items: start;
+    text-align: left;
+  }
+  .industry.no-image {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .industry + :global(.industry) {
+    margin-top: 1.25rem;
+  }
+  .industry-img {
+    width: 6.5rem;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+  .industry-name {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .industry-figure {
+    font-family: var(--font-sans);
+    line-height: 1.1;
+  }
+  .industry-figure .type-heavy {
+    font-size: 1.75rem;
+  }
+  .industry-figure-label {
+    font-size: 0.9rem;
+    color: var(--color-ink-2);
+  }
+  .industry-bar {
+    margin-top: 0.4rem;
+    height: 0.5rem;
+    border-radius: 2px;
+    background: var(--color-paper-2);
+  }
+  .industry-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--country, var(--color-ink));
+  }
+  .industry-text {
+    margin-top: 0.3rem;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    line-height: 1.45;
+    color: var(--color-ink-2);
+  }
+
+  @media (min-width: 768px) and (max-height: 820px) {
+    .industry {
+      grid-template-columns: 5rem minmax(0, 1fr);
+    }
+    .industry-img {
+      width: 5rem;
+    }
+    .industry + :global(.industry) {
+      margin-top: 0.9rem;
+    }
+    .industry-text {
+      font-size: 0.95rem;
+    }
+  }
+</style>

@@ -1,0 +1,179 @@
+---
+// Every risk in this section on one screen: four areas down, Singapore left of the seam and Vietnam
+// right, each a level and a title linking to its card. Reads the RiskCards written in the section.
+// <RiskMap section="dangers-annoyances" />
+import RiskLevel from '../story/RiskLevel.astro';
+import { getRisks } from '../../lib/risks.js';
+import { AREAS, RISK_LEVELS } from '../../lib/format.js';
+
+const { section } = Astro.props;
+const order = Object.keys(RISK_LEVELS);
+const risks = getRisks().filter((r) => r.href.startsWith(`/briefing/${section}#`));
+const areas = Object.entries(AREAS).map(([id, label]) => ({
+  id,
+  label,
+  SG: risks.filter((r) => r.area === id && r.country === 'SG').sort((a, b) => order.indexOf(a.level) - order.indexOf(b.level)),
+  VN: risks.filter((r) => r.area === id && r.country === 'VN').sort((a, b) => order.indexOf(a.level) - order.indexOf(b.level)),
+}));
+---
+
+<div class="riskmap">
+  <ul class="riskmap-levels" aria-label="Risk levels">
+    {order.map((level) => <li><RiskLevel level={level} /></li>)}
+  </ul>
+  <div class="riskmap-head" aria-hidden="true">
+    <p class="is-sg"><span class="riskmap-dot"></span>Singapore</p>
+    <p class="is-vn"><span class="riskmap-dot"></span>Vietnam</p>
+  </div>
+  {
+    areas.map((a) => (
+      <section class="riskmap-area">
+        <h3 class="riskmap-label">{a.label}</h3>
+        {['SG', 'VN'].map((c) => (
+          <ul class:list={['riskmap-list', `is-${c.toLowerCase()}`]}>
+            <li class="sr-only">{c === 'SG' ? 'Singapore' : 'Vietnam'}</li>
+            {a[c].map((r) => (
+              <li class="riskmap-item">
+                <span class="riskmap-level" style={`background: var(--color-risk-${RISK_LEVELS[r.level].step})`} title={RISK_LEVELS[r.level].label}>
+                  <span class="sr-only">{RISK_LEVELS[r.level].label}: </span>
+                </span>
+                <a href={`#${r.href.split('#')[1]}`}>{r.title}</a>
+              </li>
+            ))}
+          </ul>
+        ))}
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .riskmap {
+    position: relative;
+    max-width: 68rem;
+    margin-inline: auto;
+  }
+  .riskmap-levels {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .riskmap-head {
+    display: none;
+  }
+  .riskmap-area {
+    margin-top: 1.5rem;
+  }
+  .riskmap-label {
+    font-size: 1.35rem;
+    color: var(--color-ink);
+  }
+  .riskmap-list {
+    margin-top: 0.4rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .riskmap-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  .riskmap-level {
+    flex: none;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 999px;
+    transform: translateY(0.05rem);
+  }
+  .riskmap-item a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+  }
+  .riskmap-item a:hover {
+    text-decoration-color: color-mix(in srgb, var(--color-ink) 40%, transparent);
+  }
+
+  @media (min-width: 768px) {
+    .riskmap::before {
+      content: '';
+      position: absolute;
+      top: 5rem;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: color-mix(in srgb, var(--color-ink) 15%, transparent);
+    }
+    .riskmap-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--color-ink);
+    }
+    .riskmap-head p {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .riskmap-head .is-sg {
+      justify-content: flex-end;
+      padding-right: 2.5rem;
+    }
+    .riskmap-head .is-vn {
+      padding-left: 2.5rem;
+    }
+    .riskmap-dot {
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 999px;
+      background: var(--country);
+    }
+    .riskmap-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: clamp(0.75rem, 2vh, 1.25rem);
+    }
+    .riskmap-label {
+      position: relative;
+      grid-column: 1 / -1;
+      justify-self: center;
+      padding: 0 0.9rem;
+      background: var(--color-paper);
+    }
+    .riskmap-list.is-sg {
+      padding-right: 2.5rem;
+    }
+    .riskmap-list.is-sg .riskmap-item {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    .riskmap-list.is-vn {
+      padding-left: 2.5rem;
+    }
+  }
+
+  @media (min-width: 768px) and (max-height: 820px) {
+    .riskmap-area {
+      margin-top: 0.5rem;
+    }
+    .riskmap-item {
+      font-size: 1rem;
+    }
+    .riskmap-label {
+      font-size: 1.2rem;
+    }
+  }
+</style>

@@ -6,7 +6,8 @@ This guide is for everyone on the team, whether or not you use git. You only eve
 
 | You want to… | Edit this |
 |---|---|
-| Write or edit a section | `src/content/briefings/NN-section/` → `index.mdx` (overview), `singapore.mdx`, `vietnam.mdx` |
+| Edit a section's slides (the site) | `src/content/briefings/NN-section/index.mdx` |
+| Edit a section's full write-up (the paper) | `src/content/paper/sections/NN-section/` → `index.mdx`, `singapore.mdx`, `vietnam.mdx` |
 | Add, correct or verify a fact's source | `src/data/sources.csv` (the source table) |
 | Record a fact you couldn't source | `src/data/sources-not-used.csv` |
 | Write the executive summary | `src/content/paper/executive-summary.mdx` |
@@ -63,17 +64,16 @@ Cite the claim's ID in square brackets with an `@`, just before the sentence's f
 
 The site looks up each claim's source and writes the APA in-text citation for you, including the `2026a` / `2026b` letters when one author has several works in a year. Each citation links to its entry on the Sources page. If an ID isn't in `sources.csv`, the build stops and names the file.
 
-## Writing a section
+## The site and the paper are written separately
 
-Each file starts with frontmatter between `---` lines. Country files only need a status:
+- **The paper** (`/paper`) is the full write-up: every fact, in prose, Singapore then Vietnam. It lives in `src/content/paper/sections/NN-section/` as `index.mdx` (overview), `singapore.mdx` and `vietnam.mdx`. Write it like a normal document with `## Headings`, paragraphs, lists and tables.
+- **The site** (`/briefing/<section>`) is the deck you brief from: short slides with photos, charts and diagrams. Each section is one file, `src/content/briefings/NN-section/index.mdx`, made of `<Slide>`s.
 
-```yaml
----
-status: draft   # draft | review | final
----
-```
+A slide doesn't need every fact; the paper has them. When you change a number, change it in both places (the claim ID makes it easy to search for).
 
-A section's `index.mdx` also sets its opening banner:
+## Writing a section's slides
+
+The `index.mdx` frontmatter sets the section's opening banner:
 
 ```yaml
 ---
@@ -83,100 +83,105 @@ thesis: One sentence with the bottom line for an executive.
 hero:
   image: vietnam/industrial-welding.jpg   # or video: video/clip.mp4, or label: "PHOTO: what we still need"
   alt: Short description of the image for screen readers
-status: draft
+format: slides
+status: draft   # draft | review | final
 ---
 ```
 
-Below the frontmatter, write normal Markdown: `## Heading`, `### Subheading`, `**bold**`, `- bullet`, and tables. Country files start with `## Singapore` or `## Vietnam`.
+Below it, write one `<Slide>` per screen. The section decides how Singapore and Vietnam sit on each slide:
 
-A side-by-side comparison is a Markdown table. Leave the first header cell empty; the country columns get their colored dots automatically:
+| Layout | Use it when | How |
+|---|---|---|
+| **Pair** (default) | The two countries answer the same question: Singapore left of the center line, Vietnam right | `<Slide title="…">` with `sg` and `vn` slots |
+| **Pair, seam moved** | One country's story is much bigger than the other's | `split={36}` gives Singapore 36% of the width |
+| **Joined** | One thing spans both: a timeline, a table, a chart or diagram | `layout="joined"`, content in the default slot |
+| **Backdrop** | A closing or high-stakes slide: each half is a photo or video with text on top | `layout="backdrop"` with `sgMedia` and `vnMedia` |
+
+```mdx
+<Slide title="Getting your money out" lede="One line that says what the slide shows." sgMedia="singapore/marina-bay-night.jpg" vnMedia="video/vn-cai-mep-port.mp4">
+
+<Fragment slot="sg">
+Singapore's half. Markdown and citations work [@SG-60].
+</Fragment>
+
+<Fragment slot="vn">
+Vietnam's half [@VN-60].
+</Fragment>
+
+<Fragment slot="foot">
+Optional: something joined, under both halves.
+</Fragment>
+
+</Slide>
+```
+
+On a pair slide, `sgMedia` / `vnMedia` put a photo band on top of each half. Leave a blank line between text and a `<Fragment slot=…>` inside a component, or the slot is ignored.
+
+Aim for what you would say out loud in a minute. While running `npm run dev`, any slide taller than your browser window gets a dashed red outline and a label saying how much to cut. Check at your own laptop's window size.
+
+## Components for slides
+
+No imports needed. Copy and adjust. Every figure takes `cite` claim IDs.
+
+**Numbers across the center line** (the homepage style):
+
+```mdx
+<StatDuel rows={[
+  { label: 'Corporate tax', sg: { value: '17%', detail: 'Standard rate', cite: ['SG-59'] }, vn: { value: '20%', detail: 'Standard rate', cite: ['VN-58'] } },
+]} />
+```
+
+**Bars in one unit.** `country` colors the bar.
+
+```mdx
+<CompareBars label="US tariff on imports, 2025" items={[
+  { name: 'Singapore', country: 'SG', value: 10, display: '10%', cite: ['SG-46'] },
+  { name: 'Vietnam', country: 'VN', value: 20, display: '20%', cite: ['VN-43'] },
+]} />
+```
+
+**Both countries on one scale:** `<ScaleCompare label="…" note="0 to 100" sg={{ value: 84, detail: '…', cite: ['SG-19'] }} vn={{ … }} />`
+
+**One big figure:** `<BigStat when="May 2014" value="20+" unit="dead">What happened [@VN-67].</BigStat>` (`size="sm"` when several sit together)
+
+**A process, step by step** (the step count is the point): `<Flow country="VN" steps={[{ title: 'Audited accounts' }, { title: 'Money leaves', tone: 'end' }, { title: 'Losses? No remittance', tone: 'stop' }]} />`
+
+**News on a date axis:** `<DateStrip from="2026-08-20" to="2026-09-24" today="2026-09-13" events={[{ date: '2026-09-08', country: 'SG', title: '…', detail: '…', cite: ['SG-91'] }]} />`
+
+**Seasons over a year:** `<SeasonStrip rows={[{ country: 'VN', label: 'typhoon season', spans: [{ from: '06-01', to: '11-30' }], cite: ['VN-7'] }]} markers={[{ label: 'Our trip', from: '11-03', to: '11-13' }]} />`
+
+**Each country between two powers:** `<PullDiagram left="United States" right="China" rows={[…]} />`
+
+**Lines over a few years:** `<ShareLines label="…" unit="%" years={[2023, 2024, 2025]} series={[{ name: 'Crocs Brand', values: [56, 51, 45], cite: ['CR-1'] }]} />`
+
+**A risk** (Dangers and Annoyances). `area` is `government`, `society`, `security` or `economy`; `level` is `high` (Watch closely), `mid` (Manage it) or `low` (Low, but real). The homepage and `<RiskMap section="dangers-annoyances" />` list every risk card automatically.
+
+```mdx
+<RiskCard country="SG" area="security" level="mid" title="Scams, not street crime">
+One line of evidence [@SG-38].
+
+<Fragment slot="means">what it means for a company.</Fragment>
+</RiskCard>
+```
+
+**An industry, with photo:** `<Industry name="Footwear" image="vietnam/shoe-lasts.jpg" figure="US$11bn" figureLabel="to the US">Why it is exposed [@CR-22].</Industry>`
+
+**Rules in both countries and in each** (Etiquette): `<Trio>` with `sg`, `both` and `vn` slots, each a Markdown list.
+
+**A visit** (Itineraries), three per slide in a `grid` of three columns: `<Visit when="Wed 4 Nov, 9:00" name="Emerson" kind="Industrial automation">What it shows [@SG-83]. <Fragment slot="ask">The question.</Fragment></Visit>`
+
+**A photo or video anywhere:** `<Media src="vietnam/hcmc-metro.jpg" country="VN" ratio="21 / 9" />`
+
+**Built from data files:** `<Timeline bare />` (`src/data/timeline.yaml`), `<TradeAgreements bare />` (`src/data/trade-agreements.yaml`), `<RegionMap />`. In those YAML files, `cite: [SG-73]` lists the claim IDs behind each row.
+
+## Components for the paper
+
+The paper's files can use `<Risk>`, `<HintCards>`, `<Callout>`, `<Stops>` / `<Stop>`, `<Figure>`, `<CountryCompare>`, `<Timeline />` and `<TradeAgreements />`. Look at the existing files in `src/content/paper/sections/` for examples, and write a side-by-side comparison as a Markdown table:
 
 ```md
 |  | Singapore | Vietnam |
 |---|---|---|
 | Corporate tax | 17 percent headline [@SG-59] | 20 percent standard [@VN-58] |
-```
-
-While running `npm run dev`, a small badge shows each section's status in the side menu.
-
-### One screen at a time
-
-On a laptop, a section reads like a slide deck: each piece of content fills one screen, and the arrow keys move between screens. The page splits your file into screens for you:
-
-- Every `##` or `###` heading starts a new screen, along with the text under it.
-- Every component (risk card, callout, tip cards, stops, timeline, map) gets a screen of its own. If it sits directly under a `###` heading, it shares that heading's screen. A `##` heading is a divider, so a component right after it starts a new screen.
-- An overview that opens with a single paragraph shows it as a large lede.
-
-Aim for about 150–200 words per screen. While running `npm run dev`, any screen taller than your browser window gets a dashed red outline and a label saying how much to cut. Check at your own laptop's window size.
-
-## Components you can use in any .mdx file
-
-No imports needed. Copy and adjust. Citations work inside all of them.
-
-**A risk** (Dangers and Annoyances). `area` is `government`, `society`, `security` or `economy`; `level` is `high` (Watch closely), `mid` (Manage it) or `low` (Low, but real). The homepage lists every risk card automatically.
-
-```mdx
-<Risk area="security" level="mid" title="Scams, not street crime" seenAt="Mastercard">
-What is happening, with citations [@SG-38].
-
-<Fragment slot="means">What it means for a foreign company.</Fragment>
-<Fragment slot="seen">Optional: how Crocs or Mastercard ran into it [@MC-7].</Fragment>
-</Risk>
-```
-
-Keep each `Fragment` on one line.
-
-**Tip cards.** A Markdown list inside; a bold lead-in becomes the card's title.
-
-```mdx
-<HintCards title="Ten things to know on arrival">
-
-- **Bring business cards.** They are the first thing exchanged, offered with both hands [@SG-4].
-- **Carry cash.** Cash is still king in small places [@VN-5].
-
-</HintCards>
-```
-
-**A callout.** `tone="warn"` for a hard rule or trap; `size="sm"` for longer text; `icon` is `info`, `briefcase`, `alert` or `outlook`.
-
-```mdx
-<Callout title="Getting money out" tone="warn" size="sm">
-Profits can be remitted once a year after audited accounts [@VN-60].
-</Callout>
-```
-
-**Visit stops** (Itineraries). Three per screen fits a laptop.
-
-```mdx
-<Stops title="Singapore, 3 to 7 November">
-<Stop when="Wed 4 Nov, 9:00" name="Emerson (industrial automation)">
-What the stop reveals [@SG-83].
-
-<Fragment slot="ask">The one question to ask.</Fragment>
-</Stop>
-</Stops>
-```
-
-**Built from data files:**
-
-```mdx
-<Timeline title="Events that moved the risk picture" />   {/* src/data/timeline.yaml */}
-<TradeAgreements />                                       {/* src/data/trade-agreements.yaml */}
-<RegionMap />
-```
-
-In those YAML files, `cite: [SG-73]` lists the claim IDs behind each row.
-
-**Also available:**
-
-```mdx
-<Figure src="vietnam/hanoi-street.jpg" caption="What the photo shows." />
-<Figure label="PHOTO: what we still need" caption="Placeholder until we have it." />
-
-<CountryCompare title="Short side-by-side">
-  <Fragment slot="sg">Singapore point.</Fragment>
-  <Fragment slot="vn">Vietnam point.</Fragment>
-</CountryCompare>
 ```
 
 ## Adding images and video

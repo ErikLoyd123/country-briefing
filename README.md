@@ -2,10 +2,10 @@
 
 A country briefing for DU EMBA Cohort 84 (Global Business), by Team Poesis. It covers doing business in Singapore and Vietnam the way a guidebook would: what to know before you land, what can go wrong, what it means for your money, and what to ask in the room. Crocs and Mastercard run through every section.
 
-One set of Markdown and data files produces two outputs:
+The Markdown and data files produce two outputs:
 
-- **The site:** an overview and seven sections (Need to Know, Dangers and Annoyances, Money Matters, The Political Weather, Local Knowledge, Etiquette, Itineraries), each read one screen at a time
-- **The paper** (`/paper`, `npm run pdf`): every section in one printable document with APA citations and references
+- **The site:** an overview and seven sections (Need to Know, Dangers and Annoyances, Money Matters, The Political Weather, Local Knowledge, Etiquette, Itineraries), each a deck of slides with photos, charts and diagrams (`src/content/briefings/`)
+- **The paper** (`/paper`, `npm run pdf`): the full write-up of every section in one printable document with APA citations and references (`src/content/paper/`)
 
 Every fact is a claim in `src/data/sources.csv`, the team's source table. Text cites claims by ID (`[@SG-17]`), and the site renders the APA in-text citation and reference list from the table.
 

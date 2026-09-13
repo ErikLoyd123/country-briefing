@@ -132,3 +132,117 @@
   license: Unsplash License
   alt: A boat on a flooded street in Hoi An during rainy season
   aiGenerated: false
+- file: singapore/parliament-house.jpg
+  source: wikimedia
+  author: Johan Jönsson (Julle)
+  url: https://commons.wikimedia.org/wiki/File:Parliament_House,_Singapore,_August_2023.jpg
+  license: CC BY-SA 4.0
+  licenseUrl: https://creativecommons.org/licenses/by-sa/4.0
+  alt: Parliament House, Singapore, with the Downtown Core behind it
+  aiGenerated: false
+- file: singapore/strait-shipping.jpg
+  source: pexels-photo
+  author: Saksham Vikram
+  url: https://www.pexels.com/photo/aerial-view-of-cargo-ships-in-singapore-strait-34358847/
+  license: Pexels License
+  alt: Cargo ships in the Singapore Strait
+  aiGenerated: false
+- file: singapore/raffles-place.jpg
+  source: wikimedia
+  author: Wishds.
+  url: https://commons.wikimedia.org/wiki/File:Skyline_of_Raffles_Place,_Singapore_-_20140208.jpg
+  license: CC BY-SA 4.0
+  licenseUrl: https://creativecommons.org/licenses/by-sa/4.0
+  alt: Office towers at Raffles Place, Singapore's financial district
+  aiGenerated: false
+- file: vietnam/binh-duong-industrial-park.jpg
+  source: pexels-photo
+  author: Vietnam Real Estate
+  url: https://www.pexels.com/photo/aerial-view-of-industrial-park-in-binh-d-ng-vietnam-29289939/
+  license: Pexels License
+  alt: Aerial view of an industrial park in Thu Dau Mot, Binh Duong, Vietnam
+  aiGenerated: false
+- file: vietnam/binh-thuan-wind.jpg
+  source: pexels-photo
+  author: Hữu Nhựt Trần
+  url: https://www.pexels.com/photo/wind-turbines-in-the-binh-thu-n-desert-30848635/
+  license: Pexels License
+  alt: Wind turbines above the sand dunes of Binh Thuan, Vietnam
+  aiGenerated: false
+- file: vietnam/shoe-lasts.jpg
+  source: pexels-photo
+  author: Fernanda Simões
+  url: https://www.pexels.com/photo/leather-shoes-on-display-13524876/
+  license: Pexels License
+  alt: Shoe lasts, soles and leather uppers on a workbench
+  aiGenerated: false
+- file: video/vn-cai-mep-port.mp4
+  source: pexels-video
+  author: Toàn BDS
+  url: https://www.pexels.com/video/vibrant-aerial-view-of-a-busy-container-port-30899351/
+  license: Pexels License
+  alt: Aerial view of container stacks and cranes at Cai Mep port, Vietnam
+  aiGenerated: false
+- file: video/vn-hcmc-night-aerial.mp4
+  source: pexels-video
+  author: Toàn BDS
+  url: https://www.pexels.com/video/aerial-night-view-of-ho-chi-minh-city-skyline-31111825/
+  license: Pexels License
+  alt: Aerial view of Ho Chi Minh City and the Saigon River at night
+  aiGenerated: false
+- file: singapore/server-racks.jpg
+  source: pexels-photo
+  author: panumas nikhomkhai
+  url: https://www.pexels.com/photo/data-center-server-racks-with-active-equipment-37730212/
+  license: Pexels License
+  alt: Server racks in a data centre
+  aiGenerated: false
+- file: singapore/jewel-changi.jpg
+  source: pexels-photo
+  author: Chester Ong
+  url: https://www.pexels.com/photo/the-famous-rain-vortex-at-jewel-changi-airport-5384071/
+  license: Pexels License
+  alt: The Rain Vortex inside Jewel Changi Airport, Singapore
+  aiGenerated: false
+- file: vietnam/motorbikes-at-lights.jpg
+  source: pexels-photo
+  author: Tuan Vy
+  url: https://www.pexels.com/photo/bustling-city-street-filled-with-motorcycles-30726385/
+  license: Pexels License
+  alt: Motorbike riders waiting at a traffic light
+  aiGenerated: false
+- file: singapore/public-housing.jpg
+  source: pexels-photo
+  author: Ambient Walking
+  url: https://www.pexels.com/photo/blocks-of-flats-in-city-17113685/
+  license: Pexels License
+  alt: High-rise apartment blocks in a residential district of Singapore
+  aiGenerated: false
+- file: singapore/hawker-centre.jpg
+  source: pexels-photo
+  author: Namzy
+  url: https://www.pexels.com/photo/bustling-singapore-hawker-center-dining-scene-30210592/
+  license: Pexels License
+  alt: Diners at a hawker centre in Singapore
+  aiGenerated: false
+- file: singapore/orchard-street.jpg
+  source: pexels-photo
+  author: Prakasam Ajith
+  url: https://www.pexels.com/photo/modern-singapore-street-with-skyscrapers-and-gardens-30873985/
+  license: Pexels License
+  alt: A tree-lined shopping street in Singapore
+  aiGenerated: false
+- file: vietnam/mekong-delta-boat.jpg
+  source: pexels-photo
+  author: Tomáš Malík
+  url: https://www.pexels.com/photo/people-traveling-using-boat-1660996/
+  license: Pexels License
+  alt: A boat on a palm-lined waterway in the Mekong Delta
+  aiGenerated: false
+- file: vietnam/hcmc-metro.jpg
+  source: pexels-photo
+  author: Loriz E
+  url: https://www.pexels.com/photo/modern-metro-train-in-ho-chi-minh-city-33574096/
+  license: Pexels License
+  alt: A metro train on an elevated track in Ho Chi Minh City
+  aiGenerated: false

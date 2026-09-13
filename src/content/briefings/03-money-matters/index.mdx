@@ -4,16 +4,106 @@ thesis: What all of that means for foreign direct investment, and whether you ca
 hero:
   image: singapore/marina-bay-night.jpg
   alt: Marina Bay, Singapore, at night
+format: slides
 status: draft
 ---
 
-What all of that means for foreign direct investment: the rules, the caps, the incentives, and whether you can get your money out.
+<Slide title="The terms on the table" lede="Vietnam offers the longer tax break. Singapore offers fewer conditions." layout="joined">
 
-## At a glance
+<StatDuel rows={[
+  {
+    label: 'Headline corporate tax',
+    sg: { value: '17%', detail: 'Standard rate', cite: ['SG-59'] },
+    vn: { value: '20%', detail: 'Standard rate', cite: ['VN-58'] },
+  },
+  {
+    label: 'Best incentive rate',
+    sg: { value: '5 to 10%', detail: 'For up to five years', cite: ['SG-58'] },
+    vn: { value: '10%', detail: 'For 15 years, after four tax-free years, for high-tech and large projects', cite: ['VN-58'] },
+  },
+  {
+    label: 'Global minimum tax of 15%',
+    note: 'For large multinationals; it shrinks both incentives',
+    sg: { value: '2025', detail: 'In force from', cite: ['SG-62'] },
+    vn: { value: '2024', detail: 'In force from', cite: ['VN-59'] },
+  },
+  {
+    label: 'Limits on foreign ownership',
+    sg: { value: 'No cap', detail: 'Except broadcasting, held under 49%', cite: ['SG-56'] },
+    vn: { value: '25 closed', detail: 'Business lines, plus 58 restricted', cite: ['VN-57'] },
+  },
+]} />
 
-|  | Singapore | Vietnam |
-|---|---|---|
-| FDI | S$3,130 billion of FDI stock (end 2024), up 9.5 percent [@SG-54] | US$38.4 billion registered in 2025; US$27.6 billion disbursed, a five-year high [@VN-55]. January to August 2026: US$40.6 billion registered, up 55 percent [@VN-56] |
-| Corporate tax | 17 percent headline [@SG-59] | 20 percent standard [@VN-58] |
-| Getting money out | No capital controls [@SG-60] and no dividend withholding [@SG-61] | Profits remitted once a year, after audited accounts and tax finalisation [@VN-60] |
-| Land | Landed residential property: sales to foreigners without approval are void [@SG-57] | Use rights only, no ownership [@VN-61] |
+</Slide>
+
+<Slide title="Getting your money out" lede="The single biggest practical difference between the two. Count the steps.">
+
+<Fragment slot="sg">
+<Flow country="SG" steps={[
+  { title: 'Book the profit' },
+  { title: 'Send it home, any time', detail: 'No capital controls and no withholding tax on dividends', tone: 'end' },
+]} />
+
+<p class="mt-6 font-sans text-sm text-ink-2">Sources: [@SG-60; @SG-61]</p>
+</Fragment>
+
+<Fragment slot="vn">
+<Flow country="VN" steps={[
+  { title: 'Book the profit' },
+  { title: 'Audited financial statements' },
+  { title: 'Tax finalisation' },
+  { title: 'Tell the tax office at least seven working days ahead' },
+  { title: 'Send it home, once a year', detail: 'At fiscal year end, or when the investment ends', tone: 'end' },
+  { title: 'Carrying accumulated losses? You cannot remit at all.', tone: 'stop' },
+]} />
+
+<p class="mt-6 font-sans text-sm text-ink-2">Source: [@VN-60]</p>
+</Fragment>
+
+</Slide>
+
+<Slide title="How much money is coming in" lede="Not like for like: Singapore's figure is everything already invested; Vietnam's are each year's new money.">
+
+<Fragment slot="sg">
+<BigStat value="S$3.13tn" unit="invested by foreigners">
+The total in place at the end of 2024, up 9.5 percent in a year [@SG-54].
+</BigStat>
+
+<CompareBars label="Largest single source, and what flows back" note="FDI stock, US dollars, 2023" items={[
+  { name: 'US investment in Singapore', country: 'SG', value: 424.2, display: 'US$424bn', cite: ['SG-55'] },
+  { name: 'Singapore investment in the US', country: 'SG', value: 58, display: 'US$58bn+', cite: ['SG-55'] },
+]} />
+</Fragment>
+
+<Fragment slot="vn">
+<CompareBars label="Foreign investment, US$ billion" note="Registered is promised; disbursed is spent" items={[
+  { name: '2025, registered', country: 'VN', value: 38.4, display: '38.4', cite: ['VN-55'] },
+  { name: '2025, disbursed (a five-year high)', country: 'VN', value: 27.6, display: '27.6', cite: ['VN-55'] },
+  { name: 'Jan to Aug 2026, registered', country: 'VN', value: 40.63, display: '40.6', note: 'up 55%', cite: ['VN-56'] },
+  { name: 'Jan to Aug 2026, disbursed', country: 'VN', value: 17.25, display: '17.3', cite: ['VN-56'] },
+]} />
+
+**Singapore is Vietnam's top source of new investment in 2026**, with South Korea [@VN-56].
+</Fragment>
+
+</Slide>
+
+<Slide title="Open doors and closed ones" sgMedia="singapore/supreme-court-night.jpg" vnMedia="vietnam/saigon-skyline.jpg">
+
+<Fragment slot="sg">
+
+- **Open:** no blanket cap on foreign ownership [@SG-56]; a company costs S$315 in government fees to set up [@SG-64].
+- **Growing:** S$14.2 billion of new fixed-asset commitments in 2025 [@SG-65].
+- **Closed:** broadcasting stakes of 49 percent or more [@SG-56], and landed homes without approval [@SG-57].
+
+</Fragment>
+
+<Fragment slot="vn">
+
+- **Open:** 100 percent foreign ownership in manufacturing-adjacent services, consultancy, hotels and IT [@VN-57].
+- **Partly open:** 49 percent caps in areas such as waterway transport [@VN-57]; industrial parks lost tax incentives after October 2025 [@VN-58].
+- **Closed:** land ownership. You hold use rights by allocation, lease or transfer [@VN-61].
+
+</Fragment>
+
+</Slide>

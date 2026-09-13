@@ -1,0 +1,115 @@
+---
+// Horizontal bars on one shared scale, for figures in the same unit.
+// <CompareBars label="GDP per person, US dollars" items={[
+//   { name: 'Singapore', country: 'SG', value: 84734, display: 'US$84,734', note: '2023', cite: ['SG-23'] },
+//   { name: 'Vietnam', country: 'VN', value: 5026, display: 'US$5,026', note: '2025', cite: ['VN-18'] },
+// ]} />
+// country picks the bar color (SG, VN); leave it off for a neutral bar. max defaults to the largest value.
+import { citationHtml } from '../../lib/sources.js';
+
+const { label, note, items = [], max } = Astro.props;
+const top = max ?? Math.max(...items.map((i) => i.value));
+for (const i of items) if (typeof i.value !== 'number') throw new Error(`CompareBars "${label}": "${i.name}" needs a numeric value`);
+---
+
+<figure class="bars">
+  {
+    label && (
+      <figcaption class="bars-caption">
+        {label}
+        {note && <span class="bars-note">{note}</span>}
+      </figcaption>
+    )
+  }
+  <ul class="bars-list">
+    {
+      items.map((i) => (
+        <li class:list={['bars-row', i.country && `is-${i.country.toLowerCase()}`]}>
+          <span class="bars-name">{i.name}</span>
+          <span class="bars-track" aria-hidden="true">
+            <span class="bars-fill" style={`width:${Math.max((i.value / top) * 100, 0.6)}%`} />
+          </span>
+          <span class="bars-value">
+            <span class="type-heavy num">{i.display ?? i.value}</span>
+            {i.note && <span class="bars-value-note"> {i.note}</span>}
+            <Fragment set:html={i.cite ? ' ' + citationHtml(i.cite, undefined, `CompareBars (${label ?? i.name})`) : ''} />
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</figure>
+
+<style>
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .bars {
+    font-family: var(--font-sans);
+  }
+  .bars-caption {
+    font-size: 0.95rem;
+    color: var(--color-ink);
+  }
+  .bars-note {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+  .bars-list {
+    margin-top: 0.75rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+  .bars-row {
+    display: grid;
+    grid-template-columns: minmax(6rem, auto) minmax(0, 1fr);
+    grid-template-areas: 'name value' 'track track';
+    gap: 0.3rem 1rem;
+    align-items: baseline;
+  }
+  .bars-name {
+    grid-area: name;
+    font-size: 0.9rem;
+    color: var(--color-ink);
+  }
+  .bars-value {
+    grid-area: value;
+    justify-self: end;
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--color-ink-2);
+  }
+  .bars-value .type-heavy {
+    font-size: 1.35rem;
+    color: var(--color-ink);
+  }
+  .bars-value-note {
+    color: var(--color-ink-2);
+  }
+  .bars-track {
+    grid-area: track;
+    display: block;
+    height: 0.75rem;
+    border-radius: 2px;
+    background: var(--color-paper-2);
+  }
+  .bars-fill {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--country, var(--color-ink-2));
+  }
+
+  @media (min-width: 768px) and (max-height: 820px) {
+    .bars-list {
+      gap: 0.5rem;
+    }
+    .bars-value .type-heavy {
+      font-size: 1.15rem;
+    }
+  }
+</style>

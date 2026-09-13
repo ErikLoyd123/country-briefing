@@ -1,0 +1,162 @@
+---
+// Paired facts across the seam, like the homepage's numbers: label in the middle, Singapore's value
+// to its left, Vietnam's to its right.
+// <StatDuel rows={[
+//   { label: 'Currency', sg: { value: 'SGD', detail: 'Singapore dollar', cite: ['SG-13'] }, vn: { value: 'VND', detail: '…', cite: ['VN-5'] } },
+// ]} />
+// size="sm" for word values (a government type); the default is for short figures.
+import { citationHtml } from '../../lib/sources.js';
+
+const { rows = [], size = 'lg' } = Astro.props;
+---
+
+<dl class:list={['duel', size === 'sm' && 'is-sm']}>
+  <div class="duel-head" aria-hidden="true">
+    <p class="is-sg"><span class="duel-dot"></span>Singapore</p>
+    <p class="is-vn"><span class="duel-dot"></span>Vietnam</p>
+  </div>
+  {
+    rows.map((row) => (
+      <div class="duel-row">
+        <dt class="duel-label">
+          <span>{row.label}</span>
+          {row.note && <span class="duel-note">{row.note}</span>}
+        </dt>
+        {['sg', 'vn'].map((c) => (
+          <dd class:list={['duel-cell', `is-${c}`]}>
+            <span class="sr-only">{c === 'sg' ? 'Singapore' : 'Vietnam'}: </span>
+            <span class="duel-value type-heavy num">{row[c].value}</span>
+            <span class="duel-detail">
+              {row[c].detail} <Fragment set:html={citationHtml(row[c].cite, undefined, `StatDuel (${row.label})`)} />
+            </span>
+          </dd>
+        ))}
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .duel {
+    position: relative;
+    max-width: 68rem;
+    margin-inline: auto;
+  }
+  .duel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: color-mix(in srgb, var(--color-ink) 15%, transparent);
+  }
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .duel-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .duel-head p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .duel-head .is-sg {
+    justify-content: flex-end;
+    padding-right: 2.5rem;
+  }
+  .duel-head .is-vn {
+    padding-left: 2.5rem;
+  }
+  .duel-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--country);
+  }
+  .duel-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: clamp(1rem, 2.6vh, 1.75rem);
+  }
+  .duel-label {
+    position: relative;
+    grid-column: 1 / -1;
+    justify-self: center;
+    padding: 0.1rem 0.9rem;
+    background: var(--color-paper);
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--color-ink);
+  }
+  .duel-note {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+  .duel-cell {
+    min-width: 0;
+    margin-top: 0.35rem;
+  }
+  .duel-cell.is-sg {
+    padding-right: 2.5rem;
+    text-align: right;
+  }
+  .duel-cell.is-vn {
+    padding-left: 2.5rem;
+  }
+  .duel-value {
+    display: block;
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    line-height: 1;
+    color: var(--color-ink);
+  }
+  .is-sm .duel-value {
+    font-family: var(--font-display);
+    font-weight: 450;
+    letter-spacing: -0.01em;
+    font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+    line-height: 1.15;
+  }
+  .duel-detail {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.9rem;
+    color: var(--color-ink-2);
+  }
+  @media (max-width: 639.98px) {
+    .duel-cell.is-sg {
+      padding-right: 1rem;
+    }
+    .duel-cell.is-vn {
+      padding-left: 1rem;
+    }
+    .duel-head .is-sg {
+      padding-right: 1rem;
+    }
+    .duel-head .is-vn {
+      padding-left: 1rem;
+    }
+  }
+
+  @media (min-width: 768px) and (max-height: 820px) {
+    .duel-row {
+      margin-top: 0.75rem;
+    }
+    .duel-value {
+      font-size: 2.25rem;
+    }
+    .duel-detail {
+      margin-top: 0.15rem;
+      font-size: 0.85rem;
+    }
+  }
+</style>

@@ -1,0 +1,168 @@
+---
+// A year as twelve months, with each country's weather seasons as bands and dated markers
+// (a trip, a holiday) drawn across both.
+// <SeasonStrip rows={[
+//   { country: 'SG', label: 'Monsoons', spans: [{ from: '12-01', to: '03-10' }, { from: '06-01', to: '09-30' }], cite: ['SG-11'] },
+// ]} markers={[{ label: 'Our trip', from: '11-03', to: '11-13' }]} />
+// Dates are MM-DD. A span whose `to` is earlier than `from` wraps over the new year.
+import { citationHtml } from '../../lib/sources.js';
+
+const { rows = [], markers = [] } = Astro.props;
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const dayOfYear = (md) => {
+  const [m, d] = md.split('-').map(Number);
+  return DAYS.slice(0, m - 1).reduce((a, b) => a + b, 0) + d - 1;
+};
+const pct = (md, end = false) => ((dayOfYear(md) + (end ? 1 : 0)) / 365) * 100;
+const segments = (span) => {
+  const a = pct(span.from);
+  const b = pct(span.to, true);
+  return b > a ? [[a, b]] : [[a, 100], [0, b]];
+};
+const NAMES = { SG: 'Singapore', VN: 'Vietnam' };
+---
+
+<figure class="season">
+  <div class="season-grid">
+    <div class="season-months" aria-hidden="true">
+      {MONTHS.map((m) => <span>{m}</span>)}
+    </div>
+    {
+      rows.map((r) => (
+        <div class:list={['season-row', `is-${r.country.toLowerCase()}`]}>
+          <p class="season-label">
+            <span class="season-dot" aria-hidden="true" />
+            <span>
+              {NAMES[r.country]}: {r.label} <Fragment set:html={citationHtml(r.cite, undefined, `SeasonStrip (${r.label})`)} />
+            </span>
+          </p>
+          <div class="season-track">
+            {r.spans.map((s) => segments(s).map(([a, b]) => <span class="season-band" style={`left:${a}%; width:${b - a}%`} />))}
+          </div>
+        </div>
+      ))
+    }
+    <div class="season-markers" aria-hidden="true">
+      {
+        markers.map((m) => (
+          <span class:list={['season-marker', m.tone === 'soft' && 'is-soft']} style={`left:${pct(m.from)}%; width:${Math.max(pct(m.to, true) - pct(m.from), 0.8)}%`}>
+            <span class="season-marker-label">{m.label}</span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+  {
+    markers.length > 0 && (
+      <ul class="sr-only">
+        {markers.map((m) => (
+          <li>
+            {m.label}: {m.from} to {m.to}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</figure>
+
+<style>
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .season-grid {
+    --label-w: 0rem;
+    position: relative;
+    padding-bottom: 2.25rem;
+  }
+  @media (min-width: 768px) {
+    .season-grid {
+      --label-w: 13rem;
+    }
+    .season-row {
+      display: grid;
+      grid-template-columns: var(--label-w) minmax(0, 1fr);
+      align-items: center;
+    }
+    .season-label {
+      padding-right: 1rem;
+    }
+    .season-row .season-track {
+      margin-top: 0;
+    }
+  }
+  .season-months {
+    margin-left: var(--label-w);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+  .season-months span {
+    padding: 0 0 0.4rem 0.35rem;
+    border-left: 1px solid var(--color-rule);
+  }
+  .season-row {
+    margin-top: 0.9rem;
+  }
+  .season-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-ink);
+  }
+  .season-dot {
+    flex: none;
+    transform: translateY(-0.05rem);
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--country);
+  }
+  .season-track {
+    position: relative;
+    height: 2.25rem;
+    margin-top: 0.35rem;
+    border-radius: 3px;
+    background: repeating-linear-gradient(to right, var(--color-paper-2) 0 calc(100% / 12 - 1px), var(--color-paper) calc(100% / 12 - 1px) calc(100% / 12));
+  }
+  .season-band {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 3px;
+    background: var(--country);
+  }
+  .season-markers {
+    position: absolute;
+    inset: 1.4rem 0 0 var(--label-w);
+    pointer-events: none;
+  }
+  .season-marker {
+    position: absolute;
+    top: 0;
+    bottom: 1.6rem;
+    border-inline: 2px solid var(--color-ink);
+    background: color-mix(in srgb, var(--color-ink) 12%, transparent);
+  }
+  .season-marker.is-soft {
+    border-style: dashed;
+    border-color: var(--color-ink-2);
+    background: transparent;
+  }
+  .season-marker-label {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-top: 0.3rem;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+</style>

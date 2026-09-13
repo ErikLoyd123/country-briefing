@@ -101,3 +101,85 @@
   source: unsplash
   id: 27HacQwqvA0
   alt: A boat on a flooded street in Hoi An during rainy season
+
+# The Political Weather
+- file: singapore/parliament-house.jpg
+  source: wikimedia
+  id: "File:Parliament House, Singapore, August 2023.jpg"
+  alt: Parliament House, Singapore, with the Downtown Core behind it
+
+- file: singapore/strait-shipping.jpg
+  source: pexels-photo
+  id: 34358847
+  alt: Cargo ships in the Singapore Strait
+
+- file: singapore/raffles-place.jpg
+  source: wikimedia
+  id: "File:Skyline of Raffles Place, Singapore - 20140208.jpg"
+  alt: Office towers at Raffles Place, Singapore's financial district
+
+- file: vietnam/binh-duong-industrial-park.jpg
+  source: pexels-photo
+  id: 29289939
+  alt: Aerial view of an industrial park in Thu Dau Mot, Binh Duong, Vietnam
+
+- file: vietnam/binh-thuan-wind.jpg
+  source: pexels-photo
+  id: 30848635
+  alt: Wind turbines above the sand dunes of Binh Thuan, Vietnam
+
+- file: vietnam/shoe-lasts.jpg
+  source: pexels-photo
+  id: 13524876
+  alt: Shoe lasts, soles and leather uppers on a workbench
+
+- file: video/vn-cai-mep-port.mp4
+  source: pexels-video
+  id: 30899351
+  alt: Aerial view of container stacks and cranes at Cai Mep port, Vietnam
+
+- file: video/vn-hcmc-night-aerial.mp4
+  source: pexels-video
+  id: 31111825
+  alt: Aerial view of Ho Chi Minh City and the Saigon River at night
+
+- file: singapore/server-racks.jpg
+  source: pexels-photo
+  id: 37730212
+  alt: Server racks in a data centre
+
+# Need to Know, Dangers, Money Matters, Local Knowledge, Etiquette, Itineraries
+- file: singapore/jewel-changi.jpg
+  source: pexels-photo
+  id: 5384071
+  alt: The Rain Vortex inside Jewel Changi Airport, Singapore
+
+- file: vietnam/motorbikes-at-lights.jpg
+  source: pexels-photo
+  id: 30726385
+  alt: Motorbike riders waiting at a traffic light
+
+- file: singapore/public-housing.jpg
+  source: pexels-photo
+  id: 17113685
+  alt: High-rise apartment blocks in a residential district of Singapore
+
+- file: singapore/hawker-centre.jpg
+  source: pexels-photo
+  id: 30210592
+  alt: Diners at a hawker centre in Singapore
+
+- file: singapore/orchard-street.jpg
+  source: pexels-photo
+  id: 30873985
+  alt: A tree-lined shopping street in Singapore
+
+- file: vietnam/mekong-delta-boat.jpg
+  source: pexels-photo
+  id: 1660996
+  alt: A boat on a palm-lined waterway in the Mekong Delta
+
+- file: vietnam/hcmc-metro.jpg
+  source: pexels-photo
+  id: 33574096
+  alt: A metro train on an elevated track in Ho Chi Minh City

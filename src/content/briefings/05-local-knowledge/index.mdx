@@ -5,15 +5,125 @@ thesis: Two companies we will visit in November, followed across the border.
 hero:
   image: vietnam/industrial-welding.jpg
   alt: Workers welding metal structures in an industrial workshop
+format: slides
 status: draft
 ---
 
-Two companies we will visit in November, followed across the border. What each does in each country, the political risk it hit, what it did, and what changed when it crossed.
+<Slide title="Crocs does a different job in each country" lede="Singapore sells and ships. Vietnam makes." sgMedia="singapore/orchard-street.jpg" vnMedia="vietnam/shoe-lasts.jpg">
 
-<Callout title="Crocs: what changed at the border" size="sm">
-In Singapore Crocs faces a small tariff and no ownership or currency friction. In Vietnam it faces the tariff that was designed around its supply chain, and moving away is hard because every alternative country carries a similar rate [@CR-4]. The lesson for a smaller entrant: the sourcing country is now a political choice, and the mitigation is diversification you build before you need it. Vietnam's footwear exports still grew 5 percent in 2025 [@CR-22], and the EU agreement is phasing footwear tariffs to zero [@CR-23].
-</Callout>
+<Fragment slot="sg">
+<BigStat value="18" unit="company stores">
+Plus the Asia office at The Metropolis since 2004 and a third-party distribution centre [@CR-17; @CR-19; @CR-18].
+</BigStat>
 
-<Callout title="Mastercard: what changed at the border" size="sm">
-In Singapore Mastercard is a licensed innovator under a regulator that publishes the rules and enforces them. In Vietnam it is a partner to state institutions, because the state owns the switch, sets the data rules, and can propose an ownership cap in a draft decree. The lesson: in Singapore compliance is your cost; in Vietnam relationship is your licence [@MC-13; @MC-21; @MC-22].
-</Callout>
+**The risk it hit:** a 10 percent US tariff, minor for a business that sells and ships rather than makes here [@SG-46; @CR-24].
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="45%" unit="of Crocs Brand shoes, made in 2025">
+Crocs owns no factories; one contract manufacturer, mostly in Vietnam, makes about that share on its own [@CR-1; @CR-24; @CR-3].
+</BigStat>
+
+**The risk it hit:** 20 percent on Vietnamese goods and 40 percent on anything judged transshipped [@CR-21].
+</Fragment>
+
+</Slide>
+
+<Slide title="Crocs moved production into Vietnam just as the tariff arrived" layout="joined">
+
+<div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
+<ShareLines
+  label="Share of each brand's production made in Vietnam"
+  unit="%"
+  years={[2023, 2024, 2025]}
+  series={[
+    { name: 'Crocs Brand', values: [56, 51, 45], cite: ['CR-1'] },
+    { name: 'HEYDUDE', values: [5, 20, 44], cite: ['CR-2'], dashed: true },
+  ]}
+/>
+<div class="grid grid-cols-2 gap-x-8 gap-y-8">
+<BigStat size="sm" value="US$45m" unit="a year">
+The cost of every 10 points of tariff on its sourcing countries [@CR-8].
+</BigStat>
+<BigStat size="sm" value="170bp" unit="of margin">
+Lost to tariffs in its third-quarter 2025 guidance [@CR-11].
+</BigStat>
+<BigStat size="sm" value="−1.5%" unit="revenue">
+Full year 2025, to US$4.04 billion [@CR-12].
+</BigStat>
+<BigStat size="sm" value="+11.9%" unit="abroad">
+Crocs Brand international sales still grew [@CR-14].
+</BigStat>
+</div>
+</div>
+
+<p class="mx-auto mt-10 max-w-3xl text-center font-display text-xl leading-snug text-ink-2">HEYDUDE's move out of China ran into the 2025 tariffs, which hit it hardest [@CR-25; @CR-6]. Crocs' plan: shift the sourcing mix, cut costs, and consider raising prices [@CR-10].</p>
+
+</Slide>
+
+<Slide title="Mastercard: licensed innovator, and partner to the state" sgMedia="singapore/jewel-changi.jpg" vnMedia="vietnam/hcmc-metro.jpg">
+
+<Fragment slot="sg">
+**Asia Pacific headquarters** [@MC-1]. In March 2026 an AI agent paid for a ride to Changi Airport, Mastercard's first live agentic payment, with DBS and UOB [@MC-6].
+
+**The risk it hit:** a tough, transparent regulator that licenses seven payment services and fined nine institutions S$27 million in 2025 [@MC-8; @MC-10].
+</Fragment>
+
+<Fragment slot="vn">
+**A representative office since 2008** [@MC-12]. Vietnam's first co-badged card with NAPAS, the national switch, in 2024, and contactless ticketing on Ho Chi Minh City's Metro Line 1 [@MC-13; @MC-15].
+
+**The risk it hit:** payment rules that rewrite themselves (next slide).
+</Fragment>
+
+</Slide>
+
+<Slide title="One rulebook, and a moving one" lede="Singapore's payments law arrived in one piece. Vietnam's rules keep arriving one decree at a time.">
+
+<Fragment slot="sg">
+<Flow country="SG" steps={[
+  { title: 'January 2020: Payment Services Act', detail: 'Three licence classes, seven payment services, one regulator', tone: 'end' },
+]} />
+
+<p class="mt-5 font-sans text-sm text-ink-2">Sources: [@MC-7; @MC-8]</p>
+</Fragment>
+
+<Fragment slot="vn">
+<Flow country="VN" steps={[
+  { title: 'October 2022: Decree 53', detail: 'Store specified data in Vietnam; open a local office' },
+  { title: 'July 2024: Decree 52', detail: 'First legal definition of e-money; banks get 24 months to comply' },
+  { title: 'July 2024: Decision 2345', detail: 'Biometrics for transfers above 10 million dong' },
+  { title: 'A 49% foreign cap on e-payment firms', detail: 'Proposed in a draft decree, then dropped after pushback', tone: 'end' },
+]} />
+
+<p class="mt-5 font-sans text-sm text-ink-2">Sources: [@MC-22; @MC-19; @MC-20; @MC-18; @MC-21]</p>
+</Fragment>
+
+<Fragment slot="foot">
+<div class="mx-auto grid max-w-3xl grid-cols-1 gap-8 border-t border-rule pt-6 sm:grid-cols-2">
+<BigStat value="28×" unit="GDP">
+Vietnam's cashless payments in 2025 [@MC-23].
+</BigStat>
+<BigStat value="92%" unit="a year">
+Growth in contactless volume, 2022 to 2024 [@MC-16].
+</BigStat>
+</div>
+</Fragment>
+
+</Slide>
+
+<Slide title="What changed at the border" layout="joined">
+
+<div class="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-2">
+<div class="border-t-2 border-ink pt-5">
+<p class="font-sans text-sm font-medium text-ink">Crocs</p>
+<p class="mt-3 font-display text-[clamp(1.5rem,2.4vw,2.1rem)] leading-snug text-ink">The sourcing country is now a political choice. Build the diversification before you need it.</p>
+<p class="mt-4 text-ink-2">Every alternative country carries a similar tariff [@CR-4], and the EU deal is phasing footwear tariffs to zero [@CR-23].</p>
+</div>
+<div class="border-t-2 border-ink pt-5">
+<p class="font-sans text-sm font-medium text-ink">Mastercard</p>
+<p class="mt-3 font-display text-[clamp(1.5rem,2.4vw,2.1rem)] leading-snug text-ink">In Singapore compliance is your cost. In Vietnam relationship is your licence.</p>
+<p class="mt-4 text-ink-2">The state owns the switch, sets the data rules and can propose an ownership cap [@MC-13; @MC-22; @MC-21].</p>
+</div>
+</div>
+
+</Slide>

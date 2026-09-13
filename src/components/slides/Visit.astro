@@ -1,0 +1,71 @@
+---
+// One stop on the trip, for a slide: when, who, the risk it shows, and the question to ask.
+// <Visit when="Wed 4 Nov, 9:00" name="Emerson" kind="industrial automation">
+// What the stop reveals [@SG-83].
+// <Fragment slot="ask">The one question to ask.</Fragment>
+// </Visit>
+const { when, name, kind } = Astro.props;
+---
+
+<article class="visit">
+  <p class="visit-when num">{when}</p>
+  <h3 class="visit-name">{name}</h3>
+  {kind && <p class="visit-kind">{kind}</p>}
+  <div class="visit-body"><slot /></div>
+  {
+    Astro.slots.has('ask') && (
+      <div class="visit-ask">
+        <p class="visit-ask-label">Ask</p>
+        <div class="visit-ask-text">
+          <slot name="ask" />
+        </div>
+      </div>
+    )
+  }
+</article>
+
+<style>
+  .visit {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 0.9rem;
+    border-top: 2px solid var(--country, var(--color-ink));
+  }
+  .visit-when {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+  .visit-name {
+    margin-top: 0.15rem;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--color-ink);
+  }
+  .visit-kind {
+    font-size: 0.9rem;
+    color: var(--color-ink-2);
+  }
+  .visit-body {
+    margin-top: 0.6rem;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--color-ink-2);
+  }
+  .visit-ask {
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+  .visit-ask-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .visit-ask-text {
+    margin-top: 0.15rem;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.35;
+    color: var(--color-ink);
+  }
+</style>

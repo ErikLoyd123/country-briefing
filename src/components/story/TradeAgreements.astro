@@ -4,13 +4,14 @@ import raw from '../../data/trade-agreements.yaml?raw';
 import { loadYaml } from '../../lib/yaml.js';
 import { withCitation } from '../../lib/sources.js';
 
-const { title = 'Trade agreements in force' } = Astro.props;
+// bare: no title or outer margin, for use inside a <Slide> that titles it.
+const { title = 'Trade agreements in force', bare = false } = Astro.props;
 const agreements = loadYaml(raw, 'src/data/trade-agreements.yaml');
 ---
 
-<section class="not-prose my-12">
-  <h3 class="font-display text-2xl text-ink">{title}</h3>
-  <div class="mt-4 overflow-x-auto">
+<section class:list={['not-prose', !bare && 'my-12']}>
+  {!bare && <h3 class="font-display text-2xl text-ink">{title}</h3>}
+  <div class:list={['overflow-x-auto', !bare && 'mt-4']}>
     <table class="w-full min-w-[36rem] border-collapse text-left text-[0.95rem]">
       <thead>
         <tr class="border-b border-ink text-sm text-muted">
@@ -24,9 +25,9 @@ const agreements = loadYaml(raw, 'src/data/trade-agreements.yaml');
         {
           agreements.map((a) => (
             <tr class="border-b border-rule align-top">
-              <th scope="row" class="py-3 pr-4 font-medium text-ink">{a.name}</th>
+              <th scope="row" class:list={['pr-4 font-medium text-ink', bare ? 'py-2' : 'py-3']}>{a.name}</th>
               {['SG', 'VN'].map((c) => (
-                <td class="px-2 py-3 text-center">
+                <td class:list={['px-2 text-center', bare ? 'py-2' : 'py-3']}>
                   {a.members.includes(c) ? (
                     <span class:list={['inline-grid size-6 place-items-center rounded-full text-white', c === 'SG' ? 'bg-sg' : 'bg-vn']}>
                       <Check size={14} aria-label="Party to it" />
@@ -36,7 +37,7 @@ const agreements = loadYaml(raw, 'src/data/trade-agreements.yaml');
                   )}
                 </td>
               ))}
-              <td class="py-3 pl-4 text-ink-2" set:html={withCitation(a.note, a.cite, undefined, `trade-agreements.yaml (${a.id})`)} />
+              <td class:list={['pl-4 text-ink-2', bare ? 'py-2 text-[0.9rem] leading-snug' : 'py-3']} set:html={withCitation(a.note, a.cite, undefined, `trade-agreements.yaml (${a.id})`)} />
             </tr>
           ))
         }

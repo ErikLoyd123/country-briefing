@@ -25,10 +25,17 @@ export async function getTopics() {
   }
 
   const topics = [...byFolder.entries()].map(([folder, t]) => {
-    for (const part of Object.values(PART_FILES)) {
-      if (!t.parts[part]) throw new Error(`briefings/${folder}: missing ${part}.mdx`);
-    }
+    if (!t.parts.index) throw new Error(`briefings/${folder}: missing index.mdx`);
     const d = t.parts.index.data;
+    // A slides section is authored entirely in index.mdx; a screens section splits into three files.
+    const format = d.format ?? 'screens';
+    if (format === 'screens') {
+      for (const part of Object.values(PART_FILES)) {
+        if (!t.parts[part]) throw new Error(`briefings/${folder}: missing ${part}.mdx`);
+      }
+    } else if (t.parts.singapore || t.parts.vietnam) {
+      throw new Error(`briefings/${folder}: a slides section is written in index.mdx only; remove singapore.mdx and vietnam.mdx`);
+    }
     for (const f of REQUIRED_INDEX_FIELDS) {
       if (d[f] === undefined) throw new Error(`briefings/${folder}/index.mdx: frontmatter field "${f}" is required`);
     }
@@ -44,6 +51,7 @@ export async function getTopics() {
       thesis: d.thesis,
       hero: d.hero,
       status: d.status,
+      format,
       parts: t.parts,
     };
   });

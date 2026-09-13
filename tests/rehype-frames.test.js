@@ -41,3 +41,8 @@ it('only frames briefing files', () => {
   const tree = run([el('p'), jsx('Risk')], { path: '/repo/src/content/paper/executive-summary.mdx' });
   expect(tree.children.map((n) => n.tagName ?? n.name)).toEqual(['p', 'Risk']);
 });
+
+it('leaves a file of authored slides as it is', () => {
+  const children = [jsx('Slide'), nl(), jsx('Slide')];
+  expect(run([...children]).children).toEqual(children);
+});

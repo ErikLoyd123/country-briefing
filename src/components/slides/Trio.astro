@@ -1,0 +1,94 @@
+---
+// Rules that apply in both countries down the middle; each country's own rules either side.
+// <Trio>
+// <Fragment slot="sg">- **Names.** Last names until invited [@SG-78].</Fragment>
+// <Fragment slot="both">- **Cards.** Both hands [@SG-4; @VN-76].</Fragment>
+// <Fragment slot="vn">- **Face.** Never disagree in public [@VN-77].</Fragment>
+// </Trio>
+---
+
+<div class="trio">
+  <section class="trio-col is-sg">
+    <h3 class="trio-head"><span class="trio-dot" aria-hidden="true" />Singapore only</h3>
+    <div class="trio-body"><slot name="sg" /></div>
+  </section>
+  <section class="trio-col is-both">
+    <h3 class="trio-head">
+      <span class="trio-dot is-sg" aria-hidden="true" /><span class="trio-dot is-vn" aria-hidden="true" />Both countries
+    </h3>
+    <div class="trio-body"><slot name="both" /></div>
+  </section>
+  <section class="trio-col is-vn">
+    <h3 class="trio-head"><span class="trio-dot" aria-hidden="true" />Vietnam only</h3>
+    <div class="trio-body"><slot name="vn" /></div>
+  </section>
+</div>
+
+<style>
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .trio {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 900px) {
+    .trio {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 0;
+      align-items: stretch;
+    }
+    .trio-col.is-sg {
+      padding-right: 2rem;
+    }
+    .trio-col.is-vn {
+      padding-left: 2rem;
+    }
+  }
+  .trio-col.is-both {
+    padding: 1.25rem 1.5rem;
+    border-radius: 6px;
+    background: var(--color-paper-2);
+  }
+  .trio-head {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--color-ink);
+  }
+  .trio-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--country);
+  }
+  .trio-head .trio-dot + .trio-dot {
+    margin-left: -0.15rem;
+  }
+  .trio-body {
+    margin-top: 0.75rem;
+  }
+  .trio-body :global(ul) {
+    display: grid;
+    gap: 0.8rem;
+  }
+  .trio-body :global(li) {
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--color-ink-2);
+  }
+  .trio-body :global(li strong) {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 450;
+    color: var(--color-ink);
+  }
+</style>

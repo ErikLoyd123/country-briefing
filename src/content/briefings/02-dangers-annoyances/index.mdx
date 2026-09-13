@@ -5,16 +5,183 @@ thesis: The perceived risks of doing business in government, society, security a
 hero:
   image: vietnam/hoi-an-flood.jpg
   alt: A boat on a flooded street in Hoi An during rainy season
+format: slides
 status: draft
 ---
 
-The perceived risks of doing business, in the four areas the assignment names: government, society, security, economy. Ranked by how much they should change what you do. Readings come from Coface, the World Bank Logistics Performance Index, Transparency International and the rating agencies. (The CIA World Factbook was discontinued in February 2026, so we substituted government sources.)
+<Slide title="How the risk raters see it" lede="On every outside score, Singapore sits at or near the top and Vietnam in the middle of the pack." layout="joined">
 
-## At a glance
+<StatDuel rows={[
+  {
+    label: 'Coface country risk',
+    sg: { value: 'A2', detail: 'Business climate A1', cite: ['SG-51'] },
+    vn: { value: 'A4', detail: 'Business climate A4', cite: ['VN-20'] },
+  },
+  {
+    label: 'World Bank logistics index',
+    sg: { value: '1st', detail: 'Score 4.3', cite: ['SG-12'] },
+    vn: { value: '43rd', detail: 'Score 3.3, of 139 economies', cite: ['VN-62'] },
+  },
+  {
+    label: 'Sovereign credit rating',
+    sg: { value: 'AAA', detail: 'All three agencies, stable', cite: ['SG-21'] },
+    vn: { value: 'BB+', detail: 'Fitch, stable', cite: ['VN-16'] },
+  },
+]} />
 
-|  | Singapore | Vietnam |
-|---|---|---|
-| Coface country risk | A2 (business climate A1) [@SG-51] | A4 (business climate A4) [@VN-20] |
-| Logistics index | 4.3, ranked 1st [@SG-12] | 3.3, ranked 43rd [@VN-62] |
-| Corruption | 84, 3rd of 182 [@SG-19] | 41, 81st of 182 [@VN-15] |
-| Rating | AAA stable [@SG-21] | Fitch BB+ stable [@VN-16] |
+</Slide>
+
+<Slide title="Every risk, as we rank it" lede="Ranked by how much each should change what a foreign company does. Select one to jump to it." layout="joined">
+
+<RiskMap section="dangers-annoyances" />
+
+</Slide>
+
+<Slide title="Government" lede="In Singapore the risk is what you say. In Vietnam it is who you deal with.">
+
+<Fragment slot="sg">
+<RiskCard country="SG" area="government" level="low" title="Stable to the point of predictability, with tight rules on speech">
+The PAP won 87 of 97 seats in 2025 [@SG-17]. Foreigners need a police permit even to join an event at Speakers' Corner [@SG-27].
+
+<Fragment slot="means">keep corporate voice on commercial matters.</Fragment>
+</RiskCard>
+<RiskCard country="SG" area="government" level="low" title="Religious and racial harmony is law, not etiquette">
+Speech that wounds religious feelings is an offence [@SG-29].
+
+<Fragment slot="means">marketing and staff posts get legal review, not just brand review.</Fragment>
+</RiskCard>
+</Fragment>
+
+<Fragment slot="vn">
+<RiskCard country="VN" area="government" level="high" title="One party, a lot of change, and a purge that reaches the top">
+A president resigned in 2024 [@VN-24]. Provinces were cut from 63 to 34 and ministries from 30 to 22 [@VN-21; @VN-22].
+
+<Fragment slot="means">build relationships with the institution, not one official, and expect delay [@VN-66].</Fragment>
+</RiskCard>
+<RiskCard country="VN" area="government" level="high" title="Data lives here now">
+Foreign digital firms can be ordered to store user data locally [@VN-25]; data-transfer fines reach 5 percent of revenue [@VN-26].
+
+<Fragment slot="means">anything with a login or a customer database needs a Vietnam data plan.</Fragment>
+</RiskCard>
+<RiskCard country="VN" area="government" level="low" title="The reform is real too">
+The 2026 investment law cut 38 conditional business lines [@VN-29].
+
+<Fragment slot="means">entry is easier on paper; test it on the November visits.</Fragment>
+</RiskCard>
+</Fragment>
+
+</Slide>
+
+<Slide title="Society" lede="Singapore is old and expensive. Vietnam is young, but short of skills and clean air." sgMedia="singapore/public-housing.jpg" vnMedia="vietnam/cho-ray-hospital.jpg">
+
+<Fragment slot="sg">
+<RiskCard country="SG" area="society" level="mid" title="Old, expensive, and getting more so">
+One citizen in five is 65 or older, heading to one in four by 2030 [@SG-34]; often named the world's most expensive city [@SG-35].
+
+<Fragment slot="means">expatriate packages cost more and the home market is small.</Fragment>
+</RiskCard>
+</Fragment>
+
+<Fragment slot="vn">
+<RiskCard country="VN" area="society" level="mid" title="Young, willing, and under-credentialed">
+52.9 million workers, but only 28.8 percent hold a diploma or certificate [@VN-33].
+
+<Fragment slot="means">labour is available; skilled supervisors are not. Budget for training.</Fragment>
+</RiskCard>
+<RiskCard country="VN" area="society" level="mid" title="You will breathe the air">
+Hanoi was the 10th most polluted major city in January 2026 [@VN-30]; local hospitals do not take US insurance [@VN-9].
+
+<Fragment slot="means">insure senior staff for evacuation.</Fragment>
+</RiskCard>
+</Fragment>
+
+</Slide>
+
+<Slide title="Security" lede="In Singapore the threat comes by phone. In Vietnam it comes by road and by weather.">
+
+<Fragment slot="sg">
+<CompareBars label="Reported cases in 2025" items={[
+  { name: 'Scams', value: 37308, display: '37,308', cite: ['SG-38'] },
+  { name: 'Physical crime', value: 20857, display: '20,857', cite: ['SG-37'] },
+]} />
+
+<RiskCard country="SG" area="security" level="mid" title="Scams, not street crime">
+S$913 million was lost to scams in 2025 [@SG-39]; the terrorism threat is assessed as high [@SG-40].
+
+<Fragment slot="means">train staff against phishing, not muggings.</Fragment>
+</RiskCard>
+<RiskCard country="SG" area="security" level="high" title="The law is strict and it applies to you">
+Trafficking carries the death penalty [@SG-41]; jaywalking and littering can lead to arrest [@SG-42].
+
+<Fragment slot="means">brief every traveller before they land.</Fragment>
+</RiskCard>
+</Fragment>
+
+<Fragment slot="vn">
+<CompareBars label="Deaths" items={[
+  { name: 'Road deaths, Jan to Oct 2025', value: 8515, display: '8,515', cite: ['VN-35'] },
+  { name: 'Typhoon Yagi, Sep 2024', value: 318, display: '318', cite: ['VN-36'] },
+]} />
+
+<RiskCard country="VN" area="security" level="high" title="Weather is the disaster risk">
+Yagi also did US$3.3 billion of damage [@VN-36]; 2025 floods killed 158 more [@VN-38].
+
+<Fragment slot="means">plan flood and power contingency; the season runs to November [@VN-7].</Fragment>
+</RiskCard>
+<RiskCard country="VN" area="security" level="mid" title="The road is the crime">
+Bag snatching from motorbikes and taxi scams are the urban risks [@VN-41].
+
+<Fragment slot="means">ban motorbike rentals and write a car policy [@VN-10].</Fragment>
+</RiskCard>
+</Fragment>
+
+</Slide>
+
+<Slide title="The tariff gap" lede="The same US policy costs Vietnam twice what it costs Singapore, and four times as much if goods are judged transshipped." layout="joined">
+
+<div class="mx-auto max-w-3xl">
+<CompareBars label="US tariff on imports, 2025" items={[
+  { name: 'Singapore', country: 'SG', value: 10, display: '10%', note: 'from April 2025', cite: ['SG-46'] },
+  { name: 'Vietnam', country: 'VN', value: 20, display: '20%', note: 'most goods', cite: ['VN-43'] },
+  { name: 'Vietnam, if judged transshipped', country: 'VN', value: 40, display: '40%', cite: ['VN-43'] },
+]} max={40} />
+</div>
+
+<p class="mx-auto mt-8 max-w-2xl text-center font-display text-xl leading-snug text-ink-2">Singapore's free trade agreement did not shield it [@SG-47]. Crocs puts the cost of each 10 points of tariff at about US$45 million a year [@CR-8].</p>
+
+</Slide>
+
+<Slide title="Economy" lede="Singapore is a trade hub in a trade war. Vietnam is growing fast on the business model the tariff targets.">
+
+<Fragment slot="sg">
+<RiskCard country="SG" area="economy" level="high" title="A trade hub in a trade war">
+PM Wong called the tariffs the end of an era for rules-based trade [@SG-48].
+
+<Fragment slot="means">if neutrality between the US and China gets harder, the hub premium shrinks.</Fragment>
+</RiskCard>
+<RiskCard country="SG" area="economy" level="mid" title="Booming on AI, dependent on imported labour">
+2026 growth forecast raised to 4.5 to 5.5 percent [@SG-49]; 1.6 million foreign workers [@SG-53].
+
+<Fragment slot="means">hiring is competitive and depends on work passes.</Fragment>
+</RiskCard>
+</Fragment>
+
+<Fragment slot="vn">
+<RiskCard country="VN" area="economy" level="high" title="A tariff aimed at the business model">
+The US buys US$153 billion of Vietnam's exports, and 40 percent of its imports come from China [@VN-45; @VN-46].
+
+<Fragment slot="means">if you cannot prove Vietnamese origin, the 40 percent rate is your problem.</Fragment>
+</RiskCard>
+<RiskCard country="VN" area="economy" level="mid" title="Fast growth, rising prices, a weak dong">
+8.02 percent growth in 2025 [@VN-48]; inflation 4.89 percent in August 2026 [@VN-49].
+
+<Fragment slot="means">price in depreciation and plan for outages [@VN-51; @VN-50].</Fragment>
+</RiskCard>
+<RiskCard country="VN" area="economy" level="mid" title="Finance can still surprise">
+The US$12.5 billion SCB fraud ended in a death sentence [@VN-52].
+
+<Fragment slot="means">prefer large state and foreign-linked banks for treasury.</Fragment>
+</RiskCard>
+</Fragment>
+
+</Slide>

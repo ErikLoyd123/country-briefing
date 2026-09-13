@@ -1,0 +1,218 @@
+---
+// Each country between two powers: what ties it to the one on the left and the one on the right.
+// <PullDiagram left="United States" right="China" rows={[
+//   { country: 'SG', figure: '29', figureLabel: 'free trade agreements', cite: ['SG-68'],
+//     left: { text: 'Largest investor and defence partner.', cite: ['SG-71'] },
+//     right: { text: 'Largest trading partner since 2013.', cite: ['SG-70'] } },
+// ]} />
+import { withCitation, citationHtml } from '../../lib/sources.js';
+
+const { left, right, rows = [] } = Astro.props;
+const NAMES = { SG: 'Singapore', VN: 'Vietnam' };
+for (const r of rows) if (!NAMES[r.country]) throw new Error(`PullDiagram: country "${r.country}" must be SG or VN`);
+---
+
+<figure class="pull">
+  <div class="pull-poles" aria-hidden="true">
+    <p class="pull-pole">{left}</p>
+    <p class="pull-pole is-right">{right}</p>
+  </div>
+
+  <ol class="pull-rows">
+    {
+      rows.map((r) => (
+        <li class:list={['pull-row', `is-${r.country.toLowerCase()}`]}>
+          <p class="pull-side is-left">
+            <span class="pull-side-label">{left}</span>
+            <Fragment set:html={withCitation(r.left.text, r.left.cite, undefined, `PullDiagram (${NAMES[r.country]}, ${left})`)} />
+          </p>
+          <div class="pull-node">
+            <span class="pull-name">{NAMES[r.country]}</span>
+            <span class="pull-figure type-heavy num">{r.figure}</span>
+            <span class="pull-figure-label">
+              {r.figureLabel} <Fragment set:html={citationHtml(r.cite, undefined, `PullDiagram (${NAMES[r.country]})`)} />
+            </span>
+          </div>
+          <p class="pull-side is-right">
+            <span class="pull-side-label">{right}</span>
+            <Fragment set:html={withCitation(r.right.text, r.right.cite, undefined, `PullDiagram (${NAMES[r.country]}, ${right})`)} />
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .pull {
+    position: relative;
+  }
+  .pull-poles {
+    display: none;
+  }
+  .pull-rows {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .pull-node {
+    display: flex;
+    flex-direction: column;
+  }
+  .pull-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .pull-name::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--country);
+  }
+  .pull-figure {
+    margin-top: 0.25rem;
+    font-size: 3.25rem;
+    line-height: 1;
+    color: var(--color-ink);
+  }
+  .pull-figure-label {
+    font-size: 0.85rem;
+    color: var(--color-ink-2);
+  }
+  .pull-side {
+    margin-top: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.45;
+    color: var(--color-ink-2);
+  }
+  .pull-side-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .pull-row {
+    display: flex;
+    flex-direction: column;
+  }
+  .pull-row .is-left {
+    order: 2;
+  }
+  .pull-row .is-right {
+    order: 3;
+  }
+
+  /* Wide screens: the two powers stand at either edge as posts; each country sits in the middle
+     with a line running out to both, and what pulls it each way is written along that line. */
+  @media (min-width: 900px) {
+    .pull {
+      padding-inline: 0.5rem;
+    }
+    .pull-poles {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .pull-pole {
+      position: relative;
+      width: 9rem;
+      padding-top: 0;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      line-height: 1.1;
+      color: var(--color-ink);
+    }
+    .pull-pole.is-right {
+      text-align: right;
+    }
+    .pull-pole::after {
+      content: '';
+      position: absolute;
+      top: 4rem;
+      bottom: 0;
+      width: 3px;
+      border-radius: 2px;
+      background: var(--color-ink);
+      left: 0;
+    }
+    .pull-pole.is-right::after {
+      left: auto;
+      right: 0;
+    }
+    .pull-rows {
+      padding-top: 4.5rem;
+      gap: 3rem;
+    }
+    .pull-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 13rem minmax(0, 1fr);
+      align-items: center;
+    }
+    .pull-row .is-left,
+    .pull-row .is-right {
+      order: 0;
+      position: relative;
+      margin: 0;
+      padding-bottom: 1.1rem;
+      align-self: end;
+      margin-bottom: 2.6rem;
+    }
+    .pull-row .is-left {
+      padding: 0 1.75rem 1rem 1.5rem;
+      text-align: right;
+    }
+    .pull-row .is-right {
+      padding: 0 1.5rem 1rem 1.75rem;
+    }
+    .pull-side-label {
+      display: none;
+    }
+    /* The line from the country out to each post, with an arrowhead at the post. */
+    .pull-side::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--country);
+    }
+    .pull-side::before {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      width: 0;
+      height: 0;
+      border-block: 6px solid transparent;
+    }
+    .pull-side.is-left::before {
+      left: 0;
+      border-right: 10px solid var(--country);
+    }
+    .pull-side.is-right::before {
+      right: 0;
+      border-left: 10px solid var(--country);
+    }
+    .pull-node {
+      align-items: center;
+      text-align: center;
+      padding: 1rem 0.75rem;
+      border: 2px solid var(--country);
+      border-radius: 0.5rem;
+      background: var(--color-paper);
+    }
+  }
+</style>

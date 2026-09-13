@@ -1,0 +1,307 @@
+---
+// A few weeks of news on a true-to-scale date axis: Singapore's events above, Vietnam's below.
+// Each event's card sits in date order and a thin line runs to the day it happened, so clusters
+// of news read as clusters. Days after `today` are drawn dashed, as still to come.
+// <DateStrip from="2026-08-20" to="2026-09-23" today="2026-09-13" events={[
+//   { date: '2026-09-08', country: 'SG', title: 'Ministers get a pay rise', detail: '…', cite: ['SG-91'] },
+//   { date: '2026-09-07', end: '2026-09-09', country: 'VN', title: '…', detail: '…', cite: ['VN-88'] },
+// ]} />
+import { citationHtml } from '../../lib/sources.js';
+
+const { from, to, today, events = [], label = 'Dates' } = Astro.props;
+const DAY = 86_400_000;
+const t = (d) => Date.parse(`${d}T00:00:00Z`);
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const fmt = (d) => `${Number(d.slice(8))} ${MONTHS[Number(d.slice(5, 7)) - 1]}`;
+const span = t(to) - t(from);
+const x = (d) => ((t(d) - t(from)) / span) * 100;
+
+for (const e of events) {
+  if (!['SG', 'VN'].includes(e.country)) throw new Error(`DateStrip: "${e.title}" country must be SG or VN`);
+  if (!(e.date >= from && (e.end ?? e.date) <= to)) throw new Error(`DateStrip: "${e.title}" falls outside ${from} to ${to}`);
+}
+
+const lanes = ['SG', 'VN'].map((code) => {
+  const list = events.filter((e) => e.country === code).sort((a, b) => a.date.localeCompare(b.date));
+  return {
+    code,
+    name: code === 'SG' ? 'Singapore' : 'Vietnam',
+    events: list.map((e, i) => ({
+      ...e,
+      when: e.end ? (e.date.slice(5, 7) === e.end.slice(5, 7) ? `${Number(e.date.slice(8))} to ${fmt(e.end)}` : `${fmt(e.date)} to ${fmt(e.end)}`) : fmt(e.date),
+      card: ((i + 0.5) / list.length) * 100,
+      at: x(e.date),
+      atEnd: e.end ? x(e.end) : null,
+      future: e.date > today,
+    })),
+  };
+});
+
+// A tick on every Monday.
+const ticks = [];
+for (let d = t(from); d <= t(to); d += DAY) {
+  const iso = new Date(d).toISOString().slice(0, 10);
+  if (new Date(d).getUTCDay() === 1) ticks.push({ iso, at: x(iso) });
+}
+const todayAt = x(today);
+---
+
+<figure class="ds" aria-label={label}>
+  <ul class="ds-legend" aria-hidden="true">
+    <li class="is-sg"><span class="ds-lane-dot" />Singapore, above the line</li>
+    <li class="is-vn"><span class="ds-lane-dot" />Vietnam, below</li>
+  </ul>
+  {
+    lanes.map((lane, li) => (
+      <>
+        {li === 1 && (
+          <div class="ds-axis" aria-hidden="true">
+            <div class="ds-rule" style={`width:${todayAt}%`} />
+            <div class="ds-rule is-future" style={`left:${todayAt}%`} />
+            {ticks.map((tk) => (
+              <span class="ds-tick num" style={`left:${tk.at}%`}>
+                {fmt(tk.iso)}
+              </span>
+            ))}
+            <span class="ds-today" style={`left:${todayAt}%`}>
+              <span>Today</span>
+            </span>
+            {lanes.flatMap((l) =>
+              l.events.map((e) =>
+                e.atEnd !== null ? (
+                  <span class:list={['ds-range', `is-${l.code.toLowerCase()}`]} style={`left:${e.at}%; width:${e.atEnd - e.at}%`} />
+                ) : (
+                  <span class:list={['ds-dot', `is-${l.code.toLowerCase()}`, e.future && 'is-future']} style={`left:${e.at}%`} />
+                ),
+              ),
+            )}
+          </div>
+        )}
+        <div class:list={['ds-lane', `is-${lane.code.toLowerCase()}`, li === 0 ? 'is-above' : 'is-below']}>
+          <p class="ds-lane-name">{lane.name}</p>
+          {li === 1 && (
+            <svg class="ds-links" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+              {lane.events.map((e) => {
+                const target = e.atEnd !== null ? (e.at + e.atEnd) / 2 : e.at;
+                return <path d={`M${target},0 V12 L${e.card},28 V40`} class:list={[e.future && 'is-future']} />;
+              })}
+            </svg>
+          )}
+          <ol class="ds-cards" style={`grid-template-columns: repeat(${lane.events.length}, minmax(0, 1fr))`}>
+            {lane.events.map((e) => (
+              <li class="ds-card">
+                <time class="ds-when num" datetime={e.date}>
+                  {e.when}
+                  {e.future && <span class="ds-soon"> (coming)</span>}
+                </time>
+                <p class="ds-title">{e.title}</p>
+                <p class="ds-detail">
+                  {e.detail} <Fragment set:html={citationHtml(e.cite, undefined, `DateStrip (${e.title})`)} />
+                </p>
+              </li>
+            ))}
+          </ol>
+          {li === 0 && (
+            <svg class="ds-links" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+              {lane.events.map((e) => {
+                const target = e.atEnd !== null ? (e.at + e.atEnd) / 2 : e.at;
+                return <path d={`M${e.card},0 V12 L${target},28 V40`} class:list={[e.future && 'is-future']} />;
+              })}
+            </svg>
+          )}
+        </div>
+      </>
+    ))
+  }
+</figure>
+
+<style>
+  .ds {
+    --link-h: 3rem;
+  }
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .ds-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--color-ink-2);
+  }
+  .ds-legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  /* Lane names are for screen readers and phones; wide screens use the legend. */
+  .ds-lane-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .ds-lane-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--country);
+  }
+  .ds-cards {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .is-below {
+    display: flex;
+    flex-direction: column;
+  }
+  .ds-card {
+    padding-inline: 0.25rem;
+  }
+  .ds-when {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .ds-soon {
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+  .ds-title {
+    margin-top: 0.15rem;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.2;
+    color: var(--color-ink);
+  }
+  .ds-detail {
+    margin-top: 0.3rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--color-ink-2);
+  }
+
+  .ds-links {
+    display: block;
+    width: 100%;
+    height: var(--link-h);
+    overflow: visible;
+  }
+  .ds-links path {
+    fill: none;
+    stroke: var(--country);
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.7;
+  }
+  .ds-links path.is-future {
+    stroke-dasharray: 4 3;
+  }
+
+  .ds-axis {
+    position: relative;
+    height: 2.25rem;
+  }
+  .ds-rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  }
+  .ds-rule.is-future {
+    right: 0;
+    width: auto;
+    background: repeating-linear-gradient(to right, color-mix(in srgb, var(--color-ink) 45%, transparent) 0 6px, transparent 6px 11px);
+  }
+  .ds-tick {
+    position: absolute;
+    top: 0.55rem;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+  .ds-today {
+    position: absolute;
+    top: -0.9rem;
+    height: 2.4rem;
+    width: 1px;
+    background: var(--color-ink);
+  }
+  .ds-today span {
+    position: absolute;
+    top: 1.45rem;
+    right: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-ink);
+    white-space: nowrap;
+  }
+  .ds-dot {
+    position: absolute;
+    top: 1px;
+    width: 0.8rem;
+    height: 0.8rem;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    background: var(--country);
+    box-shadow: 0 0 0 2px var(--color-paper);
+  }
+  /* Singapore's marks ride the top edge of the line and Vietnam's the bottom, so same-day marks both show. */
+  .ds-dot.is-sg {
+    transform: translate(-50%, -80%);
+  }
+  .ds-dot.is-vn {
+    transform: translate(-50%, -20%);
+  }
+  .ds-range.is-vn {
+    transform: translateY(-20%);
+  }
+  .ds-dot.is-future {
+    background: var(--color-paper);
+    box-shadow: inset 0 0 0 2px var(--country);
+  }
+  .ds-range {
+    position: absolute;
+    top: 1px;
+    height: 0.8rem;
+    min-width: 0.8rem;
+    transform: translateY(-50%);
+    border-radius: 999px;
+    background: var(--country);
+    box-shadow: 0 0 0 2px var(--color-paper);
+  }
+  /* Phones: two plain lists, no axis. */
+  @media (max-width: 767.98px) {
+    .ds-axis,
+    .ds-links {
+      display: none;
+    }
+    .ds-cards {
+      grid-template-columns: 1fr !important;
+    }
+    .is-below {
+      margin-top: 2rem;
+    }
+    .ds-legend {
+      display: none;
+    }
+    .ds-lane-name {
+      position: static;
+      width: auto;
+      height: auto;
+      clip-path: none;
+      margin-bottom: 0.75rem;
+    }
+  }
+</style>

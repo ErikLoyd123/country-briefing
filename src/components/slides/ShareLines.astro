@@ -1,0 +1,132 @@
+---
+// A few series over a few years, drawn as lines with the values labelled at each point.
+// <ShareLines label="Share of production made in Vietnam" unit="%" years={[2023, 2024, 2025]} series={[
+//   { name: 'Crocs Brand', values: [56, 51, 45], cite: ['CR-1'] },
+//   { name: 'HEYDUDE', values: [5, 20, 44], cite: ['CR-2'], dashed: true },
+// ]} />
+// Series are told apart by ink and dash as well as by their labels, so no color is needed for identity.
+import { citationHtml } from '../../lib/sources.js';
+
+const { label, unit = '', years = [], series = [], max = 100 } = Astro.props;
+const W = 560;
+const H = 300;
+const pad = { top: 20, right: 150, bottom: 34, left: 44 };
+const iw = W - pad.left - pad.right;
+const ih = H - pad.top - pad.bottom;
+const x = (i) => pad.left + (years.length === 1 ? iw / 2 : (i / (years.length - 1)) * iw);
+const y = (v) => pad.top + ih - (v / max) * ih;
+const grid = [0, max / 2, max];
+const STROKES = ['var(--color-ink)', 'var(--color-muted)', 'var(--color-ink-2)'];
+// Keep end labels from colliding: nudge apart if closer than 18px.
+const ends = series.map((s, i) => ({ i, y: y(s.values.at(-1)) })).sort((a, b) => a.y - b.y);
+for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 36) ends[k].y = ends[k - 1].y + 36;
+const endY = Object.fromEntries(ends.map((e) => [e.i, e.y]));
+---
+
+<figure class="lines">
+  <figcaption class="lines-caption">{label}</figcaption>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label}: ${series.map((s) => `${s.name} ${s.values.map((v, i) => `${years[i]} ${v}${unit}`).join(', ')}`).join('; ')}`}>
+    {
+      grid.map((g) => (
+        <g>
+          <line x1={pad.left} x2={pad.left + iw} y1={y(g)} y2={y(g)} class="lines-grid" />
+          <text x={pad.left - 10} y={y(g) + 4} text-anchor="end" class="lines-axis">
+            {g}
+            {unit}
+          </text>
+        </g>
+      ))
+    }
+    {
+      years.map((yr, i) => (
+        <text x={x(i)} y={H - 8} text-anchor="middle" class="lines-axis">
+          {yr}
+        </text>
+      ))
+    }
+    {
+      series.map((s, si) => (
+        <g style={`--stroke:${STROKES[si % STROKES.length]}`}>
+          <polyline points={s.values.map((v, i) => `${x(i)},${y(v)}`).join(' ')} class:list={['lines-line', s.dashed && 'is-dashed']} />
+          {s.values.map((v, i) => (
+            <>
+              <circle cx={x(i)} cy={y(v)} r="5" class="lines-dot" />
+              {i < s.values.length - 1 && (
+                <text x={x(i)} y={y(v) - 12} text-anchor="middle" class="lines-value">
+                  {v}
+                  {unit}
+                </text>
+              )}
+            </>
+          ))}
+          <text x={x(s.values.length - 1) + 14} y={endY[si] + 5} class="lines-end">
+            <tspan class="lines-end-value">
+              {s.values.at(-1)}
+              {unit}
+            </tspan>
+            <tspan dx="8">{s.name}</tspan>
+          </text>
+        </g>
+      ))
+    }
+  </svg>
+  <p class="lines-source">
+    <Fragment set:html={citationHtml(series.flatMap((s) => s.cite ?? []), undefined, `ShareLines (${label})`)} />
+  </p>
+</figure>
+
+<style>
+  .lines-caption {
+    font-size: 0.95rem;
+    color: var(--color-ink);
+  }
+  .lines svg {
+    display: block;
+    width: 100%;
+    max-width: 40rem;
+    height: auto;
+    margin-top: 0.5rem;
+    overflow: visible;
+  }
+  .lines-grid {
+    stroke: var(--color-rule);
+    stroke-width: 1;
+  }
+  .lines-axis {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    fill: var(--color-muted);
+  }
+  .lines-line {
+    fill: none;
+    stroke: var(--stroke);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+  .lines-line.is-dashed {
+    stroke-dasharray: 7 5;
+  }
+  .lines-dot {
+    fill: var(--stroke);
+    stroke: var(--color-paper);
+    stroke-width: 2;
+  }
+  .lines-value {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    fill: var(--color-ink-2);
+  }
+  .lines-end {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    fill: var(--color-ink);
+  }
+  .lines-end-value {
+    font-weight: 800;
+    font-size: 20px;
+  }
+  .lines-source {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+  }
+</style>

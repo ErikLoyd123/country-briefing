@@ -1,0 +1,233 @@
+---
+// Both countries placed on one shared scale, e.g. the Corruption Perceptions Index.
+// <ScaleCompare label="Corruption Perceptions Index" note="0 to 100, higher is cleaner" min={0} max={100}
+//   sg={{ value: 84, detail: '3rd of 182 countries', cite: ['SG-19'] }}
+//   vn={{ value: 41, detail: '81st of 182 countries', cite: ['VN-15'] }} />
+// The band between the two markers is labelled with the gap, in the scale's units.
+import { citationHtml } from '../../lib/sources.js';
+
+const { label, note, min = 0, max = 100, ticks, unit = 'points', sg, vn } = Astro.props;
+for (const [code, d] of [['sg', sg], ['vn', vn]]) {
+  if (typeof d?.value !== 'number' || d.value < min || d.value > max) throw new Error(`ScaleCompare "${label}": ${code}.value must be a number from ${min} to ${max}`);
+}
+const pct = (v) => ((v - min) / (max - min)) * 100;
+const tickValues = ticks ?? [min, (min + max) / 2, max];
+const markers = [
+  { code: 'sg', name: 'Singapore', ...sg },
+  { code: 'vn', name: 'Vietnam', ...vn },
+];
+const [lo, hi] = [Math.min(sg.value, vn.value), Math.max(sg.value, vn.value)];
+const gap = hi - lo;
+---
+
+<figure class="scale">
+  <figcaption class="scale-caption">
+    <span class="text-ink">{label}</span>
+    {note && <span class="text-muted">{note}</span>}
+  </figcaption>
+
+  <div class="scale-plot" role="img" aria-label={`${label}: Singapore ${sg.value}, Vietnam ${vn.value}, on a scale of ${min} to ${max}.`}>
+    <div class="scale-gap" style={`left:${pct(lo)}%; width:${pct(hi) - pct(lo)}%`}>
+      <span class="scale-gap-label num">{gap} {unit} apart</span>
+    </div>
+    <div class="scale-track"></div>
+    {
+      tickValues.map((t) => (
+        <span class="scale-tick num" style={`left:${pct(t)}%`}>
+          {t}
+        </span>
+      ))
+    }
+    {
+      markers.map((m) => (
+        <div class:list={['scale-marker', `is-${m.code}`]} style={`left:${pct(m.value)}%; --at:${pct(m.value)}`}>
+          <span class="scale-value type-heavy num">{m.value}</span>
+          <span class="scale-name">{m.name}</span>
+          <span class="scale-detail">
+            {m.detail} <Fragment set:html={citationHtml(m.cite, undefined, `ScaleCompare (${label})`)} />
+          </span>
+          <span class="scale-dot" aria-hidden="true"></span>
+        </div>
+      ))
+    }
+  </div>
+</figure>
+
+<style>
+  .scale {
+    margin-inline: auto;
+    max-width: 64rem;
+  }
+  .scale-caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.75rem;
+    font-size: 0.95rem;
+  }
+  .scale-plot {
+    position: relative;
+    height: 11.75rem;
+    margin-inline: 1.5rem;
+  }
+  .scale-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 9.5rem;
+    height: 2px;
+    background: var(--color-ink);
+    opacity: 0.35;
+  }
+  .scale-tick {
+    position: absolute;
+    top: 10.25rem;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+  .scale-tick::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -0.8rem;
+    width: 1px;
+    height: 0.45rem;
+    background: var(--color-muted);
+  }
+  .scale-gap {
+    position: absolute;
+    top: 9.5rem;
+    height: 2px;
+    background: var(--color-ink);
+  }
+  .scale-gap-label {
+    position: absolute;
+    left: 50%;
+    top: 0.9rem;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.85rem;
+    color: var(--color-ink-2);
+  }
+  .scale-marker {
+    position: absolute;
+    top: 0;
+    height: 9.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 1.1rem;
+    transform: translateX(-50%);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .scale-value {
+    font-size: clamp(2.75rem, 5vw, 4rem);
+    line-height: 1;
+    color: var(--color-ink);
+  }
+  .scale-name {
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .scale-detail {
+    font-size: 0.85rem;
+    color: var(--color-ink-2);
+  }
+  .scale-dot {
+    position: absolute;
+    bottom: -0.55rem;
+    left: 50%;
+    width: 1.1rem;
+    height: 1.1rem;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: var(--country);
+    box-shadow: 0 0 0 3px var(--color-paper);
+  }
+  /* Narrow screens: Singapore's label above the line, Vietnam's below, each sliding along its
+     marker so it stays inside the plot. */
+  @media (max-width: 639.98px) {
+    .scale-plot {
+      height: 17rem;
+      margin-inline: 0.5rem;
+    }
+    .scale-marker {
+      width: 10rem;
+      white-space: normal;
+      align-items: stretch;
+      text-align: left;
+      transform: translateX(calc(var(--at) * -1%));
+    }
+    .scale-marker.is-sg {
+      text-align: right;
+    }
+    .scale-marker.is-vn {
+      top: 9.5rem;
+      height: auto;
+      justify-content: flex-start;
+      padding: 1.1rem 0 0;
+    }
+    .scale-marker.is-vn .scale-dot {
+      top: -0.55rem;
+      bottom: auto;
+    }
+    .scale-marker.is-vn::after {
+      top: 0.55rem;
+      bottom: auto;
+    }
+    .scale-dot,
+    .scale-marker::after {
+      left: calc(var(--at) * 1%) !important;
+    }
+    .scale-tick,
+    .scale-gap-label {
+      display: none;
+    }
+  }
+  .scale-marker::after {
+      left: calc(var(--at) * 1%) !important;
+    }
+    .scale-gap-label {
+      display: none;
+    }
+  }
+  .scale-marker::after {
+    content: '';
+    position: absolute;
+    bottom: 0.55rem;
+    left: 50%;
+    width: 1px;
+    height: 0.5rem;
+    background: var(--country);
+  }
+
+  @media (min-width: 768px) and (max-height: 820px) {
+    .scale-plot {
+      height: 10rem;
+    }
+    .scale-value {
+      font-size: 2.5rem;
+    }
+    .scale-marker {
+      height: 7.75rem;
+    }
+    .scale-track,
+    .scale-gap {
+      top: 7.75rem;
+    }
+    .scale-tick {
+      top: 8.5rem;
+    }
+  }
+</style>

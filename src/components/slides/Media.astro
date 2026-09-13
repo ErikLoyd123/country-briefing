@@ -1,0 +1,59 @@
+---
+// A photo or video with a short label, for placing media by hand inside a slide.
+// <Media src="singapore/strait-shipping.jpg" country="SG" />   (label defaults to the country name)
+// src: an image under src/assets/images/ or a video under public/media/ (ending .mp4). Alt text comes from credits.yaml.
+import HeroMedia from '../story/HeroMedia.astro';
+import { findCredit } from '../../lib/credits.js';
+
+const { src, country, label, ratio = '16 / 9', sizes = '(min-width: 1024px) 32rem, 100vw' } = Astro.props;
+const credit = findCredit(src);
+if (!credit) throw new Error(`Media: "${src}" has no credits.yaml entry. Add it to media-sources.yaml and run npm run media.`);
+const video = src.endsWith('.mp4');
+const NAMES = { SG: 'Singapore', VN: 'Vietnam' };
+const caption = label ?? NAMES[country];
+---
+
+<figure class:list={['media', country && `is-${country.toLowerCase()}`]}>
+  <div class="media-frame" style={`aspect-ratio: ${ratio}`}>
+    <HeroMedia image={video ? undefined : src} video={video ? src : undefined} alt={credit.alt} sizes={sizes} />
+  </div>
+  {
+    caption && (
+      <figcaption class="media-caption">
+        {country && <span class="media-dot" aria-hidden="true" />}
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .media-frame {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 3px;
+    background: var(--color-night);
+  }
+  .media-caption {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .media-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--country);
+  }
+</style>

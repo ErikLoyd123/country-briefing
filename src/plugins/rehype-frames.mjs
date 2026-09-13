@@ -5,6 +5,7 @@
 //     unless it directly follows an h3, which it then shares a frame with. An h2 is a
 //     divider (e.g. "Singapore"), so a visual right after it still starts a new frame.
 //   - Prose (paragraphs, lists, tables) collects into the current frame.
+// A file written as authored <Slide>s already is its frames, so it is left alone.
 // Only files under src/content/briefings/ are framed. Elsewhere (the paper page) the
 // frames are plain wrappers; see .briefing-prose in src/styles/global.css.
 
@@ -20,6 +21,7 @@ const isModuleCode = (node) => node.type === 'mdxjsEsm';
 export default function rehypeFrames() {
   return (tree, file) => {
     if (!String(file.path ?? '').replace(/\\/g, '/').includes('/content/briefings/')) return;
+    if (tree.children.some((n) => n.type === 'mdxJsxFlowElement' && n.name === 'Slide')) return;
 
     const out = [];
     let frame = null; // { node, onlyHeadings, hasH2, endsWithVisual }

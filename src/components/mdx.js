@@ -10,6 +10,22 @@ import RiskLevel from './story/RiskLevel.astro';
 import Stops from './story/Stops.astro';
 import Stop from './story/Stop.astro';
 import RegionMap from './maps/RegionMap.astro';
+import Slide from './slides/Slide.astro';
+import ScaleCompare from './slides/ScaleCompare.astro';
+import DateStrip from './slides/DateStrip.astro';
+import PullDiagram from './slides/PullDiagram.astro';
+import Industry from './slides/Industry.astro';
+import BigStat from './slides/BigStat.astro';
+import Media from './slides/Media.astro';
+import StatDuel from './slides/StatDuel.astro';
+import CompareBars from './slides/CompareBars.astro';
+import SeasonStrip from './slides/SeasonStrip.astro';
+import Flow from './slides/Flow.astro';
+import RiskCard from './slides/RiskCard.astro';
+import ShareLines from './slides/ShareLines.astro';
+import Trio from './slides/Trio.astro';
+import Visit from './slides/Visit.astro';
+import RiskMap from './slides/RiskMap.astro';
 
 export const mdxComponents = {
   Callout,
@@ -23,4 +39,20 @@ export const mdxComponents = {
   Stops,
   Stop,
   RegionMap,
+  Slide,
+  ScaleCompare,
+  DateStrip,
+  PullDiagram,
+  Industry,
+  BigStat,
+  Media,
+  StatDuel,
+  CompareBars,
+  SeasonStrip,
+  Flow,
+  RiskCard,
+  ShareLines,
+  Trio,
+  Visit,
+  RiskMap,
 };

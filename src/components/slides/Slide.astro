@@ -1,0 +1,313 @@
+---
+// One screen of a briefing section. The section decides how Singapore and Vietnam sit:
+//
+//   <Slide title="…" layout="joined">        one block across the page: a timeline, a table, a diagram
+//   <Slide title="…">                         pair (the default): Singapore left of the seam, Vietnam right
+//   <Slide title="…" split={36}>              pair with the seam moved: Singapore's share of the width, in percent,
+//                                             for when one country's story is much bigger than the other's
+//   <Slide title="…" layout="backdrop">       each country's half is a photo or video with its text on top
+//
+// Slots: default (joined content under the title), sg and vn (the two halves), foot (joined, under the halves).
+//   <Fragment slot="sg">…</Fragment>
+// sgMedia / vnMedia: an image under src/assets/images/ or a video under public/media/ (ending .mp4).
+//   pair: a photo band on top of each half. backdrop: fills each half. Alt text comes from credits.yaml.
+// align="mirror" right-aligns Singapore's half against the seam; use it for short text and figures.
+import HeroMedia from '../story/HeroMedia.astro';
+import { findCredit } from '../../lib/credits.js';
+
+const { title, lede, layout = 'pair', split = 50, sgMedia, vnMedia, align = 'start', id } = Astro.props;
+if (!['pair', 'joined', 'backdrop'].includes(layout)) throw new Error(`Slide "${title}": layout "${layout}" should be pair, joined or backdrop`);
+if (split < 20 || split > 80) throw new Error(`Slide "${title}": split ${split} should be between 20 and 80`);
+
+const media = (file) => {
+  if (!file) return null;
+  const credit = findCredit(file);
+  if (!credit) throw new Error(`Slide "${title}": "${file}" has no credits.yaml entry. Add it to media-sources.yaml and run npm run media.`);
+  return file.endsWith('.mp4') ? { video: file, alt: credit.alt } : { image: file, alt: credit.alt };
+};
+const halves = [
+  { code: 'sg', name: 'Singapore', slot: 'sg', media: media(sgMedia) },
+  { code: 'vn', name: 'Vietnam', slot: 'vn', media: media(vnMedia) },
+];
+const hasHalves = Boolean(Astro.slots.has('sg') || Astro.slots.has('vn') || sgMedia || vnMedia);
+const slug = id ?? (title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : undefined);
+---
+
+<section id={slug} class="frame slide" data-layout={layout} data-align={align} data-slide-title={title} style={`--split: ${split}%; --split-n: ${split / 100}`}>
+  {
+    title && (
+      <header class="slide-head container-wide">
+        <h2 class="slide-title">{title}</h2>
+        {lede && <p class="slide-lede">{lede}</p>}
+      </header>
+    )
+  }
+
+  {Astro.slots.has('default') && <div class="slide-body container-wide"><slot /></div>}
+
+  {
+    hasHalves && (
+      <div class:list={['slide-halves', layout !== 'backdrop' && 'container-wide']}>
+        {halves.map((h) => (
+          <div class:list={['slide-half', `is-${h.code}`]}>
+            {h.media && layout === 'backdrop' && (
+              <div class="slide-backdrop" aria-hidden={h.media.video ? 'true' : undefined}>
+                <HeroMedia image={h.media.image} video={h.media.video} alt={h.media.alt} sizes="50vw" />
+              </div>
+            )}
+            <div class="slide-half-inner">
+              {h.media && layout === 'pair' && (
+                <div class="slide-band">
+                  <HeroMedia image={h.media.image} video={h.media.video} alt={h.media.alt} sizes="(min-width: 1024px) 40rem, 100vw" />
+                </div>
+              )}
+              <p class="slide-country">
+                <span class="slide-dot" aria-hidden="true" />
+                {h.name}
+              </p>
+              {Astro.slots.has(h.slot) && (
+                <div class="slide-half-body">{h.slot === 'sg' ? <slot name="sg" /> : <slot name="vn" />}</div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  {Astro.slots.has('foot') && <div class="slide-foot container-wide"><slot name="foot" /></div>}
+</section>
+
+<style>
+  .slide {
+    --gutter: clamp(1.25rem, 3vw, 3rem);
+    position: relative;
+    font-family: var(--font-sans);
+    color: var(--color-ink-2);
+    padding-block: clamp(2rem, 6vh, 4rem);
+  }
+  .slide + :global(.slide) {
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .slide-head {
+    text-align: center;
+  }
+  .slide-title {
+    margin-inline: auto;
+    max-width: 30ch;
+    font-size: clamp(2rem, 3.6vw, 3.25rem);
+    line-height: 1.05;
+    color: var(--color-ink);
+  }
+  .slide-lede {
+    margin: 0.9rem auto 0;
+    max-width: 40rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    line-height: 1.45;
+    color: var(--color-ink-2);
+  }
+
+  .slide-body,
+  .slide-foot {
+    margin-top: clamp(1.75rem, 4vh, 3rem);
+  }
+  .slide-halves {
+    margin-top: clamp(1.75rem, 4vh, 3rem);
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .slide-country {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .slide-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--country);
+  }
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .slide-half-body {
+    margin-top: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.55;
+  }
+  .slide-half-body :global(> * + *) {
+    margin-top: 0.8em;
+  }
+  /* Lists in a half: compact, each item a bold lead-in and a line. */
+  .slide-half-body :global(:is(ol, ul):not([class])) {
+    display: grid;
+    gap: clamp(0.45rem, 1.4vh, 0.8rem);
+    padding-left: 1.4em;
+    font-family: var(--font-sans);
+    font-size: 0.98rem;
+    line-height: 1.4;
+  }
+  .slide-half-body :global(ol:not([class])) {
+    list-style: decimal;
+  }
+  .slide-half-body :global(ul:not([class])) {
+    list-style: disc;
+  }
+  .slide-half-body :global(:is(ol, ul):not([class]) > li::marker) {
+    color: var(--country);
+    font-weight: 600;
+  }
+  .slide-half-body :global(li strong) {
+    font-weight: 500;
+  }
+  .slide-half-body :global(strong) {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  .slide-band {
+    position: relative;
+    aspect-ratio: 3 / 1;
+    max-width: 100%;
+    margin-bottom: 0.9rem;
+    overflow: hidden;
+    border-radius: 3px;
+    background: var(--color-night);
+  }
+
+  /* Two halves split on a seam: the site's center line from the homepage, moved when one
+     country carries more of the story. */
+  @media (min-width: 768px) {
+    .slide-halves {
+      position: relative;
+      grid-template-columns: minmax(0, var(--split)) minmax(0, 1fr);
+      gap: 0;
+    }
+    .slide-halves.container-wide::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      /* The container's side padding sits outside the columns, so offset the seam by it. */
+      left: calc(clamp(1rem, 4vw, 2.5rem) + (100% - 2 * clamp(1rem, 4vw, 2.5rem)) * var(--split-n));
+      width: 1px;
+      background: color-mix(in srgb, var(--color-ink) 15%, transparent);
+    }
+    .is-sg .slide-half-inner {
+      padding-right: var(--gutter);
+    }
+    .is-vn .slide-half-inner {
+      padding-left: var(--gutter);
+    }
+    .slide[data-align='mirror'] .is-sg .slide-half-inner {
+      text-align: right;
+    }
+    .slide[data-align='mirror'] .is-sg .slide-country {
+      justify-content: flex-end;
+    }
+  }
+
+  /* Backdrop: two full-bleed halves of photo or video, text set on the dark bottom edge. */
+  .slide[data-layout='backdrop'] {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0;
+  }
+  .slide[data-layout='backdrop'] .slide-halves {
+    flex: 1;
+    gap: 0;
+    margin-top: clamp(1.5rem, 3vh, 2.5rem);
+  }
+  .slide[data-layout='backdrop'] .slide-half {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: flex-end;
+    min-height: 24rem;
+    background: var(--color-night);
+    color: var(--color-on-night);
+  }
+  .slide-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .slide-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--color-night) 10%, color-mix(in srgb, var(--color-night) 55%, transparent) 55%, color-mix(in srgb, var(--color-night) 15%, transparent));
+  }
+  .slide[data-layout='backdrop'] .slide-half-inner {
+    width: 100%;
+    max-width: 38rem;
+    padding: 2.5rem clamp(1rem, 4vw, 3rem);
+  }
+  .slide[data-layout='backdrop'] .is-sg {
+    justify-content: flex-end;
+  }
+  .slide[data-layout='backdrop'] .slide-country {
+    color: var(--color-on-night);
+  }
+  .slide[data-layout='backdrop'] .slide-half-body {
+    color: var(--color-on-night);
+    font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+    line-height: 1.4;
+  }
+  .slide[data-layout='backdrop'] .slide-half-body :global(.cite) {
+    font-size: 0.6em;
+  }
+  .slide[data-layout='backdrop'] .slide-half-body :global(.cite),
+  .slide[data-layout='backdrop'] .slide-half-body :global(.cite a) {
+    color: var(--color-on-night-muted);
+  }
+  @media (min-width: 768px) {
+    .slide[data-layout='backdrop'] .is-vn .slide-half-inner {
+      padding-left: clamp(1.5rem, 4vw, 3rem);
+    }
+    .slide[data-layout='backdrop'] .is-sg .slide-half-inner {
+      padding-right: clamp(1.5rem, 4vw, 3rem);
+    }
+    .slide[data-layout='backdrop'] .slide-half + .slide-half {
+      border-left: 1px solid color-mix(in srgb, var(--color-on-night) 25%, transparent);
+    }
+  }
+
+  /* Shorter laptop screens: tighten the chrome so the content keeps its size. */
+  @media (min-width: 768px) and (max-height: 820px) {
+    .slide {
+      padding-block: 1.5rem;
+    }
+    .slide-title {
+      font-size: clamp(1.9rem, 3vw, 2.5rem);
+    }
+    .slide-lede {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+    }
+    .slide-body,
+    .slide-foot,
+    .slide-halves {
+      margin-top: 1.25rem;
+    }
+    .slide-band {
+      aspect-ratio: 4 / 1;
+      margin-bottom: 0.6rem;
+    }
+    .slide-half-body {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+  }
+</style>

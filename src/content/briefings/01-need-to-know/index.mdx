@@ -4,18 +4,110 @@ thesis: The ten things I would tell you in the taxi from the airport, for each c
 hero:
   video: video/hcmc-night-intersection.mp4
   alt: Night traffic at a busy intersection in Ho Chi Minh City
+format: slides
 status: draft
 ---
 
-## At a glance
+<Slide title="At a glance" lede="Both are one-party-dominant and both are safe to visit. Almost everything else differs." layout="joined">
 
-|  | Singapore | Vietnam |
-|---|---|---|
-| Currency | Singapore dollar (SGD) [@SG-13] | Dong (VND), roughly 25,900 to the US dollar; notes only [@VN-11; @VN-5] |
-| Government | Parliamentary republic; People's Action Party government led by PM Lawrence Wong [@SG-16] | One-party state; To Lam is General Secretary and President, Le Minh Hung Prime Minister [@VN-12; @VN-88; @VN-14] |
-| Last election | 3 May 2025: PAP 87 of 97 seats [@SG-17] | 15 March 2026: Communist Party 482 of 500 seats [@VN-13] |
-| Corruption index | 84 of 100, 3rd of 182 countries [@SG-19] | 41 of 100, 81st of 182 countries [@VN-15] |
-| Credit rating | AAA / Aaa, stable [@SG-21] | Fitch BB+, stable [@VN-16] |
-| Weather risk | Monsoons December to early March and June to September [@SG-11] | Typhoon season June to the end of November [@VN-7] |
-| Population | 6.11 million (June 2025) [@SG-22] | 101.6 million (2025) [@VN-17] |
-| GDP per person | US$84,734 (2023) [@SG-23] | US$5,026 (2025); now upper-middle income [@VN-18; @VN-19] |
+<StatDuel rows={[
+  {
+    label: 'Currency',
+    sg: { value: 'S$', detail: 'Singapore dollar', cite: ['SG-13'] },
+    vn: { value: '25,900 ₫', detail: 'dong to the US dollar; notes only, no coins', cite: ['VN-11', 'VN-5'] },
+  },
+  {
+    label: "Ruling party's seats",
+    sg: { value: '87 of 97', detail: "People's Action Party, May 2025; PM Lawrence Wong", cite: ['SG-17', 'SG-16'] },
+    vn: { value: '482 of 500', detail: 'Communist Party, March 2026; To Lam heads party and state', cite: ['VN-13', 'VN-12', 'VN-88'] },
+  },
+  {
+    label: 'US travel advisory',
+    sg: { value: 'Level 1', detail: 'Normal precautions; crime against foreigners is rare', cite: ['SG-8'] },
+    vn: { value: 'Level 1', detail: 'Normal precautions; petty theft is common in tourist areas', cite: ['VN-2'] },
+  },
+]} />
+
+</Slide>
+
+<Slide title="A small rich city and a big fast-growing country" layout="joined">
+
+<div class="mx-auto grid max-w-5xl grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-2">
+<CompareBars label="People" items={[
+  { name: 'Singapore', country: 'SG', value: 6.11, display: '6.1 million', note: 'June 2025', cite: ['SG-22'] },
+  { name: 'Vietnam', country: 'VN', value: 101.6, display: '101.6 million', note: '2025', cite: ['VN-17'] },
+]} />
+<CompareBars label="GDP per person, US dollars" items={[
+  { name: 'Singapore', country: 'SG', value: 84734, display: 'US$84,734', note: '2023', cite: ['SG-23'] },
+  { name: 'Vietnam', country: 'VN', value: 5026, display: 'US$5,026', note: '2025', cite: ['VN-18'] },
+]} />
+</div>
+
+<p class="mx-auto mt-10 max-w-2xl text-center font-display text-xl leading-snug text-ink-2">Vietnam has about 17 times the people; Singapore produces about 17 times as much per person. Vietnam became an upper-middle-income economy in July 2026 [@VN-19].</p>
+
+</Slide>
+
+<Slide title="When the weather gets in the way" lede="Our November trip lands at the tail of Vietnam's typhoon season." layout="joined">
+
+<SeasonStrip
+  rows={[
+    { country: 'SG', label: 'monsoons', spans: [{ from: '12-01', to: '03-10' }, { from: '06-01', to: '09-30' }], cite: ['SG-11'] },
+    { country: 'VN', label: 'typhoon season', spans: [{ from: '06-01', to: '11-30' }], cite: ['VN-7'] },
+  ]}
+  markers={[
+    { label: 'Tet 2026: business shuts', from: '02-14', to: '02-22', tone: 'soft' },
+    { label: 'Our trip, 3 to 13 Nov', from: '11-03', to: '11-13' },
+  ]}
+/>
+
+<p class="mx-auto mt-4 max-w-2xl text-center text-ink-2">Singapore also gets about 171 rain days a year, so carry an umbrella to every meeting [@SG-11]. Tet dates are for 2026 [@VN-6].</p>
+
+</Slide>
+
+<Slide title="Ten things to know on arrival" sgMedia="singapore/jewel-changi.jpg" vnMedia="vietnam/motorbikes-at-lights.jpg">
+
+<Fragment slot="sg">
+
+1. **No visa for short visits.** 90 days for US citizens; six months left on your passport [@SG-2].
+2. **File the arrival card.** Free, online, within three days of landing [@SG-1].
+3. **English works everywhere.** Business, government and daily life [@SG-3].
+4. **Bring business cards.** The first thing exchanged, with both hands [@SG-4].
+5. **Read the "++" on menus.** Service charge and GST are added; do not tip on top [@SG-6].
+
+</Fragment>
+
+<Fragment slot="vn">
+
+1. **Get the e-visa first.** US$25 single entry, US$50 multiple, up to 90 days [@VN-1].
+2. **Mind your phone.** Level 1 advisory, but petty theft is common in tourist areas [@VN-2].
+3. **Expect the traffic.** 77 million motorbikes for about 100 million people [@VN-3].
+4. **Cross at a steady pace.** Never stop or dart back; the bikes flow around you [@VN-4].
+5. **Carry cash.** Cash is king in small places; no tipping expected [@VN-5].
+
+</Fragment>
+
+</Slide>
+
+<Slide title="And five more" sgMedia="singapore/hawker-centre.jpg" vnMedia="video/rainy-day-traffic.mp4">
+
+<Fragment slot="sg">
+
+6. **Leave the vape at home.** Fines up to S$10,000 since May 2026 [@SG-9].
+7. **No chewing gum.** Importing it is prohibited outright [@SG-10].
+8. **Crime is rare.** Crime against foreigners is rare [@SG-8].
+9. **Expect rain.** About 171 rain days a year [@SG-11].
+10. **Be on time.** First in the world on logistics; things arrive on time, and so should you [@SG-12].
+
+</Fragment>
+
+<Fragment slot="vn">
+
+6. **Declare large cash.** Over 15 million dong or US$5,000 at the border [@VN-8].
+7. **Insure for evacuation.** Local hospitals do not take US insurance [@VN-9].
+8. **Do not rent a motorbike.** Illegal without a Vietnamese licence; voids insurance [@VN-10].
+9. **Drug tests look back.** You can be charged for something taken before you arrived [@VN-42].
+10. **Tet shuts the country.** 14 to 22 February in 2026; plan nothing then [@VN-6].
+
+</Fragment>
+
+</Slide>

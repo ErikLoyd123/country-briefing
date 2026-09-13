@@ -15,9 +15,17 @@ const summary = await render(summaryEntry);
 const appendices = (await getCollection('appendices')).sort((a, b) => a.data.order - b.data.order);
 const renderedAppendices = await Promise.all(appendices.map(async (a) => ({ entry: a, rendered: await render(a) })));
 
+// The paper reads the full write-up (src/content/paper/sections), not the briefing's slides.
+const writeup = new Map((await getCollection('writeup')).map((e) => [e.id, e]));
 const renderedTopics = await Promise.all(
   topics.map(async (t) => {
-    const parts = await Promise.all(['index', 'singapore', 'vietnam'].map((p) => render(t.parts[p])));
+    const parts = await Promise.all(
+      ['index', 'singapore', 'vietnam'].map((p) => {
+        const entry = writeup.get(`${t.folder}/${p}`);
+        if (!entry) throw new Error(`src/content/paper/sections/${t.folder}/${p}.mdx is missing`);
+        return render(entry);
+      }),
+    );
     return { topic: t, parts };
   }),
 );
