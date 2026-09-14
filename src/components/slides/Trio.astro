@@ -5,20 +5,53 @@
 // <Fragment slot="both">- **Cards.** Both hands [@SG-4; @VN-76].</Fragment>
 // <Fragment slot="vn">- **Face.** Never disagree in public [@VN-77].</Fragment>
 // </Trio>
+// sgMedia / bothMedia / vnMedia: a photo (src/assets/images/) or video (public/media/, .mp4) on top of each column.
+// tall: taller photos, for a slide with only a line or two per column.
+import HeroMedia from '../story/HeroMedia.astro';
+import { findCredit } from '../../lib/credits.js';
+
+const media = (file) => {
+  if (!file) return null;
+  const credit = findCredit(file);
+  if (!credit) throw new Error(`Trio: "${file}" has no credits.yaml entry. Add it to media-sources.yaml and run npm run media.`);
+  return file.endsWith('.mp4') ? { video: file, alt: credit.alt } : { image: file, alt: credit.alt };
+};
+const bands = { sg: media(Astro.props.sgMedia), both: media(Astro.props.bothMedia), vn: media(Astro.props.vnMedia) };
 ---
 
-<div class="trio">
-  <section class="trio-col is-sg">
+<div class:list={['trio', Astro.props.tall && 'is-tall']}>
+  <section class:list={['trio-col', 'is-sg', bands.sg && 'has-media']}>
+    {
+      bands.sg && (
+        <div class="trio-band">
+          <HeroMedia image={bands.sg.image} video={bands.sg.video} alt={bands.sg.alt} sizes="(min-width: 900px) 26rem, 100vw" />
+        </div>
+      )
+    }
     <h3 class="trio-head"><span class="trio-dot" aria-hidden="true" />Singapore only</h3>
     <div class="trio-body"><slot name="sg" /></div>
   </section>
-  <section class="trio-col is-both">
+  <section class:list={['trio-col', 'is-both', bands.both && 'has-media']}>
+    {
+      bands.both && (
+        <div class="trio-band">
+          <HeroMedia image={bands.both.image} video={bands.both.video} alt={bands.both.alt} sizes="(min-width: 900px) 26rem, 100vw" />
+        </div>
+      )
+    }
     <h3 class="trio-head">
       <span class="trio-dot is-sg" aria-hidden="true" /><span class="trio-dot is-vn" aria-hidden="true" />Both countries
     </h3>
     <div class="trio-body"><slot name="both" /></div>
   </section>
-  <section class="trio-col is-vn">
+  <section class:list={['trio-col', 'is-vn', bands.vn && 'has-media']}>
+    {
+      bands.vn && (
+        <div class="trio-band">
+          <HeroMedia image={bands.vn.image} video={bands.vn.video} alt={bands.vn.alt} sizes="(min-width: 900px) 26rem, 100vw" />
+        </div>
+      )
+    }
     <h3 class="trio-head"><span class="trio-dot" aria-hidden="true" />Vietnam only</h3>
     <div class="trio-body"><slot name="vn" /></div>
   </section>
@@ -48,7 +81,26 @@
       padding-left: 2rem;
     }
   }
+  .trio-band {
+    position: relative;
+    height: clamp(7rem, 19svh, 11rem);
+    margin-bottom: 0.9rem;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--color-night);
+  }
+  .trio-col.is-both.has-media .trio-band {
+    margin: -1.25rem -1.5rem 0.9rem;
+    border-radius: 6px 6px 0 0;
+  }
+  .is-tall .trio-band {
+    height: clamp(10rem, 32svh, 19rem);
+  }
+  :global(.slide[data-tone='tint']) .trio-col.is-both {
+    background: white;
+  }
   .trio-col.is-both {
+    align-self: start;
     padding: 1.25rem 1.5rem;
     border-radius: 6px;
     background: var(--color-paper-2);

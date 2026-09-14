@@ -13,9 +13,9 @@ const index = buildIndex(
 );
 
 const paragraph = (value) => ({ type: 'root', children: [{ type: 'paragraph', children: [{ type: 'text', value }] }] });
-const run = (value) => {
+const run = (value, path = 'test.mdx') => {
   const tree = paragraph(value);
-  remarkClaims({ index })(tree, { path: 'test.mdx' });
+  remarkClaims({ index })(tree, { path });
   return tree.children[0].children;
 };
 const flat = (nodes) => nodes.map((n) => (n.type === 'text' ? n.value : flat(n.children))).join('');
@@ -35,4 +35,11 @@ it('leaves text without citations alone', () => {
 it('fails on unknown claim IDs and on citations that are not claim IDs', () => {
   expect(() => run('Bad [@SG-99].')).toThrow(/SG-99 in test.mdx/);
   expect(() => run('Old style [@wb-wgi-2025].')).toThrow(/should cite claim IDs/);
+});
+
+it('checks but hides citations on the briefing slides, closing up the text around them', () => {
+  const slides = '/repo/src/content/briefings/01-need-to-know/index.mdx';
+  expect(flat(run('Growth was fast [@SG-1; @VN-2]. Then [@SG-1] again.', slides))).toBe('Growth was fast. Then again.');
+  expect(flat(run('[@SG-1] leads.', slides))).toBe(' leads.');
+  expect(() => run('Bad [@SG-99].', slides)).toThrow(/SG-99/);
 });

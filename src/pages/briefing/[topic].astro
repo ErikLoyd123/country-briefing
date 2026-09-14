@@ -15,6 +15,8 @@ export async function getStaticPaths() {
 }
 
 const { topic, prev, next, total } = Astro.props;
+// Slides brief: components check their claim IDs but leave citations to the paper and the Sources page.
+Astro.locals.hideCitations = true;
 const slides = topic.format === 'slides';
 const [overview, singapore, vietnam] = await Promise.all((slides ? ['index'] : ['index', 'singapore', 'vietnam']).map((p) => render(topic.parts[p])));
 const sections = [
@@ -124,6 +126,7 @@ const pager = [
         for (const e of entries) {
           if (!e.isIntersecting) continue;
           dots.forEach((a, i) => a.toggleAttribute('aria-current', slides[i] === e.target));
+          rail.classList.toggle('is-on-night', e.target.dataset.tone === 'night' || e.target.dataset.layout === 'backdrop');
         }
       },
       { rootMargin: '-45% 0px -50% 0px' },
@@ -234,6 +237,33 @@ const pager = [
       flex-direction: column;
       justify-content: center;
     }
+    /* A slide's title keeps the same place on every screen, like a deck; its content centres in the room below. */
+    .briefing :global(.frame.slide) {
+      justify-content: flex-start;
+    }
+    .briefing :global(.slide > .slide-head) {
+      margin-bottom: clamp(1.25rem, 3.5vh, 2.75rem);
+    }
+    /* Spare height goes a third above the content and two thirds below, so the content sits near its title. */
+    .briefing :global(.slide > *) {
+      order: 2;
+    }
+    .briefing :global(.slide > .slide-head) {
+      order: 0;
+    }
+    .briefing :global(.slide > .slide-head + *) {
+      margin-top: 0;
+    }
+    .briefing :global(.slide.frame:not([data-layout='backdrop'])::before),
+    .briefing :global(.slide.frame:not([data-layout='backdrop'], [data-overflow])::after) {
+      content: '';
+      order: 1;
+      flex-grow: 1;
+    }
+    .briefing :global(.slide.frame:not([data-layout='backdrop'], [data-overflow])::after) {
+      order: 3;
+      flex-grow: 2;
+    }
     .briefing :global(.frame:not(.slide)) {
       padding-block: clamp(1.25rem, 5vh, 3rem);
     }
@@ -264,7 +294,7 @@ const pager = [
     .briefing :global(.frame > :first-child) {
       margin-top: 0;
     }
-    .briefing :global(.frame > :last-child) {
+    .briefing :global(.frame:not(.slide) > :last-child) {
       margin-bottom: 0;
     }
 
@@ -341,6 +371,13 @@ const pager = [
   .slide-rail :global(a[aria-current])::before {
     background: var(--color-ink);
     transform: scale(1.5);
+  }
+  /* Over a dark slide the dots turn light. */
+  .slide-rail.is-on-night :global(a)::before {
+    background: color-mix(in srgb, var(--color-on-night) 45%, transparent);
+  }
+  .slide-rail.is-on-night :global(a[aria-current])::before {
+    background: var(--color-on-night);
   }
   .slide-rail :global(.slide-rail-label) {
     position: absolute;

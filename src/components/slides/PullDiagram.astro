@@ -5,7 +5,7 @@
 //     left: { text: 'Largest investor and defence partner.', cite: ['SG-71'] },
 //     right: { text: 'Largest trading partner since 2013.', cite: ['SG-70'] } },
 // ]} />
-import { withCitation, citationHtml } from '../../lib/sources.js';
+import { siteCitation, siteWithCitation } from '../../lib/sources.js';
 
 const { left, right, rows = [] } = Astro.props;
 const NAMES = { SG: 'Singapore', VN: 'Vietnam' };
@@ -24,18 +24,20 @@ for (const r of rows) if (!NAMES[r.country]) throw new Error(`PullDiagram: count
         <li class:list={['pull-row', `is-${r.country.toLowerCase()}`]}>
           <p class="pull-side is-left">
             <span class="pull-side-label">{left}</span>
-            <Fragment set:html={withCitation(r.left.text, r.left.cite, undefined, `PullDiagram (${NAMES[r.country]}, ${left})`)} />
+            <Fragment set:html={siteWithCitation(Astro.locals, r.left.text, r.left.cite, `PullDiagram (${NAMES[r.country]}, ${left})`)} />
           </p>
           <div class="pull-node">
             <span class="pull-name">{NAMES[r.country]}</span>
-            <span class="pull-figure type-heavy num">{r.figure}</span>
-            <span class="pull-figure-label">
-              {r.figureLabel} <Fragment set:html={citationHtml(r.cite, undefined, `PullDiagram (${NAMES[r.country]})`)} />
-            </span>
+            {r.figure && <span class="pull-figure type-heavy num">{r.figure}</span>}
+            {r.figure && (
+              <span class="pull-figure-label">
+                {r.figureLabel} <Fragment set:html={siteCitation(Astro.locals, r.cite, `PullDiagram (${NAMES[r.country]})`)} />
+              </span>
+            )}
           </div>
           <p class="pull-side is-right">
             <span class="pull-side-label">{right}</span>
-            <Fragment set:html={withCitation(r.right.text, r.right.cite, undefined, `PullDiagram (${NAMES[r.country]}, ${right})`)} />
+            <Fragment set:html={siteWithCitation(Astro.locals, r.right.text, r.right.cite, `PullDiagram (${NAMES[r.country]}, ${right})`)} />
           </p>
         </li>
       ))
@@ -153,8 +155,12 @@ for (const r of rows) if (!NAMES[r.country]) throw new Error(`PullDiagram: count
       right: 0;
     }
     .pull-rows {
-      padding-top: 4.5rem;
-      gap: 3rem;
+      padding-top: clamp(3.5rem, 8vh, 5.5rem);
+      gap: clamp(2.5rem, 7vh, 5rem);
+    }
+    .pull-side {
+      font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+      line-height: 1.3;
     }
     .pull-row {
       display: grid;

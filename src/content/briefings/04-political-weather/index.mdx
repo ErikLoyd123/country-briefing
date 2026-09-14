@@ -11,7 +11,9 @@ status: draft
 
 <Slide title="Twelve years of political weather" lede="The events that moved the risk picture. Vietnam's list is longer, and most of it is recent." layout="joined">
 
-<Timeline bare />
+<Plate width="wide" key>
+<Timeline bare brief legend={false} />
+</Plate>
 
 </Slide>
 
@@ -25,16 +27,16 @@ status: draft
 />
 
 <Fragment slot="sg">
-**Clean, and proves it in public.** A former transport minister was jailed for twelve months in 2024, the first political corruption trial in nearly fifty years [@SG-66]. The bureau charged two private-sector managers on 7 September [@SG-67].
+**Clean, and proves it in public.** A former minister was jailed in 2024, the first such trial in nearly fifty years [@SG-66].
 </Fragment>
 
 <Fragment slot="vn">
-**A real purge, with a side effect.** Officials delay decisions to avoid exposure; in one Ho Chi Minh City period about 100 public projects got no planned funding [@VN-66]. Expect the courtesy of delay.
+**A real purge, with a side effect.** Officials delay decisions to avoid exposure [@VN-66]. Expect the courtesy of delay.
 </Fragment>
 
 </Slide>
 
-<Slide title="Between Washington and Beijing" lede="For both countries, what matters most with the US and what matters most with China point in different directions." layout="joined">
+<Slide title="Between Washington and Beijing" tone="tint" lede="For both countries, what matters most with the US and what matters most with China point in different directions." layout="joined">
 
 <PullDiagram
   left="United States"
@@ -42,19 +44,13 @@ status: draft
   rows={[
     {
       country: 'SG',
-      figure: '29',
-      figureLabel: 'free trade agreements',
-      cite: ['SG-68'],
-      left: { text: 'Largest investor and defence partner, and a 10% tariff since April 2025.', cite: ['SG-71', 'SG-46'] },
-      right: { text: 'Largest trading partner since 2013; the free trade deal was upgraded again in December 2024.', cite: ['SG-70', 'SG-72'] },
+      left: { text: 'Largest investor and defence partner.', cite: ['SG-71'] },
+      right: { text: 'Largest trading partner since 2013.', cite: ['SG-70'] },
     },
     {
       country: 'VN',
-      figure: '18',
-      figureLabel: 'free trade agreements',
-      cite: ['VN-63'],
-      left: { text: 'Biggest export market at US$153 billion, now under a 20% tariff, 40% if transshipped.', cite: ['VN-45', 'VN-43'] },
-      right: { text: 'Supplies 40% of imports; Xi visited in April 2025 and both sides pledged calm at sea.', cite: ['VN-46', 'VN-72'] },
+      left: { text: 'Biggest export market, at US$153 billion.', cite: ['VN-45'] },
+      right: { text: 'Supplies 40% of imports; both sides pledged calm at sea in 2025.', cite: ['VN-46', 'VN-72'] },
     },
   ]}
 />
@@ -63,17 +59,14 @@ status: draft
 
 <Slide title="The agreements that set the terms" lede="Both are in the two big regional deals. Singapore also has its own deals with the US and China; Vietnam's run to Europe and the UK." layout="joined">
 
-<div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)]">
+<div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
 <TradeAgreements bare />
-<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1">
-<Media src="singapore/strait-shipping.jpg" country="SG" ratio="21 / 9" />
-<Media src="video/vn-cai-mep-port.mp4" country="VN" ratio="21 / 9" />
-</div>
+<RegionMap compact />
 </div>
 
 </Slide>
 
-<Slide title="Civil unrest" lede="Rare in both. In Vietnam it has two known triggers." split={36}>
+<Slide title="Civil unrest" tone="tint" lede="Rare in both. In Vietnam it has two known triggers." split={36} sgMedia="singapore/little-india.jpg" vnMedia="vietnam/industrial-welding.jpg">
 
 <Fragment slot="sg">
 <BigStat when="December 2013" value="62" unit="injured">
@@ -100,7 +93,7 @@ Protests against 99-year land leases and the cybersecurity law [@VN-68].
 
 <Fragment slot="sg">
 <Industry name="Wealth management" image="singapore/raffles-place.jpg" figure="S$6.07tn" figureLabel="under management">
-Nine institutions fined S$27 million after the S$3 billion laundering case [@SG-74; @MC-10; @MC-11].
+Under scrutiny since the S$3 billion laundering case [@SG-74; @MC-11].
 </Industry>
 <Industry name="Shipping and bunkering" image="singapore/pasir-panjang-terminal.jpg" figure="44.7m" figureLabel="TEUs in 2025, a record">
 Downstream of every chokepoint from Hormuz to the South China Sea [@SG-75].
@@ -111,10 +104,10 @@ A build-out limited by land and power [@SG-95].
 </Fragment>
 
 <Fragment slot="vn">
-<Industry name="Electronics" image="vietnam/binh-duong-industrial-park.jpg" figure="US$42bn" figureLabel="to the US in 2025" bar={42.09} barMax={42.09}>
+<Industry name="Electronics" image="vietnam/binh-duong-industrial-park.jpg" figure="US$42bn" figureLabel="to the US in 2025">
 23 percent of all exports; Samsung alone is 12 percent [@VN-70; @VN-69].
 </Industry>
-<Industry name="Footwear" image="vietnam/shoe-lasts.jpg" figure="US$11bn" figureLabel="to the US in 2025" bar={11.01} barMax={42.09}>
+<Industry name="Footwear" image="vietnam/shoe-lasts.jpg" figure="US$11bn" figureLabel="to the US in 2025">
 Out of US$29 billion exported, squarely under the tariff [@CR-22].
 </Industry>
 <Industry name="Energy" image="vietnam/binh-thuan-wind.jpg" figure="28 to 36%" figureLabel="renewables by 2030">
@@ -126,6 +119,7 @@ The revised power plan's target, after 2023 blackouts that cost US$1.4 billion [
 
 <Slide title="What changed in the last three weeks" lede="And one date still to come." layout="joined">
 
+<Plate width="wide">
 <DateStrip
   from="2026-08-20"
   to="2026-09-24"
@@ -141,6 +135,7 @@ The revised power plan's target, after 2023 blackouts that cost US$1.4 billion [
     { date: '2026-09-21', country: 'VN', title: 'FTSE upgrade', detail: 'About US$6 billion of passive inflows expected.', cite: ['VN-91'] },
   ]}
 />
+</Plate>
 
 </Slide>
 

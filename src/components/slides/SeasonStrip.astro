@@ -5,7 +5,7 @@
 //   { country: 'SG', label: 'Monsoons', spans: [{ from: '12-01', to: '03-10' }, { from: '06-01', to: '09-30' }], cite: ['SG-11'] },
 // ]} markers={[{ label: 'Our trip', from: '11-03', to: '11-13' }]} />
 // Dates are MM-DD. A span whose `to` is earlier than `from` wraps over the new year.
-import { citationHtml } from '../../lib/sources.js';
+import { siteCitation } from '../../lib/sources.js';
 
 const { rows = [], markers = [] } = Astro.props;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -34,7 +34,7 @@ const NAMES = { SG: 'Singapore', VN: 'Vietnam' };
           <p class="season-label">
             <span class="season-dot" aria-hidden="true" />
             <span>
-              {NAMES[r.country]}: {r.label} <Fragment set:html={citationHtml(r.cite, undefined, `SeasonStrip (${r.label})`)} />
+              {NAMES[r.country]}: {r.label} <Fragment set:html={siteCitation(Astro.locals, r.cite, `SeasonStrip (${r.label})`)} />
             </span>
           </p>
           <div class="season-track">

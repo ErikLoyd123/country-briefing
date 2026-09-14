@@ -246,3 +246,180 @@
   license: Pexels License
   alt: A metro train on an elevated track in Ho Chi Minh City
   aiGenerated: false
+- file: video/sg-rain-skyline.mp4
+  source: pexels-video
+  author: Saurabh Srivastava
+  url: https://www.pexels.com/video/dramatic-aerial-view-of-singapore-harbor-31048133/
+  license: Pexels License
+  alt: Dark storm clouds over boats moored in a harbour in Singapore
+  aiGenerated: false
+- file: video/vn-storm-palms.mp4
+  source: pexels-video
+  author: Ankit Bhattacharjee
+  url: https://www.pexels.com/video/swaying-trees-and-plants-due-to-strong-rain-and-wind-6108100/
+  license: Pexels License
+  alt: Palm trees bending in heavy wind and rain above rooftops
+  aiGenerated: false
+- file: video/port-cranes-aerial.mp4
+  source: pexels-video
+  author: K
+  url: https://www.pexels.com/video/aerial-shot-of-gantry-crane-6618332/
+  license: Pexels License
+  alt: Aerial view of gantry cranes beside a container ship at a port
+  aiGenerated: false
+- file: video/sg-street-crossing.mp4
+  source: pexels-video
+  author: Alex Pandian
+  url: https://www.pexels.com/video/people-walking-at-a-commercial-district-4583056/
+  license: Pexels License
+  alt: Pedestrians crossing a street in a shopping district in Singapore
+  aiGenerated: false
+- file: video/vn-motorbikes-day.mp4
+  source: pexels-video
+  author: Pew Nguyen
+  url: https://www.pexels.com/video/motorcyclists-on-street-in-saigon-13275194/
+  license: Pexels License
+  alt: Daytime motorbike traffic on a street in Ho Chi Minh City
+  aiGenerated: false
+- file: video/contactless-payment.mp4
+  source: pexels-video
+  author: Gustavo Fring
+  url: https://www.pexels.com/video/person-tapping-her-smartphone-to-pay-her-bill-5101679/
+  license: Pexels License
+  alt: A hand tapping a smartphone on a card payment terminal
+  aiGenerated: false
+- file: video/footwear-factory.mp4
+  source: pexels-video
+  author: Media Dung
+  url: https://www.pexels.com/video/shoemaker-working-with-machine-9936744/
+  license: Pexels License
+  alt: A worker holding a leather shoe against a buffing wheel in a shoe workshop
+  aiGenerated: false
+- file: common/business-card-exchange.jpg
+  source: unsplash
+  author: Van Tay Media
+  url: https://unsplash.com/photos/hands-exchanging-business-card-in-office-chyT9XPAdcg?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Two hands exchanging a business card by an office window
+  aiGenerated: false
+- file: vietnam/coffee-meeting.jpg
+  source: unsplash
+  author: NAM CZ
+  url: https://unsplash.com/photos/a-glass-of-water-and-a-cup-of-coffee-on-a-table-RFKpgayllWQ?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Vietnamese phin filter coffee and a glass of iced water on a café table
+  aiGenerated: false
+- file: singapore/little-india.jpg
+  source: unsplash
+  author: Claudio Schwarz
+  url: https://unsplash.com/photos/a-street-lined-with-shops-and-people-walking-down-it-lC_Z_DfL0aY?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Shophouses and festive street decorations along a road in Little India, Singapore
+  aiGenerated: false
+- file: singapore/speakers-corner.jpg
+  source: wikimedia
+  author: Raynaldsantika (Raynald Santika).
+  url: https://commons.wikimedia.org/wiki/File:Speakers_Corner_1.jpg
+  license: CC BY-SA 4.0
+  licenseUrl: https://creativecommons.org/licenses/by-sa/4.0
+  alt: The Speakers' Corner sign and a canopy stage in Hong Lim Park, Singapore
+  aiGenerated: false
+- file: vietnam/hanoi-ba-dinh.jpg
+  source: pexels-photo
+  author: Thắng Phạm
+  url: https://www.pexels.com/photo/ho-chi-minh-mausoleum-in-a-rainy-day-27203341/
+  license: Pexels License
+  alt: Ho Chi Minh Mausoleum and a Vietnamese flag on Ba Dinh Square, Hanoi
+  aiGenerated: false
+- file: common/phone-scam.jpg
+  source: pexels-photo
+  author: Towfiqu barbhuiya
+  url: https://www.pexels.com/photo/a-person-holding-a-smartphone-11341268/
+  license: Pexels License
+  alt: A hand holding a lit smartphone in the dark
+  aiGenerated: false
+- file: vietnam/dong-banknotes.jpg
+  source: pexels-photo
+  author: My Tran
+  url: https://www.pexels.com/photo/person-holding-a-vietnamese-dong-8089862/
+  license: Pexels License
+  alt: Hands holding a Vietnamese dong banknote in front of Ha Long Bay
+  aiGenerated: false
+- file: singapore/sgd-banknotes.jpg
+  source: unsplash
+  author: Jason Leung
+  url: https://unsplash.com/photos/10-and-50-banknotes-on-white-textile-hAjKXEMRo-I?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Banknotes from several countries, including a Singapore two-dollar note
+  aiGenerated: false
+- file: singapore/industrial-automation.jpg
+  source: pexels-photo
+  author: Policarpo  Brito
+  url: https://www.pexels.com/photo/stainless-steel-industrial-equipment-in-a-factory-33514501/
+  license: Pexels License
+  alt: Stainless steel tank, pipes and automated valves in an industrial plant
+  aiGenerated: false
+- file: singapore/marina-bay-financial.jpg
+  source: pexels-photo
+  author: Anita Kieseler
+  url: https://www.pexels.com/photo/view-of-the-modern-singapore-skyline-20768136/
+  license: Pexels License
+  alt: Office towers of Singapore's Marina Bay and Downtown Core reflected in the bay in daylight
+  aiGenerated: false
+- file: singapore/us-embassy.jpg
+  source: wikimedia
+  author: en:User:VK35
+  url: https://commons.wikimedia.org/wiki/File:United_States_Embassy_in_Napier_Road.jpg
+  license: CC BY 2.5
+  licenseUrl: https://creativecommons.org/licenses/by/2.5
+  alt: The Embassy of the United States on Napier Road, Singapore
+  aiGenerated: false
+- file: vietnam/smartphone-chat.jpg
+  source: pexels-photo
+  author: Vũ  Bụi
+  url: https://www.pexels.com/photo/men-relaxing-at-flower-market-in-quy-nh-n-30200999/
+  license: Pexels License
+  alt: Two men in face masks using smartphones on a street in Quy Nhon, Vietnam
+  aiGenerated: false
+- file: vietnam/podcast-studio.jpg
+  source: pexels-photo
+  author: Jakub Zerdzicki
+  url: https://www.pexels.com/photo/professional-studio-microphone-setup-with-boom-arms-38493049/
+  license: Pexels License
+  alt: Podcast microphones on boom arms beside a studio light
+  aiGenerated: false
+- file: vietnam/cacao-pods.jpg
+  source: unsplash
+  author: Aleksandar Popovski
+  url: https://unsplash.com/photos/cocoa-pods-hanging-from-a-tree-branch-sFCOat9rphk?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Ripe cacao pods hanging from a tree branch
+  aiGenerated: false
+- file: vietnam/landmark-81.jpg
+  source: pexels-photo
+  author: Hiển Hồ
+  url: https://www.pexels.com/photo/city-skyline-under-blue-sky-8464898/
+  license: Pexels License
+  alt: Landmark 81 and surrounding high-rises beside the Saigon River, Ho Chi Minh City
+  aiGenerated: false
+- file: vietnam/hanoi-haze.jpg
+  source: unsplash
+  author: Duc Van
+  url: https://unsplash.com/photos/a-view-of-a-city-from-a-tall-building-vUrinjV-byk?utm_source=country-briefing&utm_medium=referral
+  license: Unsplash License
+  alt: Hanoi's high-rises and an elevated road in thick haze
+  aiGenerated: false
+- file: common/passport-stamps.jpg
+  source: pexels-photo
+  author: Ekaterina Belinskaya
+  url: https://www.pexels.com/photo/person-holding-an-opened-passport-4922356/
+  license: Pexels License
+  alt: A hand holding open a passport page covered in entry stamps
+  aiGenerated: false
+- file: vietnam/saigon-river-containers.jpg
+  source: pexels-photo
+  author: Quang Nguyen Vinh
+  url: https://www.pexels.com/photo/two-cargo-ships-sailing-near-city-2144905/
+  license: Pexels License
+  alt: Container barges on the Saigon River with the Ho Chi Minh City skyline at dusk
+  aiGenerated: false

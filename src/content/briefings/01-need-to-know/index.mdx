@@ -8,13 +8,14 @@ format: slides
 status: draft
 ---
 
-<Slide title="At a glance" lede="Both are one-party-dominant and both are safe to visit. Almost everything else differs." layout="joined">
+<Slide title="At a glance" tone="tint" lede="Both are one-party-dominant and both are safe to visit. Almost everything else differs." layout="joined">
 
+<Plate key>
 <StatDuel rows={[
   {
     label: 'Currency',
     sg: { value: 'S$', detail: 'Singapore dollar', cite: ['SG-13'] },
-    vn: { value: '25,900 ₫', detail: 'dong to the US dollar; notes only, no coins', cite: ['VN-11', 'VN-5'] },
+    vn: { value: '₫', detail: 'Vietnamese dong, about 25,900 to the US dollar; notes only', cite: ['VN-11', 'VN-5'] },
   },
   {
     label: "Ruling party's seats",
@@ -26,28 +27,30 @@ status: draft
     sg: { value: 'Level 1', detail: 'Normal precautions; crime against foreigners is rare', cite: ['SG-8'] },
     vn: { value: 'Level 1', detail: 'Normal precautions; petty theft is common in tourist areas', cite: ['VN-2'] },
   },
-]} />
+]} head={false} />
+</Plate>
 
 </Slide>
 
-<Slide title="A small rich city and a big fast-growing country" layout="joined">
+<Slide title="A small rich city and a big fast-growing country" lede="About 17 times the people in Vietnam; about 17 times the output per person in Singapore." layout="joined">
 
-<div class="mx-auto grid max-w-5xl grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-2">
-<CompareBars label="People" items={[
-  { name: 'Singapore', country: 'SG', value: 6.11, display: '6.1 million', note: 'June 2025', cite: ['SG-22'] },
-  { name: 'Vietnam', country: 'VN', value: 101.6, display: '101.6 million', note: '2025', cite: ['VN-17'] },
-]} />
-<CompareBars label="GDP per person, US dollars" items={[
-  { name: 'Singapore', country: 'SG', value: 84734, display: 'US$84,734', note: '2023', cite: ['SG-23'] },
-  { name: 'Vietnam', country: 'VN', value: 5026, display: 'US$5,026', note: '2025', cite: ['VN-18'] },
-]} />
-</div>
+<Plate key>
+<UnitCompare rows={[
+  { label: 'People', unit: 'dot', per: 'Each dot is 1 million people',
+    sg: { value: 6.11, display: '6.1m', detail: 'June 2025', cite: ['SG-22'] },
+    vn: { value: 101.6, display: '101.6m', detail: '2025', cite: ['VN-17'] } },
+  { label: 'GDP per person', unit: 'square', per: 'Each square is US$1,000',
+    sg: { value: 84.734, display: 'US$84,734', detail: '2023', cite: ['SG-23'] },
+    vn: { value: 5.026, display: 'US$5,026', detail: '2025', cite: ['VN-18'] } },
+]} head={false} />
 
-<p class="mx-auto mt-10 max-w-2xl text-center font-display text-xl leading-snug text-ink-2">Vietnam has about 17 times the people; Singapore produces about 17 times as much per person. Vietnam became an upper-middle-income economy in July 2026 [@VN-19].</p>
+<Fragment slot="note">Vietnam became an upper-middle-income economy in July 2026 [@VN-19].</Fragment>
+
+</Plate>
 
 </Slide>
 
-<Slide title="When the weather gets in the way" lede="Our November trip lands at the tail of Vietnam's typhoon season." layout="joined">
+<Slide title="When the weather gets in the way" lede="Our November trip lands at the tail of Vietnam's typhoon season." layout="joined" backdrop="video/vn-storm-palms.mp4">
 
 <SeasonStrip
   rows={[
@@ -60,7 +63,7 @@ status: draft
   ]}
 />
 
-<p class="mx-auto mt-4 max-w-2xl text-center text-ink-2">Singapore also gets about 171 rain days a year, so carry an umbrella to every meeting [@SG-11]. Tet dates are for 2026 [@VN-6].</p>
+<p class="mx-auto mt-4 max-w-2xl text-center text-ink-2">Tet dates are for 2026 [@VN-6].</p>
 
 </Slide>
 
@@ -72,7 +75,7 @@ status: draft
 2. **File the arrival card.** Free, online, within three days of landing [@SG-1].
 3. **English works everywhere.** Business, government and daily life [@SG-3].
 4. **Bring business cards.** The first thing exchanged, with both hands [@SG-4].
-5. **Read the "++" on menus.** Service charge and GST are added; do not tip on top [@SG-6].
+5. **Read the "++" on menus.** Service charge and GST are added to the bill [@SG-6].
 
 </Fragment>
 
@@ -82,19 +85,19 @@ status: draft
 2. **Mind your phone.** Level 1 advisory, but petty theft is common in tourist areas [@VN-2].
 3. **Expect the traffic.** 77 million motorbikes for about 100 million people [@VN-3].
 4. **Cross at a steady pace.** Never stop or dart back; the bikes flow around you [@VN-4].
-5. **Carry cash.** Cash is king in small places; no tipping expected [@VN-5].
+5. **Carry cash.** Cash is king in small places [@VN-5].
 
 </Fragment>
 
 </Slide>
 
-<Slide title="And five more" sgMedia="singapore/hawker-centre.jpg" vnMedia="video/rainy-day-traffic.mp4">
+<Slide title="And five more each" sgMedia="singapore/hawker-centre.jpg" vnMedia="video/rainy-day-traffic.mp4">
 
 <Fragment slot="sg">
 
 6. **Leave the vape at home.** Fines up to S$10,000 since May 2026 [@SG-9].
 7. **No chewing gum.** Importing it is prohibited outright [@SG-10].
-8. **Crime is rare.** Crime against foreigners is rare [@SG-8].
+8. **You are unlikely to be a target.** Crime against foreigners is rare [@SG-8].
 9. **Expect rain.** About 171 rain days a year [@SG-11].
 10. **Be on time.** First in the world on logistics; things arrive on time, and so should you [@SG-12].
 

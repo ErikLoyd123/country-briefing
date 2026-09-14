@@ -20,7 +20,7 @@ const alt = image ? (findCredit(image)?.alt ?? '') : '';
 ---
 
 <div class:list={['industry', !img && 'no-image']}>
-  {img && <Image src={img} alt={alt} widths={[160, 320]} sizes="7rem" class="industry-img" />}
+  {img && <Image src={img} alt={alt} widths={[160, 320]} sizes="10rem" class="industry-img" />}
   <div class="min-w-0">
     <p class="industry-name">{name}</p>
     {
@@ -44,7 +44,7 @@ const alt = image ? (findCredit(image)?.alt ?? '') : '';
 <style>
   .industry {
     display: grid;
-    grid-template-columns: 6.5rem minmax(0, 1fr);
+    grid-template-columns: clamp(6.5rem, 11vw, 10rem) minmax(0, 1fr);
     gap: 1.1rem;
     align-items: start;
     text-align: left;
@@ -56,8 +56,8 @@ const alt = image ? (findCredit(image)?.alt ?? '') : '';
     margin-top: 1.25rem;
   }
   .industry-img {
-    width: 6.5rem;
-    aspect-ratio: 1;
+    width: 100%;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     border-radius: 3px;
   }

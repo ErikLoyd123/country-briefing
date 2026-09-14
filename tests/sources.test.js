@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest';
-import { parseApa, inTextAuthor, parseClaims, buildIndex, citationHtml, withCitation, loadIndex, citedClaimIds } from '../src/lib/sources.js';
+import { parseApa, inTextAuthor, parseClaims, buildIndex, citationHtml, withCitation, loadIndex, citedClaimIds, claimUsage, siteCitation, siteWithCitation } from '../src/lib/sources.js';
 
 const HEADER = 'ID,Screen,Country / company,Claim,Source (APA),Link,Retrieved,Verified by,Notes,Quote';
 const row = (id, apa, url) => `${id},need to know,Singapore,A claim.,"${apa}",${url},2026-09-13,,,`;
@@ -61,4 +61,19 @@ it('loads the real source table, and every claim cited in content exists', () =>
   expect(ix.claims.length).toBeGreaterThan(200);
   expect(new Set(ix.sources.map((s) => s.id)).size).toBe(ix.sources.length);
   expect(citedClaimIds(ix).size).toBeGreaterThan(200);
+});
+
+it('hides citations on briefing pages but still checks the claim IDs', () => {
+  const locals = { hideCitations: true };
+  expect(siteCitation(locals, ['SG-1'])).toBe('');
+  expect(siteWithCitation(locals, 'Things arrive on time.', ['SG-1'])).toBe('Things arrive on time.');
+  expect(() => siteCitation(locals, ['XX-9'], 'StatDuel')).toThrow(/XX-9 in StatDuel/);
+  expect(siteCitation({}, ['SG-1'])).toMatch(/class="cite"/);
+});
+
+it('lists the slides each claim appears on, including data files and the homepage', () => {
+  const usage = claimUsage();
+  expect(usage.get('SG-22')).toContainEqual(expect.objectContaining({ section: 'Need to Know', href: expect.stringMatching(/^\/briefing\/need-to-know#/) }));
+  // Timeline rows come from src/data/timeline.yaml, listed on the slide that shows <Timeline>.
+  expect(usage.get('SG-73')?.some((p) => p.href.startsWith('/briefing/political-weather'))).toBe(true);
 });

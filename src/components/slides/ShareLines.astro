@@ -5,7 +5,7 @@
 //   { name: 'HEYDUDE', values: [5, 20, 44], cite: ['CR-2'], dashed: true },
 // ]} />
 // Series are told apart by ink and dash as well as by their labels, so no color is needed for identity.
-import { citationHtml } from '../../lib/sources.js';
+import { siteCitation } from '../../lib/sources.js';
 
 const { label, unit = '', years = [], series = [], max = 100 } = Astro.props;
 const W = 560;
@@ -71,7 +71,7 @@ const endY = Object.fromEntries(ends.map((e) => [e.i, e.y]));
     }
   </svg>
   <p class="lines-source">
-    <Fragment set:html={citationHtml(series.flatMap((s) => s.cite ?? []), undefined, `ShareLines (${label})`)} />
+    <Fragment set:html={siteCitation(Astro.locals, series.flatMap((s) => s.cite ?? []), `ShareLines (${label})`)} />
   </p>
 </figure>
 

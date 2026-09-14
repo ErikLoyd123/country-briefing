@@ -1,0 +1,91 @@
+---
+// A framed figure: a hairline border with its caption set into the top edge, on the seam.
+// Use it to hold one joined visual (bars, a strip, a unit chart) so it doesn't float in white space.
+// <Plate caption="People and output per person">…<Fragment slot="note">A line under the figure [@VN-19].</Fragment></Plate>
+// key: set the Singapore / Vietnam colour key into the top edge instead of a caption.
+// width: "narrow" (48rem), "medium" (64rem, the default) or "wide" (the full slide).
+const { caption, key = false, width = 'medium' } = Astro.props;
+---
+
+<figure class:list={['plate', `is-${width}`]}>
+  {
+    (caption || key) && (
+      <figcaption class="plate-caption">
+        {key ? (
+          <span class="plate-key">
+            <span class="is-sg">Singapore</span>
+            <span class="is-vn">Vietnam</span>
+          </span>
+        ) : (
+          caption
+        )}
+      </figcaption>
+    )
+  }
+  <div class="plate-body"><slot /></div>
+  {Astro.slots.has('note') && <div class="plate-note"><slot name="note" /></div>}
+</figure>
+
+<style>
+  .plate {
+    --plate: color-mix(in srgb, var(--color-paper-2) 38%, var(--color-paper));
+    position: relative;
+    margin-inline: auto;
+    padding: clamp(1.5rem, 3.5vh, 2.5rem) clamp(1.25rem, 3.5vw, 3rem) clamp(1.25rem, 3vh, 2rem);
+    border: 1px solid var(--color-rule);
+    border-radius: 14px;
+    background: var(--plate);
+    font-family: var(--font-sans);
+  }
+  .is-narrow {
+    max-width: 48rem;
+  }
+  .is-medium {
+    max-width: 64rem;
+  }
+  .plate-caption {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: calc(100% - 3rem);
+    padding: 0.2rem 1rem;
+    /* Straddles the border: the slide's ground above the line, the plate's below. */
+    background: linear-gradient(to bottom, var(--color-paper) 50%, var(--plate) 50%);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--color-ink);
+    text-align: center;
+    text-wrap: balance;
+  }
+  /* Label cut-outs inside the figure match the plate, not the slide. */
+  .plate-body {
+    --color-paper: var(--plate);
+  }
+  .plate-key {
+    display: flex;
+    gap: 2.5rem;
+  }
+  .plate-key span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .plate-key span::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--color-sg);
+  }
+  .plate-key .is-vn::before {
+    background: var(--color-vn);
+  }
+  .plate-note {
+    margin-top: clamp(1rem, 2.5vh, 1.5rem);
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    text-align: center;
+  }
+</style>

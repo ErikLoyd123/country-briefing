@@ -7,7 +7,7 @@ The Markdown and data files produce two outputs:
 - **The site:** an overview and seven sections (Need to Know, Dangers and Annoyances, Money Matters, The Political Weather, Local Knowledge, Etiquette, Itineraries), each a deck of slides with photos, charts and diagrams (`src/content/briefings/`)
 - **The paper** (`/paper`, `npm run pdf`): the full write-up of every section in one printable document with APA citations and references (`src/content/paper/`)
 
-Every fact is a claim in `src/data/sources.csv`, the team's source table. Text cites claims by ID (`[@SG-17]`), and the site renders the APA in-text citation and reference list from the table.
+Every fact is a claim in `src/data/sources.csv`, the team's source table. Text cites claims by ID (`[@SG-17]`). The paper renders the APA in-text citations and reference list from the table; the slides and homepage check the IDs but don't show citations, and the Sources page lists the slides each claim appears on.
 
 ## Quick start
 

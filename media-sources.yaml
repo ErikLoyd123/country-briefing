@@ -183,3 +183,129 @@
   source: pexels-photo
   id: 33574096
   alt: A metro train on an elevated track in Ho Chi Minh City
+
+# Slide backgrounds (videos) and section photos
+- file: video/sg-rain-skyline.mp4
+  source: pexels-video
+  id: 31048133
+  alt: Dark storm clouds over boats moored in a harbour in Singapore
+
+- file: video/vn-storm-palms.mp4
+  source: pexels-video
+  id: 6108100
+  alt: Palm trees bending in heavy wind and rain above rooftops
+
+- file: video/port-cranes-aerial.mp4
+  source: pexels-video
+  id: 6618332
+  alt: Aerial view of gantry cranes beside a container ship at a port
+
+- file: video/sg-street-crossing.mp4
+  source: pexels-video
+  id: 4583056
+  alt: Pedestrians crossing a street in a shopping district in Singapore
+
+- file: video/vn-motorbikes-day.mp4
+  source: pexels-video
+  id: 13275194
+  alt: Daytime motorbike traffic on a street in Ho Chi Minh City
+
+- file: video/contactless-payment.mp4
+  source: pexels-video
+  id: 5101679
+  alt: A hand tapping a smartphone on a card payment terminal
+
+- file: video/footwear-factory.mp4
+  source: pexels-video
+  id: 9936744
+  alt: A worker holding a leather shoe against a buffing wheel in a shoe workshop
+
+- file: common/business-card-exchange.jpg
+  source: unsplash
+  id: chyT9XPAdcg
+  alt: Two hands exchanging a business card by an office window
+
+- file: vietnam/coffee-meeting.jpg
+  source: unsplash
+  id: RFKpgayllWQ
+  alt: Vietnamese phin filter coffee and a glass of iced water on a café table
+
+- file: singapore/little-india.jpg
+  source: unsplash
+  id: lC_Z_DfL0aY
+  alt: Shophouses and festive street decorations along a road in Little India, Singapore
+
+- file: singapore/speakers-corner.jpg
+  source: wikimedia
+  id: "File:Speakers Corner 1.jpg"
+  alt: The Speakers' Corner sign and a canopy stage in Hong Lim Park, Singapore
+
+- file: vietnam/hanoi-ba-dinh.jpg
+  source: pexels-photo
+  id: 27203341
+  alt: Ho Chi Minh Mausoleum and a Vietnamese flag on Ba Dinh Square, Hanoi
+
+- file: common/phone-scam.jpg
+  source: pexels-photo
+  id: 11341268
+  alt: A hand holding a lit smartphone in the dark
+
+- file: vietnam/dong-banknotes.jpg
+  source: pexels-photo
+  id: 8089862
+  alt: Hands holding a Vietnamese dong banknote in front of Ha Long Bay
+
+- file: singapore/sgd-banknotes.jpg
+  source: unsplash
+  id: hAjKXEMRo-I
+  alt: Banknotes from several countries, including a Singapore two-dollar note
+
+- file: singapore/industrial-automation.jpg
+  source: pexels-photo
+  id: 33514501
+  alt: Stainless steel tank, pipes and automated valves in an industrial plant
+
+- file: singapore/marina-bay-financial.jpg
+  source: pexels-photo
+  id: 20768136
+  alt: Office towers of Singapore's Marina Bay and Downtown Core reflected in the bay in daylight
+
+- file: singapore/us-embassy.jpg
+  source: wikimedia
+  id: "File:United States Embassy in Napier Road.jpg"
+  alt: The Embassy of the United States on Napier Road, Singapore
+
+- file: vietnam/smartphone-chat.jpg
+  source: pexels-photo
+  id: 30200999
+  alt: Two men in face masks using smartphones on a street in Quy Nhon, Vietnam
+
+- file: vietnam/podcast-studio.jpg
+  source: pexels-photo
+  id: 38493049
+  alt: Podcast microphones on boom arms beside a studio light
+
+- file: vietnam/cacao-pods.jpg
+  source: unsplash
+  id: sFCOat9rphk
+  alt: Ripe cacao pods hanging from a tree branch
+
+- file: vietnam/landmark-81.jpg
+  source: pexels-photo
+  id: 8464898
+  alt: Landmark 81 and surrounding high-rises beside the Saigon River, Ho Chi Minh City
+
+- file: vietnam/hanoi-haze.jpg
+  source: unsplash
+  id: vUrinjV-byk
+  alt: Hanoi's high-rises and an elevated road in thick haze
+
+- file: common/passport-stamps.jpg
+  source: pexels-photo
+  id: 4922356
+  alt: A hand holding open a passport page covered in entry stamps
+
+- file: vietnam/saigon-river-containers.jpg
+  source: pexels-photo
+  id: 2144905
+  alt: Container barges on the Saigon River with the Ho Chi Minh City skyline at dusk

@@ -4,10 +4,24 @@
 // What the stop reveals [@SG-83].
 // <Fragment slot="ask">The one question to ask.</Fragment>
 // </Visit>
-const { when, name, kind } = Astro.props;
+// media: an optional photo (src/assets/images/) or video (public/media/, .mp4) above the card.
+import HeroMedia from '../story/HeroMedia.astro';
+import { findCredit } from '../../lib/credits.js';
+
+const { when, name, kind, media } = Astro.props;
+const credit = media ? findCredit(media) : null;
+if (media && !credit) throw new Error(`Visit "${name}": "${media}" has no credits.yaml entry. Add it to media-sources.yaml and run npm run media.`);
+const video = media?.endsWith('.mp4');
 ---
 
-<article class="visit">
+<article class:list={['visit', media && 'has-media']}>
+  {
+    media && (
+      <div class="visit-media">
+        <HeroMedia image={video ? undefined : media} video={video ? media : undefined} alt={credit.alt} sizes="(min-width: 768px) 26rem, 100vw" />
+      </div>
+    )
+  }
   <p class="visit-when num">{when}</p>
   <h3 class="visit-name">{name}</h3>
   {kind && <p class="visit-kind">{kind}</p>}
@@ -29,8 +43,41 @@ const { when, name, kind } = Astro.props;
     display: flex;
     flex-direction: column;
     height: 100%;
+  }
+  /* In a grid of visits, each card's parts share rows with its neighbours, so the questions line up. */
+  @supports (grid-template-rows: subgrid) {
+    .visit {
+      display: grid;
+      grid-row: span 6;
+      grid-template-rows: subgrid;
+      row-gap: 0;
+      align-content: start;
+    }
+    .visit:not(.has-media)::before {
+      content: '';
+    }
+    /* An auto margin would still push the question to the bottom of its shared row. */
+    .visit .visit-ask {
+      margin-top: 0;
+    }
+  }
+  .visit {
     padding-top: 0.9rem;
     border-top: 2px solid var(--country, var(--color-ink));
+  }
+  .visit.has-media {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .visit-media {
+    position: relative;
+    aspect-ratio: 2.2 / 1;
+    max-height: 22svh;
+    margin-bottom: 0.8rem;
+    overflow: hidden;
+    border-radius: 4px;
+    border-bottom: 3px solid var(--country, var(--color-ink));
+    background: var(--color-night);
   }
   .visit-when {
     font-size: 0.85rem;
@@ -55,6 +102,7 @@ const { when, name, kind } = Astro.props;
   .visit-ask {
     margin-top: auto;
     padding-top: 1rem;
+    align-self: start;
   }
   .visit-ask-label {
     font-size: 0.85rem;

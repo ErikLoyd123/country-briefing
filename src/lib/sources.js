@@ -168,6 +168,68 @@ export function withCitation(text, ids, index = loadIndex(), where = '') {
   return `${esc(m[1])} ${citationHtml(ids, index, where)}${m[2]}`;
 }
 
+// Pages that brief rather than document (the slides and the homepage) set Astro.locals.hideCitations.
+// Components pass Astro.locals here: claim IDs are still checked against sources.csv, but nothing is shown.
+// The paper and the Sources page carry the citations; the Sources page lists where each claim appears.
+export function siteCitation(locals, ids, where = '') {
+  if (!locals?.hideCitations) return citationHtml(ids, undefined, where);
+  if (ids?.length) sourcesFor(ids, undefined, where);
+  return '';
+}
+
+export function siteWithCitation(locals, text, ids, where = '') {
+  if (!locals?.hideCitations) return withCitation(text, ids, undefined, where);
+  if (ids?.length) sourcesFor(ids, undefined, where);
+  return esc(text);
+}
+
+// Where each claim appears on the site: Map of claim ID → [{ section, slide, href }].
+// Reads each slides section's index.mdx one <Slide> at a time, counting claim IDs written in the slide and
+// in the data files its components read. The homepage counts its own IDs and headline-numbers.yaml.
+const DATA_BY_TAG = { Timeline: 'timeline.yaml', TradeAgreements: 'trade-agreements.yaml' };
+export const slideAnchor = (title) =>
+  title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+export function claimUsage(index = loadIndex()) {
+  const cwd = process.cwd();
+  const ids = (text) => [...text.matchAll(/\b[A-Z]{2,4}-\d+\b/g)].map((m) => m[0]).filter((id) => index.claimById.has(id));
+  const dataIds = (file) => ids(readFileSync(resolve(cwd, 'src/data', file), 'utf8'));
+  const usage = new Map();
+  const add = (id, place) => {
+    const list = usage.get(id) ?? [];
+    if (!list.some((p) => p.href === place.href)) list.push(place);
+    usage.set(id, list);
+  };
+
+  add.all = (list, place) => list.forEach((id) => add(id, place));
+  add.all([...dataIds('headline-numbers.yaml'), ...ids(readFileSync(resolve(cwd, 'src/pages/index.astro'), 'utf8'))], { section: 'Overview', slide: 'Homepage', href: '/' });
+
+  const dir = resolve(cwd, 'src/content/briefings');
+  for (const folder of readdirSync(dir).sort()) {
+    const file = join(dir, folder, 'index.mdx');
+    let text;
+    try {
+      text = readFileSync(file, 'utf8');
+    } catch {
+      continue;
+    }
+    const front = /^---\n([\s\S]*?)\n---/.exec(text)?.[1] ?? '';
+    const field = (name) => new RegExp(`^${name}:\\s*"?(.+?)"?\\s*$`, 'm').exec(front)?.[1];
+    const section = field('short') ?? field('title') ?? folder;
+    const slug = folder.replace(/^\d+-/, '');
+    for (const chunk of text.split(/(?=<Slide[\s>])/).slice(1)) {
+      const title = /^<Slide[^>]*?\stitle="([^"]*)"/.exec(chunk)?.[1] ?? '';
+      const place = { section, slide: title, href: `/briefing/${slug}${title ? `#${slideAnchor(title)}` : ''}` };
+      add.all(ids(chunk), place);
+      for (const [tag, data] of Object.entries(DATA_BY_TAG)) if (chunk.includes(`<${tag}`)) add.all(dataIds(data), place);
+    }
+  }
+  return usage;
+}
+
 // Claim IDs cited anywhere in content (MDX) or data (YAML). Drives the paper's reference list.
 export function citedClaimIds(index = loadIndex()) {
   const roots = ['src/content', 'src/data'].map((d) => resolve(process.cwd(), d));

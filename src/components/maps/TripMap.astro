@@ -1,0 +1,68 @@
+---
+// A small locator map of the November trip: Singapore, the flight to Ho Chi Minh City, the drive to the
+// Mekong Delta. Rendered to static SVG at build time. Used as an inset by <TripStrip map />.
+import { geoMercator, geoPath } from 'd3-geo';
+import { feature } from 'topojson-client';
+import world from 'world-atlas/countries-50m.json';
+
+const { class: className } = Astro.props;
+const W = 300;
+const H = 340;
+const ISO = { '702': 'SG', '704': 'VN' };
+const projection = geoMercator()
+  .fitExtent([[0, 0], [W, H]], { type: 'MultiPoint', coordinates: [[98.8, -0.2], [111.2, 13.2]] })
+  .clipExtent([[0, 0], [W, H]]);
+const path = geoPath(projection);
+const land = feature(world, world.objects.countries)
+  .features.filter((f) => {
+    const [[x0, y0], [x1, y1]] = path.bounds(f);
+    return x1 > 0 && x0 < W && y1 > 0 && y0 < H;
+  })
+  .map((f) => ({ d: path(f), country: ISO[f.id] ?? null }));
+
+const sg = projection([103.82, 1.35]);
+const hcmc = projection([106.7, 10.78]);
+const delta = projection([105.78, 10.03]);
+// The flight bows out over the South China Sea.
+const mid = [(sg[0] + hcmc[0]) / 2 + 48, (sg[1] + hcmc[1]) / 2];
+const flight = `M${sg[0]},${sg[1]} Q${mid[0]},${mid[1]} ${hcmc[0]},${hcmc[1]}`;
+const fill = (c) => (c === 'SG' ? 'var(--color-sg)' : c === 'VN' ? 'color-mix(in srgb, var(--color-vn) 35%, var(--trip-land))' : 'var(--trip-land)');
+---
+
+<svg viewBox={`0 0 ${W} ${H}`} class:list={['trip-map', className]} role="img" aria-label="Map of the trip: Singapore, a flight to Ho Chi Minh City, then the Mekong Delta">
+  <rect width={W} height={H} fill="var(--trip-sea)" />
+  {land.map((l) => <path d={l.d} fill={fill(l.country)} stroke="var(--trip-border)" stroke-width="0.6" />)}
+  <path d={flight} fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-dasharray="1 9" stroke-linecap="round" />
+  <path d={`M${hcmc[0]},${hcmc[1]} L${delta[0]},${delta[1]}`} fill="none" stroke="var(--color-vn)" stroke-width="2.5" stroke-linecap="round" />
+  <circle cx={sg[0]} cy={sg[1]} r="8" fill="var(--color-sg)" stroke="white" stroke-width="2" />
+  <circle cx={hcmc[0]} cy={hcmc[1]} r="8" fill="var(--color-vn)" stroke="white" stroke-width="2" />
+  <circle cx={delta[0]} cy={delta[1]} r="4" fill="var(--color-vn)" stroke="white" stroke-width="1.5" />
+  <text x={sg[0] + 14} y={sg[1] + 9} class="trip-map-label">Singapore</text>
+  <text x={hcmc[0] + 4} y={hcmc[1] - 16} text-anchor="middle" class="trip-map-label">HCMC</text>
+  <text x={delta[0] - 10} y={delta[1] + 26} text-anchor="end" class="trip-map-label is-small">Mekong Delta</text>
+</svg>
+
+<style>
+  .trip-map {
+    --trip-sea: #e8eef2;
+    --trip-land: #ffffff;
+    --trip-border: #c9d3da;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .trip-map-label {
+    font-family: var(--font-sans);
+    font-size: 26px;
+    font-weight: 600;
+    fill: var(--color-ink);
+    paint-order: stroke;
+    stroke: white;
+    stroke-width: 6px;
+    stroke-linejoin: round;
+  }
+  .trip-map-label.is-small {
+    font-size: 22px;
+    font-weight: 500;
+  }
+</style>

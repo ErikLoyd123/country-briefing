@@ -5,7 +5,7 @@
 //   { name: 'Vietnam', country: 'VN', value: 5026, display: 'US$5,026', note: '2025', cite: ['VN-18'] },
 // ]} />
 // country picks the bar color (SG, VN); leave it off for a neutral bar. max defaults to the largest value.
-import { citationHtml } from '../../lib/sources.js';
+import { siteCitation } from '../../lib/sources.js';
 
 const { label, note, items = [], max } = Astro.props;
 const top = max ?? Math.max(...items.map((i) => i.value));
@@ -32,7 +32,7 @@ for (const i of items) if (typeof i.value !== 'number') throw new Error(`Compare
           <span class="bars-value">
             <span class="type-heavy num">{i.display ?? i.value}</span>
             {i.note && <span class="bars-value-note"> {i.note}</span>}
-            <Fragment set:html={i.cite ? ' ' + citationHtml(i.cite, undefined, `CompareBars (${label ?? i.name})`) : ''} />
+            <Fragment set:html={i.cite ? ' ' + siteCitation(Astro.locals, i.cite, `CompareBars (${label ?? i.name})`) : ''} />
           </span>
         </li>
       ))

@@ -2,7 +2,7 @@
 import { Check, Minus } from '@lucide/astro';
 import raw from '../../data/trade-agreements.yaml?raw';
 import { loadYaml } from '../../lib/yaml.js';
-import { withCitation } from '../../lib/sources.js';
+import { siteWithCitation } from '../../lib/sources.js';
 
 // bare: no title or outer margin, for use inside a <Slide> that titles it.
 const { title = 'Trade agreements in force', bare = false } = Astro.props;
@@ -37,7 +37,7 @@ const agreements = loadYaml(raw, 'src/data/trade-agreements.yaml');
                   )}
                 </td>
               ))}
-              <td class:list={['pl-4 text-ink-2', bare ? 'py-2 text-[0.9rem] leading-snug' : 'py-3']} set:html={withCitation(a.note, a.cite, undefined, `trade-agreements.yaml (${a.id})`)} />
+              <td class:list={['pl-4 text-ink-2', bare ? 'py-2 text-[0.9rem] leading-snug' : 'py-3']} set:html={siteWithCitation(Astro.locals, a.note, a.cite, `trade-agreements.yaml (${a.id})`)} />
             </tr>
           ))
         }

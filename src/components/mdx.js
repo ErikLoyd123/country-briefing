@@ -26,6 +26,11 @@ import ShareLines from './slides/ShareLines.astro';
 import Trio from './slides/Trio.astro';
 import Visit from './slides/Visit.astro';
 import RiskMap from './slides/RiskMap.astro';
+import Plate from './slides/Plate.astro';
+import UnitCompare from './slides/UnitCompare.astro';
+import RatingLadder from './slides/RatingLadder.astro';
+import TripStrip from './slides/TripStrip.astro';
+import Takeaway from './slides/Takeaway.astro';
 
 export const mdxComponents = {
   Callout,
@@ -55,4 +60,9 @@ export const mdxComponents = {
   Trio,
   Visit,
   RiskMap,
+  Plate,
+  UnitCompare,
+  RatingLadder,
+  TripStrip,
+  Takeaway,
 };

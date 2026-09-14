@@ -12,10 +12,15 @@
 // sgMedia / vnMedia: an image under src/assets/images/ or a video under public/media/ (ending .mp4).
 //   pair: a photo band on top of each half. backdrop: fills each half. Alt text comes from credits.yaml.
 // align="mirror" right-aligns Singapore's half against the seam; use it for short text and figures.
+// tone: "paper" (default), "tint" (a pale ground, to break a run of white slides) or "night" (dark ground).
+// backdrop: a photo or video filling the whole slide behind a darkened veil; implies tone="night".
 import HeroMedia from '../story/HeroMedia.astro';
 import { findCredit } from '../../lib/credits.js';
+import { slideAnchor } from '../../lib/sources.js';
 
-const { title, lede, layout = 'pair', split = 50, sgMedia, vnMedia, align = 'start', id } = Astro.props;
+const { title, lede, layout = 'pair', split = 50, sgMedia, vnMedia, align = 'start', id, backdrop } = Astro.props;
+const tone = backdrop ? 'night' : (Astro.props.tone ?? 'paper');
+if (!['paper', 'tint', 'night'].includes(tone)) throw new Error(`Slide "${title}": tone "${tone}" should be paper, tint or night`);
 if (!['pair', 'joined', 'backdrop'].includes(layout)) throw new Error(`Slide "${title}": layout "${layout}" should be pair, joined or backdrop`);
 if (split < 20 || split > 80) throw new Error(`Slide "${title}": split ${split} should be between 20 and 80`);
 
@@ -25,15 +30,23 @@ const media = (file) => {
   if (!credit) throw new Error(`Slide "${title}": "${file}" has no credits.yaml entry. Add it to media-sources.yaml and run npm run media.`);
   return file.endsWith('.mp4') ? { video: file, alt: credit.alt } : { image: file, alt: credit.alt };
 };
+const backdropMedia = media(backdrop);
 const halves = [
   { code: 'sg', name: 'Singapore', slot: 'sg', media: media(sgMedia) },
   { code: 'vn', name: 'Vietnam', slot: 'vn', media: media(vnMedia) },
 ];
 const hasHalves = Boolean(Astro.slots.has('sg') || Astro.slots.has('vn') || sgMedia || vnMedia);
-const slug = id ?? (title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : undefined);
+const slug = id ?? (title ? slideAnchor(title) : undefined);
 ---
 
-<section id={slug} class="frame slide" data-layout={layout} data-align={align} data-slide-title={title} style={`--split: ${split}%; --split-n: ${split / 100}`}>
+<section id={slug} class="frame slide" data-layout={layout} data-align={align} data-tone={tone} data-backdrop={backdropMedia ? '' : undefined} data-slide-title={title} style={`--split: ${split}%; --split-n: ${split / 100}`}>
+  {
+    backdropMedia && (
+      <div class="slide-bg" aria-hidden={backdropMedia.video ? 'true' : undefined}>
+        <HeroMedia image={backdropMedia.image} video={backdropMedia.video} alt={backdropMedia.alt} sizes="100vw" />
+      </div>
+    )
+  }
   {
     title && (
       <header class="slide-head container-wide">
@@ -86,8 +99,49 @@ const slug = id ?? (title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').repl
     color: var(--color-ink-2);
     padding-block: clamp(2rem, 6vh, 4rem);
   }
-  .slide + :global(.slide) {
+  .slide + :global(.slide[data-tone='paper']) {
     border-top: 1px solid var(--color-rule);
+  }
+
+  /* Tones. Components draw with the colour tokens, so a slide redefines them for its ground. */
+  .slide[data-tone='tint'] {
+    --color-paper: #f3f5f7;
+    --color-paper-2: #e4e9ee;
+    --color-rule: #d5dbe1;
+    background: var(--color-paper);
+  }
+  .slide[data-tone='night'] {
+    --color-paper: var(--color-night);
+    --color-paper-2: color-mix(in srgb, var(--color-on-night) 13%, transparent);
+    --color-paper-3: color-mix(in srgb, var(--color-on-night) 22%, transparent);
+    --color-ink: var(--color-on-night);
+    --color-ink-2: #c9d3d8;
+    --color-muted: var(--color-on-night-muted);
+    --color-rule: color-mix(in srgb, var(--color-on-night) 18%, transparent);
+    --color-sg: #3cb4ca;
+    --color-vn: #e2a444;
+    background: var(--color-night);
+    color: var(--color-ink-2);
+  }
+  /* A backdrop sits under a veil; label cut-outs go clear so the picture shows through. */
+  .slide[data-backdrop] {
+    isolation: isolate;
+    overflow: hidden;
+    --color-paper: transparent;
+  }
+  .slide-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-night);
+  }
+  .slide-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--color-night) 70%, transparent), color-mix(in srgb, var(--color-night) 88%, transparent)),
+      color-mix(in srgb, var(--color-night) 20%, transparent);
   }
 
   .slide-head {
@@ -177,7 +231,8 @@ const slug = id ?? (title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').repl
 
   .slide-band {
     position: relative;
-    aspect-ratio: 3 / 1;
+    /* A fixed height, so both halves' photos match even when the seam is moved. */
+    height: clamp(7rem, 25svh, 15rem);
     max-width: 100%;
     margin-bottom: 0.9rem;
     overflow: hidden;
@@ -284,7 +339,7 @@ const slug = id ?? (title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').repl
   }
 
   /* Shorter laptop screens: tighten the chrome so the content keeps its size. */
-  @media (min-width: 768px) and (max-height: 820px) {
+  @media (min-width: 768px) and (max-height: 880px) {
     .slide {
       padding-block: 1.5rem;
     }
@@ -301,7 +356,7 @@ const slug = id ?? (title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').repl
       margin-top: 1.25rem;
     }
     .slide-band {
-      aspect-ratio: 4 / 1;
+      height: clamp(6rem, 16svh, 9rem);
       margin-bottom: 0.6rem;
     }
     .slide-half-body {

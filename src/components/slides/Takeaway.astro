@@ -1,0 +1,75 @@
+---
+// A closing point set on its own photo or video: a label, one line in large type, and a short detail.
+// <Takeaway media="vietnam/shoe-lasts.jpg" label="Crocs">
+// The sourcing country is now a political choice.
+// <Fragment slot="detail">Every alternative country carries a similar tariff [@CR-4].</Fragment>
+// </Takeaway>
+// Put two or three side by side in a grid.
+import HeroMedia from '../story/HeroMedia.astro';
+import { findCredit } from '../../lib/credits.js';
+
+const { media, label } = Astro.props;
+const credit = findCredit(media);
+if (!credit) throw new Error(`Takeaway "${label}": "${media}" has no credits.yaml entry. Add it to media-sources.yaml and run npm run media.`);
+const video = media.endsWith('.mp4');
+---
+
+<article class="takeaway">
+  <div class="takeaway-media" aria-hidden={video ? 'true' : undefined}>
+    <HeroMedia image={video ? undefined : media} video={video ? media : undefined} alt={credit.alt} sizes="(min-width: 1024px) 40rem, 100vw" />
+  </div>
+  <div class="takeaway-text">
+    {label && <p class="takeaway-label">{label}</p>}
+    <div class="takeaway-line"><slot /></div>
+    {Astro.slots.has('detail') && <div class="takeaway-detail"><slot name="detail" /></div>}
+  </div>
+</article>
+
+<style>
+  .takeaway {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(20rem, 52svh, 34rem);
+    overflow: hidden;
+    border-radius: 6px;
+    background: var(--color-night);
+    color: var(--color-on-night);
+  }
+  .takeaway-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .takeaway-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--color-night) 12%, color-mix(in srgb, var(--color-night) 60%, transparent) 55%, color-mix(in srgb, var(--color-night) 20%, transparent));
+  }
+  .takeaway-text {
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+  }
+  .takeaway-label {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-on-night-muted);
+  }
+  .takeaway-line {
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  .takeaway-detail {
+    margin-top: 0.9rem;
+    max-width: 34rem;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: #c9d3d8;
+  }
+</style>

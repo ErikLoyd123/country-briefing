@@ -62,7 +62,9 @@ Cite the claim's ID in square brackets with an `@`, just before the sentence's f
 | `…87 of 97 seats [@SG-17].` | …87 of 97 seats (US-ASEAN Business Council, 2025). |
 | `…a five-year high [@VN-55; @VN-56].` | …a five-year high (Viet Nam News, 2026a; Vietnam News Agency, 2026d). |
 
-The site looks up each claim's source and writes the APA in-text citation for you, including the `2026a` / `2026b` letters when one author has several works in a year. Each citation links to its entry on the Sources page. If an ID isn't in `sources.csv`, the build stops and names the file.
+The slides and the homepage check every citation but don't show it: the briefing is for presenting, and the paper carries the citations. The Sources page's verification table has an **On the site** column listing the slides each claim appears on, so you can always trace a number back to its source.
+
+In the paper, the site looks up each claim's source and writes the APA in-text citation for you, including the `2026a` / `2026b` letters when one author has several works in a year. Each citation links to its entry on the Sources page. If an ID isn't in `sources.csv`, the build stops and names the file.
 
 ## The site and the paper are written separately
 
@@ -117,11 +119,49 @@ Optional: something joined, under both halves.
 
 On a pair slide, `sgMedia` / `vnMedia` put a photo band on top of each half. Leave a blank line between text and a `<Fragment slot=…>` inside a component, or the slot is ignored.
 
+**Grounds.** Most slides sit on white. `tone="tint"` gives a pale ground, to break up a run of white slides. `backdrop="video/clip.mp4"` (or a photo) fills the whole slide behind a dark veil and turns the text light: use it for one or two slides per section where the picture carries the point (the rain behind the weather strip, the port behind the tariff bars).
+
+A slide with no photo can still carry a picture: a built figure (below), a photo band (`sgMedia` / `vnMedia`), or a `<Plate>` frame so a figure doesn't float in white space. Not every slide needs one.
+
 Aim for what you would say out loud in a minute. While running `npm run dev`, any slide taller than your browser window gets a dashed red outline and a label saying how much to cut. Check at your own laptop's window size.
 
 ## Components for slides
 
-No imports needed. Copy and adjust. Every figure takes `cite` claim IDs.
+No imports needed. Copy and adjust. Every figure takes `cite` claim IDs (checked, not shown on the slide).
+
+**A frame for a figure.** `<Plate>` draws a hairline border with a caption set into the top edge. `key` puts the Singapore / Vietnam colour key there instead; `width` is `narrow`, `medium` (default) or `wide`; a `note` slot adds a line underneath.
+
+```mdx
+<Plate key>
+<UnitCompare … head={false} />
+
+<Fragment slot="note">One line under the figure [@VN-19].</Fragment>
+
+</Plate>
+```
+
+**Counts as rows of dots or squares** (a 17-to-1 gap you can see). `value` is in units:
+
+```mdx
+<UnitCompare rows={[
+  { label: 'People', unit: 'dot', per: 'Each dot is 1 million people',
+    sg: { value: 6.11, display: '6.1m', detail: 'June 2025', cite: ['SG-22'] },
+    vn: { value: 101.6, display: '101.6m', detail: '2025', cite: ['VN-17'] } },
+]} />
+```
+
+**Ratings on their own scales** (best on the left; Singapore above, Vietnam below). A scale has `steps` or a `range` for ranks; `divide` draws a line such as investment grade:
+
+```mdx
+<RatingLadder scales={[
+  { label: 'Coface country risk', steps: ['A1', 'A2', 'A3', 'A4', 'B', 'C', 'D', 'E'],
+    sg: { at: 'A2', detail: 'Business climate A1', cite: ['SG-51'] }, vn: { at: 'A4', detail: 'Business climate A4', cite: ['VN-20'] } },
+]} />
+```
+
+**A closing point on a photo or video**, two side by side in a `grid`: `<Takeaway media="vietnam/shoe-lasts.jpg" label="Crocs">The line. <Fragment slot="detail">The detail [@CR-4].</Fragment></Takeaway>`
+
+**The trip as a row of days:** `<TripStrip map sg={{ city: 'Singapore', media: '…' }} vn={{ city: 'Ho Chi Minh City', media: '…' }} days={[{ date: '2026-11-04', country: 'SG', stops: ['Emerson', 'Swapaholic'] }]} />` (`map` adds a small route map in the corner)
 
 **Numbers across the center line** (the homepage style):
 
@@ -142,7 +182,7 @@ No imports needed. Copy and adjust. Every figure takes `cite` claim IDs.
 
 **Both countries on one scale:** `<ScaleCompare label="…" note="0 to 100" sg={{ value: 84, detail: '…', cite: ['SG-19'] }} vn={{ … }} />`
 
-**One big figure:** `<BigStat when="May 2014" value="20+" unit="dead">What happened [@VN-67].</BigStat>` (`size="sm"` when several sit together)
+**One big figure:** `<BigStat when="May 2014" value="20+" unit="dead">What happened [@VN-67].</BigStat>` (`size="sm"` when several sit together). With no text inside (`<BigStat value="2" unit="steps" />`) it heads what follows, such as a `<Flow>`.
 
 **A process, step by step** (the step count is the point): `<Flow country="VN" steps={[{ title: 'Audited accounts' }, { title: 'Money leaves', tone: 'end' }, { title: 'Losses? No remittance', tone: 'stop' }]} />`
 
@@ -166,13 +206,13 @@ One line of evidence [@SG-38].
 
 **An industry, with photo:** `<Industry name="Footwear" image="vietnam/shoe-lasts.jpg" figure="US$11bn" figureLabel="to the US">Why it is exposed [@CR-22].</Industry>`
 
-**Rules in both countries and in each** (Etiquette): `<Trio>` with `sg`, `both` and `vn` slots, each a Markdown list.
+**Rules in both countries and in each** (Etiquette): `<Trio>` with `sg`, `both` and `vn` slots, each a Markdown list. `sgMedia`, `bothMedia` and `vnMedia` put a photo or video on top of each column.
 
-**A visit** (Itineraries), three per slide in a `grid` of three columns: `<Visit when="Wed 4 Nov, 9:00" name="Emerson" kind="Industrial automation">What it shows [@SG-83]. <Fragment slot="ask">The question.</Fragment></Visit>`
+**A visit** (Itineraries), three per slide in a `grid` of three columns, with an optional `media` photo: `<Visit when="Wed 4 Nov, 9:00" name="Emerson" kind="Industrial automation" media="singapore/industrial-automation.jpg">What it shows [@SG-83]. <Fragment slot="ask">The question.</Fragment></Visit>`
 
 **A photo or video anywhere:** `<Media src="vietnam/hcmc-metro.jpg" country="VN" ratio="21 / 9" />`
 
-**Built from data files:** `<Timeline bare />` (`src/data/timeline.yaml`), `<TradeAgreements bare />` (`src/data/trade-agreements.yaml`), `<RegionMap />`. In those YAML files, `cite: [SG-73]` lists the claim IDs behind each row.
+**Built from data files:** `<Timeline bare />` (`brief` shows dates and titles only, for a slide; `legend={false}` inside a `<Plate key>`) (`src/data/timeline.yaml`), `<TradeAgreements bare />` (`src/data/trade-agreements.yaml`), `<RegionMap />`. In those YAML files, `cite: [SG-73]` lists the claim IDs behind each row.
 
 ## Components for the paper
 

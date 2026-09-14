@@ -4,13 +4,13 @@
 const { when, value, unit, size = 'lg' } = Astro.props;
 ---
 
-<div class:list={['bigstat', size === 'sm' && 'is-sm']}>
+<div class:list={['bigstat', size === 'sm' && 'is-sm', !Astro.slots.has('default') && 'is-bare']}>
   {when && <p class="bigstat-when num">{when}</p>}
   <p class="bigstat-value">
     <span class="type-heavy num">{value}</span>
     {unit && <span class="bigstat-unit">{unit}</span>}
   </p>
-  <div class="bigstat-text"><slot /></div>
+  {Astro.slots.has('default') && <div class="bigstat-text"><slot /></div>}
 </div>
 
 <style>
@@ -19,6 +19,10 @@ const { when, value, unit, size = 'lg' } = Astro.props;
     font-size: 0.85rem;
     font-weight: 500;
     color: var(--color-ink);
+  }
+  /* A figure with no text under it heads what follows (a list of steps), so leave room below. */
+  .bigstat.is-bare {
+    margin-bottom: 1.25rem;
   }
   .bigstat-value {
     margin-top: 0.1rem;

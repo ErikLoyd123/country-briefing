@@ -1,0 +1,192 @@
+---
+// Counts drawn as rows of units either side of the seam, so a 17-to-1 gap is seen, not read.
+// <UnitCompare columns={17} rows={[
+//   { label: 'People', unit: 'dot', per: '1 dot is 1 million people',
+//     sg: { value: 6.11, display: '6.1 million', detail: 'June 2025', cite: ['SG-22'] },
+//     vn: { value: 101.6, display: '101.6 million', detail: '2025', cite: ['VN-17'] } },
+// ]} />
+// value is in units (rounded to whole units when drawn). unit: "dot" or "square".
+// head={false} drops the country key, for a <Plate key> that carries it.
+import { siteCitation } from '../../lib/sources.js';
+
+const { rows = [], columns = 17, head = true } = Astro.props;
+for (const r of rows) {
+  if (!['dot', 'square'].includes(r.unit ?? 'dot')) throw new Error(`UnitCompare "${r.label}": unit should be dot or square`);
+  for (const c of ['sg', 'vn']) if (typeof r[c]?.value !== 'number') throw new Error(`UnitCompare "${r.label}": ${c} needs a numeric value`);
+}
+const NAMES = { sg: 'Singapore', vn: 'Vietnam' };
+---
+
+<dl class="units" style={`--cols: ${columns}`}>
+  {
+    head && (
+      <div class="units-head" aria-hidden="true">
+        <p class="is-sg"><span class="units-dot"></span>Singapore</p>
+        <p class="is-vn"><span class="units-dot"></span>Vietnam</p>
+      </div>
+    )
+  }
+  {
+    rows.map((r) => (
+      <div class="units-row">
+        <dt class="units-label">
+          <span>{r.label}</span>
+          {r.per && <span class="units-per">{r.per}</span>}
+        </dt>
+        {['sg', 'vn'].map((c) => {
+          const n = Math.max(Math.round(r[c].value), 0);
+          return (
+            <dd class:list={['units-cell', `is-${c}`]}>
+              <span class="sr-only">{NAMES[c]}: </span>
+              <span class="units-value">
+                <span class="type-heavy num">{r[c].display ?? r[c].value}</span>
+                {r[c].detail && <span class="units-detail">{r[c].detail}</span>}
+                <Fragment set:html={siteCitation(Astro.locals, r[c].cite, `UnitCompare (${r.label})`)} />
+              </span>
+              <span class:list={['units-grid', `is-${r.unit ?? 'dot'}`]} aria-hidden="true">
+                {Array.from({ length: n }, () => <i />)}
+              </span>
+            </dd>
+          );
+        })}
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .units {
+    position: relative;
+    font-family: var(--font-sans);
+  }
+  .units::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: color-mix(in srgb, var(--color-ink) 15%, transparent);
+  }
+  .is-sg {
+    --country: var(--color-sg);
+  }
+  .is-vn {
+    --country: var(--color-vn);
+  }
+  .units-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .units-head p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .units-head .is-sg {
+    justify-content: flex-end;
+    padding-right: var(--pad);
+  }
+  .units-head .is-vn {
+    padding-left: var(--pad);
+  }
+  .units-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--country);
+  }
+  .units {
+    --pad: clamp(1rem, 3vw, 2.5rem);
+    --unit: clamp(0.5rem, 0.85vw, 0.78rem);
+    --gap: calc(var(--unit) * 0.38);
+  }
+  .units-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    margin-top: clamp(0.75rem, 2.5vh, 1.75rem);
+  }
+  .units-row:first-child {
+    margin-top: 0;
+  }
+  .units-label {
+    position: relative;
+    grid-column: 1 / -1;
+    justify-self: center;
+    padding: 0.1rem 0.9rem;
+    background: var(--color-paper);
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--color-ink);
+  }
+  .units-per {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+  .units-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    min-width: 0;
+    margin-top: 0.5rem;
+  }
+  .units-cell.is-sg {
+    align-items: flex-end;
+    padding-right: var(--pad);
+    text-align: right;
+  }
+  .units-cell.is-vn {
+    align-items: flex-start;
+    padding-left: var(--pad);
+  }
+  .units-value {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1rem 0.45rem;
+    line-height: 1;
+  }
+  .is-sg .units-value {
+    justify-content: flex-end;
+  }
+  .units-value .type-heavy {
+    font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+    color: var(--color-ink);
+  }
+  .units-detail {
+    font-size: 0.85rem;
+    color: var(--color-ink-2);
+  }
+  /* Units fill from the seam outward: Singapore's grid runs right to left. */
+  .units-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), var(--unit));
+    gap: var(--gap);
+  }
+  .is-sg .units-grid {
+    direction: rtl;
+  }
+  .units-grid i {
+    display: block;
+    width: var(--unit);
+    height: var(--unit);
+    background: var(--country);
+  }
+  .units-grid.is-dot i {
+    border-radius: 999px;
+  }
+  .units-grid.is-square i {
+    border-radius: 1.5px;
+  }
+
+  @media (max-width: 639.98px) {
+    .units {
+      --unit: 0.42rem;
+    }
+  }
+</style>

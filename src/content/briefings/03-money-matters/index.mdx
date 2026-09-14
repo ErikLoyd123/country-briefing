@@ -8,8 +8,11 @@ format: slides
 status: draft
 ---
 
-<Slide title="The terms on the table" lede="Vietnam offers the longer tax break. Singapore offers fewer conditions." layout="joined">
+<Slide title="The terms on the table" tone="tint" lede="Vietnam offers the longer tax break. Singapore offers fewer conditions." layout="joined">
 
+<div class="grid grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)_minmax(0,1fr)]">
+<div class="hidden lg:block"><Media src="singapore/marina-bay-financial.jpg" ratio="3 / 4" /></div>
+<Plate key>
 <StatDuel rows={[
   {
     label: 'Headline corporate tax',
@@ -21,33 +24,29 @@ status: draft
     sg: { value: '5 to 10%', detail: 'For up to five years', cite: ['SG-58'] },
     vn: { value: '10%', detail: 'For 15 years, after four tax-free years, for high-tech and large projects', cite: ['VN-58'] },
   },
-  {
-    label: 'Global minimum tax of 15%',
-    note: 'For large multinationals; it shrinks both incentives',
-    sg: { value: '2025', detail: 'In force from', cite: ['SG-62'] },
-    vn: { value: '2024', detail: 'In force from', cite: ['VN-59'] },
-  },
-  {
-    label: 'Limits on foreign ownership',
-    sg: { value: 'No cap', detail: 'Except broadcasting, held under 49%', cite: ['SG-56'] },
-    vn: { value: '25 closed', detail: 'Business lines, plus 58 restricted', cite: ['VN-57'] },
-  },
-]} />
+]} head={false} />
+</Plate>
+<div class="hidden lg:block"><Media src="vietnam/landmark-81.jpg" ratio="3 / 4" /></div>
+</div>
 
 </Slide>
 
 <Slide title="Getting your money out" lede="The single biggest practical difference between the two. Count the steps.">
 
 <Fragment slot="sg">
+<BigStat value="2" unit="steps, any time" />
+
 <Flow country="SG" steps={[
   { title: 'Book the profit' },
   { title: 'Send it home, any time', detail: 'No capital controls and no withholding tax on dividends', tone: 'end' },
 ]} />
 
-<p class="mt-6 font-sans text-sm text-ink-2">Sources: [@SG-60; @SG-61]</p>
+{/* Sources: SG-60; SG-61 */}
 </Fragment>
 
 <Fragment slot="vn">
+<BigStat value="5" unit="steps, once a year" />
+
 <Flow country="VN" steps={[
   { title: 'Book the profit' },
   { title: 'Audited financial statements' },
@@ -57,12 +56,12 @@ status: draft
   { title: 'Carrying accumulated losses? You cannot remit at all.', tone: 'stop' },
 ]} />
 
-<p class="mt-6 font-sans text-sm text-ink-2">Source: [@VN-60]</p>
+{/* Sources: VN-60 */}
 </Fragment>
 
 </Slide>
 
-<Slide title="How much money is coming in" lede="Not like for like: Singapore's figure is everything already invested; Vietnam's are each year's new money.">
+<Slide title="How much money is coming in" backdrop="video/port-cranes-aerial.mp4" lede="Not like for like: Singapore's figure is everything already invested; Vietnam's are each year's new money.">
 
 <Fragment slot="sg">
 <BigStat value="S$3.13tn" unit="invested by foreigners">
@@ -76,12 +75,17 @@ The total in place at the end of 2024, up 9.5 percent in a year [@SG-54].
 </Fragment>
 
 <Fragment slot="vn">
-<CompareBars label="Foreign investment, US$ billion" note="Registered is promised; disbursed is spent" items={[
-  { name: '2025, registered', country: 'VN', value: 38.4, display: '38.4', cite: ['VN-55'] },
-  { name: '2025, disbursed (a five-year high)', country: 'VN', value: 27.6, display: '27.6', cite: ['VN-55'] },
-  { name: 'Jan to Aug 2026, registered', country: 'VN', value: 40.63, display: '40.6', note: 'up 55%', cite: ['VN-56'] },
-  { name: 'Jan to Aug 2026, disbursed', country: 'VN', value: 17.25, display: '17.3', cite: ['VN-56'] },
+<CompareBars label="Foreign investment in 2025, US$ billion" note="Registered is promised; disbursed is spent" max={40.63} items={[
+  { name: 'Registered', country: 'VN', value: 38.4, display: '38.4', cite: ['VN-55'] },
+  { name: 'Disbursed, a five-year high', country: 'VN', value: 27.6, display: '27.6', cite: ['VN-55'] },
 ]} />
+
+<div class="mt-9">
+<CompareBars label="January to August 2026, eight months" max={40.63} items={[
+  { name: 'Registered, up 55%', country: 'VN', value: 40.63, display: '40.6', cite: ['VN-56'] },
+  { name: 'Disbursed', country: 'VN', value: 17.25, display: '17.3', cite: ['VN-56'] },
+]} />
+</div>
 
 **Singapore is Vietnam's top source of new investment in 2026**, with South Korea [@VN-56].
 </Fragment>

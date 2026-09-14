@@ -4,7 +4,7 @@
 //   sg={{ value: 84, detail: '3rd of 182 countries', cite: ['SG-19'] }}
 //   vn={{ value: 41, detail: '81st of 182 countries', cite: ['VN-15'] }} />
 // The band between the two markers is labelled with the gap, in the scale's units.
-import { citationHtml } from '../../lib/sources.js';
+import { siteCitation } from '../../lib/sources.js';
 
 const { label, note, min = 0, max = 100, ticks, unit = 'points', sg, vn } = Astro.props;
 for (const [code, d] of [['sg', sg], ['vn', vn]]) {
@@ -44,7 +44,7 @@ const gap = hi - lo;
           <span class="scale-value type-heavy num">{m.value}</span>
           <span class="scale-name">{m.name}</span>
           <span class="scale-detail">
-            {m.detail} <Fragment set:html={citationHtml(m.cite, undefined, `ScaleCompare (${label})`)} />
+            {m.detail} <Fragment set:html={siteCitation(Astro.locals, m.cite, `ScaleCompare (${label})`)} />
           </span>
           <span class="scale-dot" aria-hidden="true"></span>
         </div>

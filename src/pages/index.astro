@@ -9,9 +9,12 @@ import headlineRaw from '../data/headline-numbers.yaml?raw';
 import { loadYaml } from '../lib/yaml.js';
 import { getTopics } from '../lib/topics.js';
 import { getRisks } from '../lib/risks.js';
-import { citationHtml, withCitation } from '../lib/sources.js';
+import { siteCitation, siteWithCitation } from '../lib/sources.js';
 import { AREAS, COUNTRY, RISK_LEVELS } from '../lib/format.js';
 import { ArrowRight, FileText, BookOpen } from '@lucide/astro';
+
+// The homepage briefs: claim IDs are checked but citations stay on the paper and the Sources page.
+Astro.locals.hideCitations = true;
 
 const topics = await getTopics();
 const bySlug = Object.fromEntries(topics.map((t) => [t.slug, t]));
@@ -94,7 +97,7 @@ const questions = [
       <div class="relative mx-auto max-w-4xl bg-paper py-4 text-center">
         <h2 class="mx-auto max-w-[22ch] text-4xl leading-[1.08] text-ink md:text-6xl">What would a company need to know before committing to Singapore or Vietnam?</h2>
         <p class="mx-auto mt-7 max-w-[40rem] font-display text-xl leading-relaxed text-ink-2">
-          Doing business in these two countries, told the way a guidebook tells it. Every fact carries a source you can click. Two companies, Crocs and Mastercard, run through
+          Doing business in these two countries, told the way a guidebook tells it. The paper carries every source. Two companies, Crocs and Mastercard, run through
           every section so you can watch the same firm cross the border.
         </p>
       </div>
@@ -135,7 +138,7 @@ const questions = [
                           )}
                         </span>
                         <span class="mt-2 block text-sm text-ink-2">
-                          {cell.detail} <Fragment set:html={citationHtml(cell.cite, undefined, `headline-numbers.yaml (${row.label})`)} />
+                          {cell.detail} <Fragment set:html={siteCitation(Astro.locals, cell.cite, `headline-numbers.yaml (${row.label})`)} />
                         </span>
                       </dd>
                     );
@@ -228,7 +231,7 @@ const questions = [
       <div>
         <h2 class="max-w-[16ch] text-4xl leading-[1.05] text-ink md:text-5xl">On the main artery of Asian trade</h2>
         <p class="mt-6 font-display text-xl leading-relaxed text-ink-2">
-          {tradeText.map(([text, cite]) => <Fragment set:html={withCitation(text, cite, undefined, 'the homepage trade text') + ' '} />)}
+          {tradeText.map(([text, cite]) => <Fragment set:html={siteWithCitation(Astro.locals, text, cite, 'the homepage trade text') + ' '} />)}
         </p>
 
         <table class="mt-10 w-full text-left">
@@ -248,7 +251,7 @@ const questions = [
                   {['SG', 'VN'].map((c) => (
                     <td class="py-4 pl-4 text-ink">
                       <span class="block font-semibold tracking-tight">{row[c][0]}</span>
-                      <Fragment set:html={citationHtml(row[c][1], undefined, `the homepage trade table (${row.label})`)} />
+                      <Fragment set:html={siteCitation(Astro.locals, row[c][1], `the homepage trade table (${row.label})`)} />
                     </td>
                   ))}
                 </tr>

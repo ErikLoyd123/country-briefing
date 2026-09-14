@@ -1,0 +1,258 @@
+---
+// Outside ratings drawn on their own scales, best on the left: Singapore marked above the scale,
+// Vietnam below, so the distance between them is the reading.
+// <RatingLadder scales={[
+//   { label: 'Sovereign credit rating', steps: ['AAA', 'AA+', …], divide: { after: 'BBB-', left: 'Investment grade', right: 'Speculative' },
+//     sg: { at: 'AAA', detail: 'All three agencies', cite: ['SG-21'] }, vn: { at: 'BB+', detail: 'Fitch', cite: ['VN-16'] } },
+//   { label: 'Logistics rank', range: [1, 139], sg: { at: 1, display: '1st', … }, vn: { at: 43, display: '43rd', … } },
+// ]} />
+// A scale has either steps (named grades) or range ([best, worst] for a rank).
+import { siteCitation } from '../../lib/sources.js';
+
+const { scales = [] } = Astro.props;
+const NAMES = { sg: 'Singapore', vn: 'Vietnam' };
+
+const placed = scales.map((s) => {
+  const where = (c) => {
+    const m = s[c];
+    if (s.steps) {
+      const i = s.steps.indexOf(m.at);
+      if (i < 0) throw new Error(`RatingLadder "${s.label}": ${c} "${m.at}" is not one of the steps`);
+      return { ...m, x: ((i + 0.5) / s.steps.length) * 100, display: m.display ?? m.at, index: i };
+    }
+    const [best, worst] = s.range;
+    return { ...m, x: ((m.at - best) / (worst - best)) * 100, display: m.display ?? String(m.at) };
+  };
+  const divideAt = s.divide ? ((s.steps.indexOf(s.divide.after) + 1) / s.steps.length) * 100 : null;
+  return { ...s, sg: where('sg'), vn: where('vn'), divideAt };
+});
+const anchor = (x) => (x < 18 ? 'start' : x > 82 ? 'end' : 'middle');
+---
+
+<div class="ladders">
+  {
+    placed.map((s) => (
+      <section class="ladder">
+        <h3 class="ladder-label">{s.label}</h3>
+        <div class="ladder-scale">
+          {['sg', 'vn'].map((c) => (
+            <p class:list={['ladder-flag', `is-${c}`]} data-anchor={anchor(s[c].x)} style={`--x: ${s[c].x}%`}>
+              <span class="sr-only">{NAMES[c]}: </span>
+              <span class="ladder-value type-heavy num">{s[c].display}</span>
+              <span class="ladder-detail">
+                {s[c].detail} <Fragment set:html={siteCitation(Astro.locals, s[c].cite, `RatingLadder (${s.label})`)} />
+              </span>
+            </p>
+          ))}
+          {s.steps ? (
+            <ol class:list={['ladder-track', s.steps.length > 10 && 'is-dense']} style={`--n: ${s.steps.length}`} aria-hidden="true">
+              {s.steps.map((step, i) => (
+                <li class:list={[i === s.sg.index && 'is-sg-at', i === s.vn.index && 'is-vn-at']}>{step}</li>
+              ))}
+            </ol>
+          ) : (
+            <div class="ladder-track is-range" aria-hidden="true">
+              <span class="ladder-end">{s.rangeLabels?.[0] ?? s.range[0]}</span>
+              <span class="ladder-end">{s.rangeLabels?.[1] ?? s.range[1]}</span>
+              {['sg', 'vn'].map((c) => (
+                <i class:list={['ladder-pin', `is-${c}`]} style={`--x: ${s[c].x}%`} />
+              ))}
+            </div>
+          )}
+          {s.divide && (
+            <div class="ladder-divide" style={`--x: ${s.divideAt}%`} aria-hidden="true">
+              <span class="is-left">{s.divide.left}</span>
+              <span class="is-right">{s.divide.right}</span>
+            </div>
+          )}
+        </div>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .ladders {
+    display: grid;
+    gap: clamp(1rem, 3vh, 2rem);
+    font-family: var(--font-sans);
+  }
+  .is-sg,
+  .is-sg-at {
+    --country: var(--color-sg);
+  }
+  .is-vn,
+  .is-vn-at {
+    --country: var(--color-vn);
+  }
+  .ladder {
+    display: grid;
+    grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
+    gap: 0 clamp(1rem, 3vw, 2.5rem);
+    align-items: center;
+  }
+  .ladder-label {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.2;
+    color: var(--color-ink);
+  }
+  .ladder-scale {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    row-gap: 0.45rem;
+  }
+
+  /* Flags: the value and its detail, pointing at the scale. Singapore above, Vietnam below. */
+  .ladder-flag {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    width: max-content;
+    max-width: 60%;
+    margin-left: var(--x);
+    transform: translateX(-50%);
+    line-height: 1.1;
+  }
+  .ladder-flag[data-anchor='start'] {
+    transform: translateX(-0.9rem);
+  }
+  .ladder-flag[data-anchor='end'] {
+    transform: translateX(calc(-100% + 0.9rem));
+    flex-direction: row-reverse;
+    text-align: right;
+  }
+  .ladder-flag.is-sg {
+    grid-row: 1;
+  }
+  .ladder-flag.is-vn {
+    grid-row: 3;
+  }
+  .ladder-value {
+    font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+    color: var(--country);
+  }
+  .ladder-detail {
+    font-size: 0.85rem;
+    color: var(--color-ink-2);
+  }
+
+  .ladder-track {
+    grid-row: 2;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    gap: 2px;
+  }
+  .ladder-track li {
+    position: relative;
+    padding: 0.28rem 0;
+    border-radius: 2px;
+    background: var(--color-paper-2);
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+  .ladder-track li:is(.is-sg-at, .is-vn-at) {
+    background: var(--country);
+    color: white;
+  }
+  /* A stem from each flag to its grade. */
+  .ladder-track li.is-sg-at::before,
+  .ladder-track li.is-vn-at::after,
+  .ladder-pin::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    width: 2px;
+    height: 0.45rem;
+    background: var(--country);
+  }
+  .ladder-track li.is-sg-at::before {
+    bottom: 100%;
+  }
+  .ladder-track li.is-vn-at::after {
+    top: 100%;
+  }
+
+  .ladder-track.is-range {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 1.5rem;
+    padding-inline: 0.5rem;
+    border-radius: 2px;
+    background: var(--color-paper-2);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+  .ladder-pin {
+    position: absolute;
+    top: 50%;
+    left: var(--x);
+    width: 0.8rem;
+    height: 0.8rem;
+    margin: -0.4rem 0 0 -0.4rem;
+    border-radius: 999px;
+    background: var(--country);
+    box-shadow: 0 0 0 2px var(--color-paper-2);
+  }
+  .ladder-pin.is-sg {
+    margin-left: 0;
+  }
+  .ladder-pin.is-sg::before {
+    bottom: calc(100% + 0.3rem);
+    margin-left: -1px;
+  }
+  .ladder-pin.is-vn::before {
+    top: calc(100% + 0.3rem);
+    margin-left: -1px;
+  }
+
+  .ladder-divide {
+    position: absolute;
+    top: 1.9rem;
+    bottom: 1.9rem;
+    left: var(--x);
+    width: 0;
+    border-left: 2px dashed var(--color-ink);
+    margin-left: -1px;
+  }
+  .ladder-divide span {
+    position: absolute;
+    top: -1.35rem;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    color: var(--color-muted);
+  }
+  .ladder-divide .is-left {
+    right: 0.4rem;
+  }
+  .ladder-divide .is-right {
+    left: 0.4rem;
+  }
+
+  @media (max-width: 767.98px) {
+    .ladder {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+    .ladder-track li {
+      font-size: 0.55rem;
+    }
+    /* On a phone a long scale keeps only the two marked grades' names. */
+    .ladder-track.is-dense li:not(.is-sg-at, .is-vn-at) {
+      color: transparent;
+    }
+    .ladder-divide span {
+      display: none;
+    }
+    .ladder-flag {
+      max-width: 75%;
+    }
+  }
+</style>

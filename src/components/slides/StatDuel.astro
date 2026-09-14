@@ -5,16 +5,21 @@
 //   { label: 'Currency', sg: { value: 'SGD', detail: 'Singapore dollar', cite: ['SG-13'] }, vn: { value: 'VND', detail: '…', cite: ['VN-5'] } },
 // ]} />
 // size="sm" for word values (a government type); the default is for short figures.
-import { citationHtml } from '../../lib/sources.js';
+// head={false} drops the country key, for a <Plate key> that carries it.
+import { siteCitation } from '../../lib/sources.js';
 
-const { rows = [], size = 'lg' } = Astro.props;
+const { rows = [], size = 'lg', head = true } = Astro.props;
 ---
 
 <dl class:list={['duel', size === 'sm' && 'is-sm']}>
-  <div class="duel-head" aria-hidden="true">
-    <p class="is-sg"><span class="duel-dot"></span>Singapore</p>
-    <p class="is-vn"><span class="duel-dot"></span>Vietnam</p>
-  </div>
+  {
+    head && (
+      <div class="duel-head" aria-hidden="true">
+        <p class="is-sg"><span class="duel-dot"></span>Singapore</p>
+        <p class="is-vn"><span class="duel-dot"></span>Vietnam</p>
+      </div>
+    )
+  }
   {
     rows.map((row) => (
       <div class="duel-row">
@@ -27,7 +32,7 @@ const { rows = [], size = 'lg' } = Astro.props;
             <span class="sr-only">{c === 'sg' ? 'Singapore' : 'Vietnam'}: </span>
             <span class="duel-value type-heavy num">{row[c].value}</span>
             <span class="duel-detail">
-              {row[c].detail} <Fragment set:html={citationHtml(row[c].cite, undefined, `StatDuel (${row.label})`)} />
+              {row[c].detail} <Fragment set:html={siteCitation(Astro.locals, row[c].cite, `StatDuel (${row.label})`)} />
             </span>
           </dd>
         ))}
