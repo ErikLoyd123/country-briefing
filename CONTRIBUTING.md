@@ -14,7 +14,6 @@ This guide is for everyone on the team, whether or not you use git. You only eve
 | Add an appendix | `src/content/appendices/` (new `.mdx` file with `title` and `order`) |
 | Add an event to the timeline | `src/data/timeline.yaml` |
 | Update trade agreements | `src/data/trade-agreements.yaml` |
-| Change the homepage's five numbers | `src/data/headline-numbers.yaml` |
 | Change team names or the course line | `src/lib/team.js` |
 | Add a photo or video | `media-sources.yaml`, then `npm run media` |
 

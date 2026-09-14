@@ -185,7 +185,7 @@ export function siteWithCitation(locals, text, ids, where = '') {
 
 // Where each claim appears on the site: Map of claim ID → [{ section, slide, href }].
 // Reads each slides section's index.mdx one <Slide> at a time, counting claim IDs written in the slide and
-// in the data files its components read. The homepage counts its own IDs and headline-numbers.yaml.
+// in the data files its components read.
 const DATA_BY_TAG = { Timeline: 'timeline.yaml', TradeAgreements: 'trade-agreements.yaml' };
 export const slideAnchor = (title) =>
   title
@@ -203,9 +203,7 @@ export function claimUsage(index = loadIndex()) {
     if (!list.some((p) => p.href === place.href)) list.push(place);
     usage.set(id, list);
   };
-
   add.all = (list, place) => list.forEach((id) => add(id, place));
-  add.all([...dataIds('headline-numbers.yaml'), ...ids(readFileSync(resolve(cwd, 'src/pages/index.astro'), 'utf8'))], { section: 'Overview', slide: 'Homepage', href: '/' });
 
   const dir = resolve(cwd, 'src/content/briefings');
   for (const folder of readdirSync(dir).sort()) {
