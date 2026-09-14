@@ -8,7 +8,7 @@ format: slides
 status: draft
 ---
 
-<Slide title="The terms on the table" tone="tint" lede="Vietnam offers the longer tax break. Singapore offers fewer conditions." layout="joined">
+<Slide title="The terms on the table" tone="tint" lede="Vietnam offers the longer tax break. Singapore offers fewer conditions. For a company the size of Crocs or Mastercard, neither goes below 15 percent." layout="joined">
 
 <div class="grid grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)_minmax(0,1fr)]">
 <div class="hidden lg:block"><Media src="singapore/marina-bay-financial.jpg" ratio="3 / 4" /></div>
@@ -22,7 +22,12 @@ status: draft
   {
     label: 'Best incentive rate',
     sg: { value: '5 to 10%', detail: 'For up to five years', cite: ['SG-58'] },
-    vn: { value: '10%', detail: 'For 15 years, after four tax-free years, for high-tech and large projects', cite: ['VN-58'] },
+    vn: { value: '10%', detail: 'For 15 years, with four years tax-free and nine at half rate, for high-tech and large projects', cite: ['VN-58'] },
+  },
+  {
+    label: 'Floor for large multinationals',
+    sg: { value: '15%', detail: 'Global minimum tax, from 2025', cite: ['SG-62'] },
+    vn: { value: '15%', detail: 'Global minimum tax, from 2024, for groups over €750m revenue', cite: ['VN-59'] },
   },
 ]} head={false} />
 </Plate>
@@ -105,9 +110,27 @@ The total in place at the end of 2024, up 9.5 percent in a year [@SG-54].
 <Fragment slot="vn">
 
 - **Open:** 100 percent foreign ownership in manufacturing-adjacent services, consultancy, hotels and IT [@VN-57].
-- **Partly open:** 49 percent caps in areas such as waterway transport [@VN-57]; industrial parks lost tax incentives after October 2025 [@VN-58].
+- **Partly open:** 49 percent caps in areas such as waterway transport [@VN-57].
+- **Shrinking:** industrial parks lost their tax incentives for projects licensed after October 2025 [@VN-58].
 - **Closed:** land ownership. You hold use rights by allocation, lease or transfer [@VN-61].
 
 </Fragment>
+
+</Slide>
+
+<Slide title="What it means for an investor" layout="joined">
+
+<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+<Takeaway media="singapore/raffles-place.jpg" label="Singapore">
+The tax break is shorter, but your money moves whenever you like.
+
+<Fragment slot="detail">No capital controls and no dividend withholding [@SG-60; @SG-61]; incentives run five years at most [@SG-58].</Fragment>
+</Takeaway>
+<Takeaway media="vietnam/binh-duong-industrial-park.jpg" label="Vietnam">
+The tax break is longer, but your cash leaves once a year, and only if the books show a profit.
+
+<Fragment slot="detail">Remittance waits for audited accounts and tax finalisation, and accumulated losses block it [@VN-60]. Large groups still pay at least 15 percent [@VN-59].</Fragment>
+</Takeaway>
+</div>
 
 </Slide>
