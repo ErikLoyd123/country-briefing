@@ -12,13 +12,20 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 const events = loadYaml(raw, 'src/data/timeline.yaml')
   .map((e) => {
     if (!/^\d{4}-\d{2}$/.test(e.date)) throw new Error(`timeline.yaml: date "${e.date}" must be YYYY-MM`);
+    if (e.end && !/^\d{4}-\d{2}$/.test(e.end)) throw new Error(`timeline.yaml: end "${e.end}" must be YYYY-MM`);
     if (!['SG', 'VN', 'both'].includes(e.country)) throw new Error(`timeline.yaml: "${e.title}" country must be SG, VN or both`);
     return e;
   })
   .filter((e) => !from || e.date >= from)
   .sort((a, b) => a.date.localeCompare(b.date));
 const hasBoth = events.some((e) => e.country === 'both');
-const label = (d) => `${MONTHS[Number(d.slice(5)) - 1]} ${d.slice(0, 4)}`;
+const month = (d) => MONTHS[Number(d.slice(5)) - 1];
+const label = (d) => `${month(d)} ${d.slice(0, 4)}`;
+// A span in one year reads "Apr to Jul 2025"; across years, "Nov 2025 to Feb 2026".
+const span = (e) => {
+  if (!e.end) return label(e.date);
+  return e.end.slice(0, 4) === e.date.slice(0, 4) ? `${month(e.date)} to ${label(e.end)}` : `${label(e.date)} to ${label(e.end)}`;
+};
 ---
 
 <section class:list={['not-prose', !bare && 'my-14', brief && 'is-brief']}>
@@ -41,7 +48,7 @@ const label = (d) => `${MONTHS[Number(d.slice(5)) - 1]} ${d.slice(0, 4)}`;
     {
       events.map((e, i) => (
         <li class:list={['tl-item', `is-${e.country.toLowerCase()}`, i % 2 ? 'is-below' : 'is-above']} style={`--col:${i + 1}`}>
-          <time class="tl-date num" datetime={e.date}>{label(e.date)}</time>
+          <time class="tl-date num" datetime={e.date}>{span(e)}</time>
           <div class="tl-card">
             <p class="tl-country text-xs text-muted">{e.country === 'SG' ? 'Singapore' : e.country === 'VN' ? 'Vietnam' : 'Both countries'}</p>
             <p class="font-medium text-ink">{e.title}</p>

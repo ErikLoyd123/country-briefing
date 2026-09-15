@@ -1,4 +1,4 @@
-# Political and risk events. date: YYYY-MM. country: SG | VN | both.
+# Political and risk events. date: YYYY-MM (end: YYYY-MM for a span). country: SG | VN | both.
 # cite: claim IDs from src/data/sources.csv. Keep to about a dozen so it fits one screen.
 - { date: "2013-12", country: SG, title: Little India riot, detail: The worst public violence in Singapore in four decades., cite: [SG-73] }
 - { date: "2014-05", country: VN, title: Anti-China factory riots, detail: At least 20 dead after China moved an oil rig into disputed waters., cite: [VN-67] }
@@ -6,9 +6,11 @@
 - { date: "2024-03", country: VN, title: President resigns, detail: The anti-corruption campaign reaches the top., cite: [VN-24] }
 - { date: "2024-09", country: VN, title: Typhoon Yagi, detail: 318 dead and about US$3.3 billion in damage., cite: [VN-36] }
 - { date: "2024-10", country: SG, title: Ex-minister jailed, detail: First political corruption trial in nearly 50 years., cite: [SG-66] }
-- { date: "2025-04", country: SG, title: 10% US tariff, detail: The free trade agreement did not shield exporters., cite: [SG-46] }
+- { date: "2025-04", end: "2025-07", country: both, title: US emergency-powers tariffs, detail: "10% on Singapore and 20% on Vietnam, with 40% on goods judged transshipped.", cite: [SG-46, VN-43] }
 - { date: "2025-05", country: SG, title: General election, detail: PAP wins 87 of 97 seats., cite: [SG-17] }
-- { date: "2025-07", country: VN, title: 20% and 40% US tariffs, detail: 40% on goods judged transshipped., cite: [VN-43] }
 - { date: "2026-01", country: VN, title: 14th Party Congress, detail: Growth target of at least 10% a year., cite: [VN-75] }
+- { date: "2026-02", country: both, title: US Supreme Court strikes down the tariffs, detail: "A flat 10% surcharge replaces them until July 24.", cite: [VN-92] }
 - { date: "2026-03", country: VN, title: National Assembly election, detail: Communist Party takes 482 of 500 seats., cite: [VN-13] }
+- { date: "2026-04", country: VN, title: US names Vietnam a Priority Foreign Country, detail: "For intellectual property; a Section 301 investigation opens on May 29.", cite: [VN-93, VN-94] }
+- { date: "2026-07", country: both, title: 12.5% US tariff under Section 301, detail: "Takes effect on both countries as the 10% surcharge expires.", cite: [SG-96, VN-96, VN-95] }
 - { date: "2026-09", country: VN, title: FTSE emerging-market upgrade due, detail: About US$6 billion of passive inflows expected., cite: [VN-91] }
