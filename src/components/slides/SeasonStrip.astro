@@ -5,6 +5,8 @@
 //   { country: 'SG', label: 'Monsoons', spans: [{ from: '12-01', to: '03-10' }, { from: '06-01', to: '09-30' }], cite: ['SG-11'] },
 // ]} markers={[{ label: 'Our trip', from: '11-03', to: '11-13' }]} />
 // Dates are MM-DD. A span whose `to` is earlier than `from` wraps over the new year.
+// temps: { place, high: [12 °C], low: [12 °C], cite } adds each month's average daily high and low under the row,
+// shown in °F with °C on hover.
 import { siteCitation } from '../../lib/sources.js';
 
 const { rows = [], markers = [] } = Astro.props;
@@ -21,6 +23,10 @@ const segments = (span) => {
   return b > a ? [[a, b]] : [[a, 100], [0, b]];
 };
 const NAMES = { SG: 'Singapore', VN: 'Vietnam' };
+const toF = (c) => Math.round((c * 9) / 5 + 32);
+for (const r of rows) {
+  if (r.temps && (r.temps.high?.length !== 12 || r.temps.low?.length !== 12)) throw new Error(`SeasonStrip (${r.label}): temps needs 12 highs and 12 lows`);
+}
 ---
 
 <figure class="season">
@@ -54,6 +60,36 @@ const NAMES = { SG: 'Singapore', VN: 'Vietnam' };
     </div>
   </div>
   {
+    rows.some((r) => r.temps) && (
+      <div class="season-temps-block">
+        <p class="season-temps-head">Average daily high and low, °F</p>
+        {rows
+          .filter((r) => r.temps)
+          .map((r) => (
+            <div class:list={['season-temps-row', `is-${r.country.toLowerCase()}`]}>
+              <p class="season-temps-label">
+                <span class="season-dot" aria-hidden="true" />
+                <span>
+                  {r.temps.place} <Fragment set:html={siteCitation(Astro.locals, r.temps.cite, `SeasonStrip (${r.temps.place} temperatures)`)} />
+                </span>
+              </p>
+              <ol class="season-temps">
+                {MONTHS.map((m, i) => (
+                  <li title={`${m}: ${r.temps.high[i]}°C high, ${r.temps.low[i]}°C low`}>
+                    <span class="sr-only">{m}: </span>
+                    <span class="season-high num">{toF(r.temps.high[i])}°</span>
+                    <span class="sr-only"> high, </span>
+                    <span class="season-low num">{toF(r.temps.low[i])}°</span>
+                    <span class="sr-only"> low</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
+      </div>
+    )
+  }
+  {
     markers.length > 0 && (
       <ul class="sr-only">
         {markers.map((m) => (
@@ -73,13 +109,15 @@ const NAMES = { SG: 'Singapore', VN: 'Vietnam' };
   .is-vn {
     --country: var(--color-vn);
   }
-  .season-grid {
+  .season {
     --label-w: 0rem;
+  }
+  .season-grid {
     position: relative;
     padding-bottom: 2.25rem;
   }
   @media (min-width: 768px) {
-    .season-grid {
+    .season {
       --label-w: 13rem;
     }
     .season-row {
@@ -129,6 +167,52 @@ const NAMES = { SG: 'Singapore', VN: 'Vietnam' };
     margin-top: 0.35rem;
     border-radius: 3px;
     background: repeating-linear-gradient(to right, var(--color-paper-2) 0 calc(100% / 12 - 1px), var(--color-paper) calc(100% / 12 - 1px) calc(100% / 12));
+  }
+  .season-temps-block {
+    margin-top: 0.5rem;
+  }
+  .season-temps-head {
+    margin-left: var(--label-w);
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+  .season-temps-row {
+    margin-top: 0.5rem;
+  }
+  @media (min-width: 768px) {
+    .season-temps-row {
+      display: grid;
+      grid-template-columns: var(--label-w) minmax(0, 1fr);
+      align-items: baseline;
+    }
+  }
+  .season-temps-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding-right: 1rem;
+    font-size: 0.9rem;
+    color: var(--color-ink);
+  }
+  .season-temps {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    font-size: clamp(0.62rem, 0.9vw, 0.85rem);
+    line-height: 1.2;
+  }
+  .season-temps li {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.3rem;
+    padding-left: 0.35rem;
+    border-left: 1px solid var(--color-rule);
+  }
+  .season-high {
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .season-low {
+    color: var(--color-muted);
   }
   .season-band {
     position: absolute;

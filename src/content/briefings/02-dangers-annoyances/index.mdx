@@ -20,17 +20,34 @@ status: draft
     vn: { at: 'BB+', detail: 'Fitch, stable: one notch short', cite: ['VN-16'] } },
   { label: 'Coface country risk',
     steps: ['A1', 'A2', 'A3', 'A4', 'B', 'C', 'D', 'E'],
-    sg: { at: 'A2', detail: 'Business climate A1', cite: ['SG-51'] },
-    vn: { at: 'A4', detail: 'Business climate A4', cite: ['VN-20'] } },
+    sg: { at: 'A3', detail: 'Business climate A1; cut from A2 in 2025', cite: ['SG-100', 'SG-101'] },
+    vn: { at: 'B', detail: 'Business climate A4; cut from A4 in June 2026', cite: ['VN-98', 'VN-99'] } },
   { label: 'World Bank logistics rank', range: [1, 139], rangeLabels: ['', '139th of 139'],
     sg: { at: 1, display: '1st', detail: 'Score 4.3', cite: ['SG-12'] },
     vn: { at: 43, display: '43rd', detail: 'Score 3.3', cite: ['VN-62'] } },
 ]} />
 </Plate>
 
+<Fragment slot="foot">
+<div class="mx-auto grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-3">
+<div class="rounded-md border border-rule bg-paper p-5">
+<p class="text-sm font-medium text-ink">Coface country risk</p>
+<p class="mt-2 text-ink-2">Graded from A1 (very low) to E (extreme) [@CF-1]. Singapore's A3 means a less favourable outlook but stable politics [@CF-2]. Vietnam's B means an uncertain outlook, with politics that could see strong tension [@CF-3].</p>
+</div>
+<div class="rounded-md border border-rule bg-paper p-5">
+<p class="text-sm font-medium text-ink">Coface business climate</p>
+<p class="mt-2 text-ink-2">A1 (Singapore): reliable company accounts, effective debt collection and an almost fully open market [@CF-4]. A4 (Vietnam): debt collection is not always effective, institutions have gaps and market access has limits [@CF-5].</p>
+</div>
+<div class="rounded-md border border-rule bg-paper p-5">
+<p class="text-sm font-medium text-ink">World Bank logistics rank</p>
+<p class="mt-2 text-ink-2">How easily firms can set up reliable supply chains. Logistics professionals score each country from 1 to 5 on six core dimensions; 139 countries were ranked in 2023 [@WB-1; @WB-2].</p>
+</div>
+</div>
+</Fragment>
+
 </Slide>
 
-<Slide title="Every risk, as we rank it" covers={['Government', 'Society', 'Security', 'Economy']} tone="tint" lede="Ranked by how much each should change what a foreign company does. Select one to jump to it." layout="joined">
+<Slide title="Every risk, as we rank it" covers={['Government', 'Society', 'Education', 'Security', 'Economy']} tone="tint" lede="Ranked by how much each should change what a foreign company does. Select one to jump to it." layout="joined">
 
 <RiskMap section="dangers-annoyances" />
 
@@ -66,7 +83,7 @@ Foreign digital firms can be ordered to store user data locally [@VN-25].
 
 </Slide>
 
-<Slide title="Society" covers={['Society']} lede="Singapore is old and expensive. Vietnam is young, but short of skills and clean air." sgMedia="singapore/public-housing.jpg" vnMedia="vietnam/hanoi-haze.jpg">
+<Slide title="Society" covers={['Society']} lede="Singapore is old and expensive. Vietnam is young, and its air is a health risk." sgMedia="singapore/public-housing.jpg" vnMedia="vietnam/hanoi-haze.jpg">
 
 <Fragment slot="sg">
 <BigStat value="1 in 5" unit="citizens aged 65 or older" />
@@ -79,15 +96,34 @@ Ageing fast [@SG-34], in one of the world's most expensive cities [@SG-35].
 </Fragment>
 
 <Fragment slot="vn">
-<RiskCard country="VN" area="society" level="mid" title="Young, willing, and under-credentialed">
-Only 28.8% of workers hold a diploma or certificate [@VN-33].
-
-<Fragment slot="means">labour is available; skilled supervisors are not. Budget for training.</Fragment>
-</RiskCard>
 <RiskCard country="VN" area="society" level="mid" title="You will breathe the air">
 Hanoi was the 10th most polluted major city in January 2026 [@VN-30].
 
 <Fragment slot="means">insure senior staff for evacuation.</Fragment>
+</RiskCard>
+</Fragment>
+
+</Slide>
+
+<Slide title="Education" covers={['Education']} tone="tint" lede="Singapore's schools top the world. Vietnam's workforce is young, but most of it has no formal qualification.">
+
+<Fragment slot="sg">
+<BigStat value="1st" unit="in the world on PISA 2022, in maths, reading and science" />
+
+<RiskCard country="SG" area="education" level="low" title="The best-performing schools in the world">
+Singapore topped every PISA 2022 ranking [@SG-33], and English is the language of schooling and business [@SG-3].
+
+<Fragment slot="means">a draw for relocating families, and a well-educated local hiring pool.</Fragment>
+</RiskCard>
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="28.8%" unit="of workers hold a diploma or certificate" />
+
+<RiskCard country="VN" area="education" level="mid" title="Young, willing, and under-credentialed">
+The labour force grows by 500,000 a year, but few hold a qualification [@VN-33], and PISA scores fell sharply from 2018 [@VN-32].
+
+<Fragment slot="means">labour is available; skilled supervisors are not. Budget for training.</Fragment>
 </RiskCard>
 </Fragment>
 
@@ -137,28 +173,31 @@ Bag snatching from motorbikes and taxi scams [@VN-41].
 
 <div class="mx-auto max-w-3xl">
 <CompareBars label="US tariff on imports" items={[
-  { name: 'Singapore, 2025', country: 'SG', value: 10, display: '10%', note: 'struck down February 2026', cite: ['SG-46', 'VN-92'] },
-  { name: 'Vietnam, 2025', country: 'VN', value: 20, display: '20%', note: 'most goods', cite: ['VN-43'] },
+  { name: 'Singapore, 2025', country: 'SG', value: 10, display: '10%', note: 'on US$38.2bn of US imports', cite: ['SG-46', 'US-3'] },
+  { name: 'Vietnam, 2025', country: 'VN', value: 20, display: '20%', note: 'most of US$193.9bn of US imports', cite: ['VN-43', 'US-4'] },
   { name: 'Vietnam, 2025, if judged transshipped', country: 'VN', value: 40, display: '40%', cite: ['VN-43'] },
   { name: 'Singapore, since July 2026', country: 'SG', value: 12.5, display: '12.5%', note: 'Section 301', cite: ['SG-96'] },
   { name: 'Vietnam, since July 2026', country: 'VN', value: 12.5, display: '12.5%', note: 'Section 301', cite: ['VN-96'] },
 ]} max={40} />
 </div>
 
-<p class="mx-auto mt-8 max-w-2xl text-center font-display text-xl leading-snug text-ink-2">Singapore's free trade agreement with the US did not shield it [@SG-47].</p>
+<div class="mx-auto mt-8 max-w-3xl space-y-3 text-center font-display text-xl leading-snug text-ink-2">
+<p>**Transshipped** means routed through a third country to hide where goods were really made, such as Chinese products relabelled “Made in Vietnam” [@US-5].</p>
+<p>At 12.5%, the tariff falls on goods worth US$193.9 billion a year from Vietnam and US$38.2 billion from Singapore, at 2025 import levels [@US-4; @US-3]. The 2025 rates were struck down in February 2026 [@VN-92], and Singapore's free trade agreement with the US did not shield it [@SG-47].</p>
+</div>
 
 </Slide>
 
-<Slide title="Economy" covers={['Economy', 'Trade']} lede="Singapore is a trade hub in a trade war. Vietnam is growing fast on exports the US now taxes." sgMedia="singapore/strait-shipping.jpg" vnMedia="vietnam/saigon-river-containers.jpg">
+<Slide title="Economy" covers={['Economy', 'Trade']} lede="Singapore is a trade hub exposed to US tariffs. Vietnam is the region's fastest-growing economy, on exports the US now taxes." sgMedia="singapore/strait-shipping.jpg" vnMedia="vietnam/saigon-river-containers.jpg">
 
 <Fragment slot="sg">
-<RiskCard country="SG" area="economy" level="high" title="A trade hub in a trade war">
-PM Wong called the tariffs the end of an era for rules-based trade [@SG-48].
+<RiskCard country="SG" area="economy" level="high" title="A trade hub exposed to US tariffs">
+Trade is worth more than three times GDP [@SG-102]. PM Wong called the 2025 US tariffs the end of an era for rules-based trade [@SG-48].
 
 <Fragment slot="means">the hub premium shrinks if neutrality gets harder.</Fragment>
 </RiskCard>
 <RiskCard country="SG" area="economy" level="mid" title="Booming on AI, dependent on imported labour">
-1.6 million foreign workers [@SG-53].
+Growth hit 5.9% in the second quarter of 2026 on the AI investment wave [@SG-49; @SG-50], with 1.6 million foreign workers [@SG-53].
 
 <Fragment slot="means">hiring is competitive and depends on work passes.</Fragment>
 </RiskCard>
@@ -171,10 +210,23 @@ The US buys the exports; China supplies 40% of the imports [@VN-45; @VN-46]. A 1
 <Fragment slot="means">US-bound exports cost more, and the investigation could add to that.</Fragment>
 </RiskCard>
 <RiskCard country="VN" area="economy" level="mid" title="Fast growth, rising prices, a weak dong">
-8.02% growth in 2025, and 4.89% inflation [@VN-48; @VN-49].
+8.02% growth in 2025 and 7.2% forecast for 2026, with inflation at 4.89% [@VN-48; @AS-3; @VN-49].
 
 <Fragment slot="means">price in depreciation and plan for outages [@VN-51; @VN-50].</Fragment>
 </RiskCard>
+</Fragment>
+
+<Fragment slot="foot">
+<div class="mx-auto max-w-3xl">
+<p class="mb-6 text-center font-display text-xl leading-snug text-ink">**Asia as a region is slowing** on the 2026 energy shock, but Vietnam is still Southeast Asia's fastest-growing economy [@AS-1; @AS-4; @AS-3].</p>
+<CompareBars label="GDP growth forecast, 2026" items={[
+  { name: 'Vietnam', country: 'VN', value: 7.2, display: '7.2%', note: 'ADB', cite: ['AS-3'] },
+  { name: 'Singapore', country: 'SG', value: 5, display: '4.5–5.5%', note: 'government forecast', cite: ['SG-49'] },
+  { name: 'Developing Asia and the Pacific', value: 4.9, display: '4.9%', note: 'ADB', cite: ['AS-1'] },
+  { name: 'Developing Southeast Asia', value: 4.6, display: '4.6%', note: 'ADB, excludes Singapore', cite: ['AS-2', 'AS-3'] },
+  { name: 'East Asia and Pacific', value: 4.2, display: '4.2%', note: 'World Bank', cite: ['AS-4'] },
+]} />
+</div>
 </Fragment>
 
 </Slide>

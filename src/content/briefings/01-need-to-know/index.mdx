@@ -1,6 +1,6 @@
 ---
 title: Need to Know
-thesis: The ten things I would tell you in the taxi from the airport, for each country.
+thesis: The basics before you land, and the five risks to brief every traveller on.
 hero:
   video: video/hcmc-night-intersection.mp4
   alt: Night traffic at a busy intersection in Ho Chi Minh City
@@ -8,7 +8,7 @@ format: slides
 status: draft
 ---
 
-<Slide id="the-question" title="What would a company need to know before committing to Singapore or Vietnam?" lede="Told the way a guidebook tells it. Two companies, Crocs and Mastercard, run through every section so you can watch the same firm cross the border." layout="joined">
+<Slide id="the-question" title="What would a founder or CEO need to know before committing to Singapore or Vietnam?" lede="Told the way a guidebook tells it. Two companies, Crocs and Mastercard, run through every section so you can watch the same firm cross the border." layout="joined">
 
 <ol class="mx-auto grid max-w-6xl grid-cols-1 gap-10 md:grid-cols-3">
 <li class="border-t-2 border-ink pt-5">
@@ -36,7 +36,7 @@ status: draft
 <StatDuel rows={[
   {
     label: 'Currency',
-    sg: { value: 'S$', detail: 'Singapore dollar', cite: ['SG-13'] },
+    sg: { value: 'S$', detail: 'Singapore dollar, about 1.27 to the US dollar', cite: ['SG-13', 'SG-97'] },
     vn: { value: '₫', detail: 'Vietnamese dong, about 25,900 to the US dollar; notes only', cite: ['VN-11', 'VN-5'] },
   },
   {
@@ -54,16 +54,18 @@ status: draft
 
 </Slide>
 
-<Slide title="A small rich city and a big fast-growing country" covers={['Society', 'Economy']} lede="About 17 times the people in Vietnam; about 17 times the output per person in Singapore." layout="joined">
+<Slide title="A small rich city and a big fast-growing country" covers={['Society', 'Economy']} lede="About 17 times the people in Vietnam; nearly 20 times the annual output per person in Singapore. The US sits between them on both." layout="joined">
 
 <Plate key>
 <UnitCompare rows={[
   { label: 'People', unit: 'dot', per: 'Each dot is 1 million people',
+    ref: { label: 'United States', display: '341.8m', detail: '(July 2025)', cite: ['US-1'] },
     sg: { value: 6.11, display: '6.1m', detail: 'June 2025', cite: ['SG-22'] },
     vn: { value: 101.6, display: '101.6m', detail: '2025', cite: ['VN-17'] } },
-  { label: 'GDP per person', unit: 'square', per: 'Each square is US$1,000',
-    sg: { value: 84.734, display: 'US$84,734', detail: '2023', cite: ['SG-23'] },
-    vn: { value: 5.026, display: 'US$5,026', detail: '2025', cite: ['VN-18'] } },
+  { label: 'GDP per person, annual', unit: 'square', per: 'Each square is US$1,000',
+    ref: { label: 'United States', display: 'US$90,027', detail: '(2025)', cite: ['US-2'] },
+    sg: { value: 98.814, display: 'US$98,814', detail: 'annual, 2025', cite: ['SG-98'] },
+    vn: { value: 5.026, display: 'US$5,026', detail: 'annual, 2025', cite: ['VN-18'] } },
 ]} head={false} />
 
 <Fragment slot="note">Vietnam became an upper-middle-income economy in July 2026 [@VN-19].</Fragment>
@@ -72,12 +74,14 @@ status: draft
 
 </Slide>
 
-<Slide title="When the weather gets in the way" covers={['Security']} lede="Our November trip lands at the tail of Vietnam's typhoon season." layout="joined" backdrop="video/vn-storm-palms.mp4">
+<Slide title="When the weather gets in the way" covers={['Security']} lede="Our November trip lands at the tail of Vietnam's typhoon season. Both are hot all year; expect highs near 90°F." layout="joined" backdrop="video/vn-storm-palms.mp4">
 
 <SeasonStrip
   rows={[
-    { country: 'SG', label: 'monsoons', spans: [{ from: '12-01', to: '03-10' }, { from: '06-01', to: '09-30' }], cite: ['SG-11'] },
-    { country: 'VN', label: 'typhoon season', spans: [{ from: '06-01', to: '11-30' }], cite: ['VN-7'] },
+    { country: 'SG', label: 'monsoons', spans: [{ from: '12-01', to: '03-10' }, { from: '06-01', to: '09-30' }], cite: ['SG-11'],
+      temps: { place: 'Singapore', high: [30.6, 31.5, 32.2, 32.4, 32.3, 31.9, 31.4, 31.4, 31.6, 31.8, 31.2, 30.5], low: [24.3, 24.6, 24.9, 25.3, 25.7, 25.7, 25.4, 25.3, 25.2, 25.0, 24.6, 24.3], cite: ['SG-99'] } },
+    { country: 'VN', label: 'typhoon season', spans: [{ from: '06-01', to: '11-30' }], cite: ['VN-7'],
+      temps: { place: 'Ho Chi Minh City', high: [32.0, 32.7, 33.6, 34.5, 34.9, 33.5, 33.0, 32.9, 32.6, 32.3, 32.4, 31.6], low: [23.4, 23.1, 24.9, 26.4, 26.4, 25.5, 25.2, 25.1, 25.0, 25.0, 24.9, 23.9], cite: ['VN-97'] } },
   ]}
   markers={[
     { label: 'Tet 2026: business shuts', from: '02-14', to: '02-22', tone: 'soft' },
@@ -89,49 +93,25 @@ status: draft
 
 </Slide>
 
-<Slide title="Ten things to know on arrival" covers={['Security']} sgMedia="singapore/jewel-changi.jpg" vnMedia="vietnam/motorbikes-at-lights.jpg">
+<Slide title="Five risks to know on arrival" covers={['Security']} lede="The ones that can get a visitor arrested, robbed or hurt." sgMedia="singapore/supreme-court-night.jpg" vnMedia="vietnam/motorbikes-at-lights.jpg">
 
 <Fragment slot="sg">
 
-1. **No visa for short visits.** 90 days for US citizens; six months left on your passport [@SG-2].
-2. **File the arrival card.** Free, online, within three days of landing [@SG-1].
-3. **English works everywhere.** Business, government and daily life [@SG-3].
-4. **Bring business cards.** The first thing exchanged, with both hands [@SG-4].
-5. **Read the "++" on menus.** Service charge and GST are added to the bill [@SG-6].
+1. **Drug laws carry the death penalty.** Trafficking can mean execution; possession can mean caning [@SG-41; @SG-81].
+2. **Petty offences are arrestable.** Jaywalking, littering or spitting can lead to arrest, and vandalism means caning [@SG-42].
+3. **Leave the vape at home.** Possessing or using one can cost S$10,000 since May 2026 [@SG-9].
+4. **Expect scams, not street crime.** 37,308 scam cases and S$913 million lost in 2025 [@SG-38; @SG-39].
+5. **The terror threat is rated high.** Driven by online self-radicalisation [@SG-92].
 
 </Fragment>
 
 <Fragment slot="vn">
 
-1. **Get the e-visa first.** US$25 single entry, US$50 multiple, up to 90 days [@VN-1].
-2. **Mind your phone.** Level 1 advisory, but petty theft is common in tourist areas [@VN-2].
-3. **Expect the traffic.** 77 million motorbikes for about 100 million people [@VN-3].
-4. **Cross at a steady pace.** Never stop or dart back; the bikes flow around you [@VN-4].
-5. **Carry cash.** Cash is king in small places [@VN-5].
-
-</Fragment>
-
-</Slide>
-
-<Slide title="And five more each" covers={['Security']} sgMedia="singapore/hawker-centre.jpg" vnMedia="video/rainy-day-traffic.mp4">
-
-<Fragment slot="sg">
-
-6. **Leave the vape at home.** Fines up to S$10,000 since May 2026 [@SG-9].
-7. **No chewing gum.** Importing it is prohibited outright [@SG-10].
-8. **You are unlikely to be a target.** Crime against foreigners is rare [@SG-8].
-9. **Expect rain.** About 171 rain days a year [@SG-11].
-10. **Be on time.** First in the world on logistics; things arrive on time, and so should you [@SG-12].
-
-</Fragment>
-
-<Fragment slot="vn">
-
-6. **Declare large cash.** Over 15 million dong or US$5,000 at the border [@VN-8].
-7. **Insure for evacuation.** Local hospitals do not take US insurance [@VN-9].
-8. **Do not rent a motorbike.** Illegal without a Vietnamese licence; voids insurance [@VN-10].
-9. **Drug tests look back.** You can be charged for something taken before you arrived [@VN-42].
-10. **Tet shuts the country.** 14 to 22 February in 2026; plan nothing then [@VN-6].
+1. **The road is the biggest danger.** 8,515 traffic deaths in the first ten months of 2025 [@VN-35].
+2. **Do not rent a motorbike.** Illegal without a Vietnamese licence, and it voids your insurance [@VN-10].
+3. **Hold on to your phone and bag.** Drive-by snatching is common; use established taxi firms [@VN-2; @VN-41].
+4. **Drug tests look back.** You can be charged for something taken before you arrived [@VN-42].
+5. **Insure for evacuation.** Local hospitals do not take US insurance [@VN-9].
 
 </Fragment>
 

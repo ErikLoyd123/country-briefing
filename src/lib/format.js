@@ -16,6 +16,7 @@ export const RISK_LEVELS = {
 export const AREAS = {
   government: 'Government',
   society: 'Society',
+  education: 'Education',
   security: 'Security',
   economy: 'Economy',
 };

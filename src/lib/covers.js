@@ -2,7 +2,7 @@
 // Tag a slide with covers={['Government', 'FDI']}; the Briefing menu rolls a section's slide tags up.
 // Pills are colored by the prompt question the area belongs to.
 export const questions = [
-  { label: 'Risks', pill: 'border-blue-200 bg-blue-50 text-blue-800', dot: 'bg-blue-500', areas: ['Government', 'Society', 'Security', 'Economy'] },
+  { label: 'Risks', pill: 'border-blue-200 bg-blue-50 text-blue-800', dot: 'bg-blue-500', areas: ['Government', 'Society', 'Education', 'Security', 'Economy'] },
   { label: 'FDI', pill: 'border-emerald-200 bg-emerald-50 text-emerald-800', dot: 'bg-emerald-500', areas: ['FDI'] },
   { label: 'Political environment', pill: 'border-fuchsia-200 bg-fuchsia-50 text-fuchsia-800', dot: 'bg-fuchsia-500', areas: ['Politics', 'Transparency', 'Corruption', 'Trade', 'Civil unrest', 'Industries'] },
 ];
