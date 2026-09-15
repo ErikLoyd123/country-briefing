@@ -66,31 +66,28 @@ status: draft
 
 </Slide>
 
-<Slide title="How much money is coming in" covers={['FDI']} backdrop="video/port-cranes-aerial.mp4" lede="Not like for like: Singapore's figure is everything already invested; Vietnam's are each year's new money.">
+<Slide title="How much money is coming in" covers={['FDI']} backdrop="video/port-cranes-aerial.mp4" lede="New foreign investment each year, measured the same way for both by the UN. Singapore takes in about seven times as much.">
 
 <Fragment slot="sg">
-<BigStat value="S$3.13tn" unit="invested by foreigners">
-The total in place at the end of 2024, up 9.5% in a year [@SG-54].
+<BigStat value="US$150.9bn" unit="in 2025">
+New money from foreign investors, up 10.8% on 2024 [@SG-103].
 </BigStat>
 
-<CompareBars label="Largest single source, and what flows back" note="FDI stock, US dollars, 2023" items={[
-  { name: 'US investment in Singapore', country: 'SG', value: 424.2, display: 'US$424bn', cite: ['SG-55'] },
-  { name: 'Singapore investment in the US', country: 'SG', value: 58, display: 'US$58bn+', cite: ['SG-55'] },
+<CompareBars label="New foreign investment by year" note="US dollars, both countries on one scale" max={150.9} items={[
+  { name: '2024', country: 'SG', value: 136.2, display: 'US$136.2bn', cite: ['SG-103'] },
+  { name: '2025', country: 'SG', value: 150.9, display: 'US$150.9bn', cite: ['SG-103'] },
 ]} />
 </Fragment>
 
 <Fragment slot="vn">
-<CompareBars label="Foreign investment in 2025, US$ billion" note="Registered is promised; disbursed is spent" max={40.63} items={[
-  { name: 'Registered', country: 'VN', value: 38.4, display: '38.4', cite: ['VN-55'] },
-  { name: 'Disbursed, a five-year high', country: 'VN', value: 27.6, display: '27.6', cite: ['VN-55'] },
-]} />
+<BigStat value="US$20.4bn" unit="in 2025">
+New money from foreign investors, up 0.9% on 2024 [@VN-100].
+</BigStat>
 
-<div class="mt-9">
-<CompareBars label="January to August 2026, eight months" max={40.63} items={[
-  { name: 'Registered, up 55%', country: 'VN', value: 40.63, display: '40.6', cite: ['VN-56'] },
-  { name: 'Disbursed', country: 'VN', value: 17.25, display: '17.3', cite: ['VN-56'] },
+<CompareBars label="New foreign investment by year" note="US dollars, both countries on one scale" max={150.9} items={[
+  { name: '2024', country: 'VN', value: 20.17, display: 'US$20.2bn', cite: ['VN-100'] },
+  { name: '2025', country: 'VN', value: 20.35, display: 'US$20.4bn', cite: ['VN-100'] },
 ]} />
-</div>
 
 **Singapore is Vietnam's top source of new investment in 2026**, with South Korea [@VN-56].
 </Fragment>
