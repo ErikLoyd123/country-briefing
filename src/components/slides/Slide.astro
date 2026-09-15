@@ -20,14 +20,18 @@
 //   <Slide question={3} title="What does the tariff mean?" media="vietnam/shoe-lasts.jpg" lede="The short answer.">
 // question: its number, shown as "Q3" and used for the slide's anchor (#q3). media: a photo or video behind
 // the band. lede: the short answer, set large under the band. Halves, default and foot slots work as usual.
+// look: how the question sits, so a run of Q&A slides doesn't repeat one picture. "band" (default): a dark band,
+// the photo opening up on the right. "panel": a pale band, the photo as a hard-edged column on the right.
+// "night": the whole slide goes dark and the photo fills the band, fading into the answer.
 import HeroMedia from '../story/HeroMedia.astro';
 import CoverPills from '../ui/CoverPills.astro';
 import { findCredit } from '../../lib/credits.js';
 import { slideAnchor } from '../../lib/sources.js';
 
-const { title, lede, layout = 'pair', split = 50, sgMedia, vnMedia, align = 'start', id, backdrop, covers, question } = Astro.props;
+const { title, lede, layout = 'pair', split = 50, sgMedia, vnMedia, align = 'start', id, backdrop, covers, question, look = 'band' } = Astro.props;
 if (question && backdrop) throw new Error(`Slide "${title}": a question slide takes media for its band, not backdrop`);
-const tone = backdrop ? 'night' : (Astro.props.tone ?? 'paper');
+if (!['band', 'panel', 'night'].includes(look)) throw new Error(`Slide "${title}": look "${look}" should be band, panel or night`);
+const tone = backdrop || (question && look === 'night') ? 'night' : (Astro.props.tone ?? 'paper');
 if (!['paper', 'tint', 'night'].includes(tone)) throw new Error(`Slide "${title}": tone "${tone}" should be paper, tint or night`);
 if (!['pair', 'joined', 'backdrop'].includes(layout)) throw new Error(`Slide "${title}": layout "${layout}" should be pair, joined or backdrop`);
 if (split < 20 || split > 80) throw new Error(`Slide "${title}": split ${split} should be between 20 and 80`);
@@ -56,6 +60,7 @@ const slug = id ?? (question ? `q${question}` : title ? slideAnchor(title) : und
   data-tone={tone}
   data-backdrop={backdropMedia ? '' : undefined}
   data-question={question ? '' : undefined}
+  data-look={question ? look : undefined}
   data-slide-title={question ? `Q${question}. ${title}` : title}
   style={`--split: ${split}%; --split-n: ${split / 100}`}
 >
@@ -230,6 +235,39 @@ const slug = id ?? (question ? `q${question}` : title ? slideAnchor(title) : und
       var(--color-night) 25%,
       color-mix(in srgb, var(--color-night) 72%, transparent) 60%,
       color-mix(in srgb, var(--color-night) 35%, transparent)
+    );
+  }
+  /* Panel: a pale band, the photo standing as its own column on the right with a clean edge. */
+  .slide[data-look='panel'] .qa-band {
+    background: var(--color-paper-2);
+    color: var(--color-ink);
+  }
+  .slide[data-look='panel'] .qa-band-bg {
+    left: auto;
+    width: 34%;
+  }
+  .slide[data-look='panel'] .qa-band-bg::after {
+    display: none;
+  }
+  .slide[data-look='panel'] .qa-question {
+    max-width: min(34ch, 56vw);
+    color: var(--color-ink);
+  }
+  @media (max-width: 767.98px) {
+    .slide[data-look='panel'] .qa-band-bg {
+      display: none;
+    }
+  }
+  /* Night: the photo fills the band under an even veil and dissolves into the dark slide below. */
+  .slide[data-look='night'] .qa-band {
+    padding-block: clamp(1.75rem, 5vh, 3.25rem) clamp(1rem, 2.5vh, 1.75rem);
+  }
+  .slide[data-look='night'] .qa-band-bg::after {
+    background: linear-gradient(
+      to top,
+      var(--color-night) 0%,
+      color-mix(in srgb, var(--color-night) 70%, transparent) 45%,
+      color-mix(in srgb, var(--color-night) 45%, transparent)
     );
   }
   .qa-kicker {
