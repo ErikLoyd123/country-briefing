@@ -29,26 +29,29 @@ In outside factories. Crocs owns none [@CR-1; @CR-24].
 
 </Slide>
 
-<Slide title="HEYDUDE moved into Vietnam just as the tariff arrived" covers={['Trade', 'Industries']} lede="The two brands went opposite ways. Crocs Brand eased out, from 56% to 45%. HEYDUDE piled in, from 5% to 44% in two years." layout="joined">
+<Slide title="HEYDUDE left China for Vietnam, and the tariff followed" covers={['Trade', 'Industries']} lede="Moving factories out of China didn't escape US tariffs. By 2025 HEYDUDE made 44% of its shoes in Vietnam, and that July Vietnam got a 20% tariff of its own." layout="joined">
 
 <Plate width="wide">
 <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+<div>
 <ShareLines
-  label="Share of each brand's production made in Vietnam"
+  label="Where HEYDUDE shoes are made, share of production"
   unit="%"
-  max={70}
+  max={100}
   years={[2023, 2024, 2025]}
   series={[
-    { name: 'Crocs Brand', values: [56, 51, 45], cite: ['CR-1'] },
-    { name: 'HEYDUDE', values: [5, 20, 44], cite: ['CR-2'], dashed: true },
+    { name: 'Vietnam', values: [5, 20, 44], cite: ['CR-2'] },
+    { name: 'China', values: [83, 58], cite: ['CR-25'], dashed: true },
   ]}
 />
+<p class="mt-2 text-sm text-muted">Crocs has not published HEYDUDE's 2025 China share, only that China is no longer the majority.</p>
+</div>
 <div class="grid grid-cols-1 gap-8">
-<BigStat value="US$45m" unit="a year">
-What each 10 points of tariff costs Crocs across its sourcing countries [@CR-8].
+<BigStat value="−13.3%" unit="HEYDUDE sales">
+In 2025, while the Crocs Brand grew 1.5% [@CR-13]. Crocs says tariffs hit HEYDUDE disproportionately [@CR-6].
 </BigStat>
-<BigStat value="170bp" unit="of margin">
-Lost to tariffs in its third-quarter 2025 guidance [@CR-11].
+<BigStat value="1.7pts" unit="of margin lost to tariffs">
+Crocs' operating-margin guidance for the third quarter of 2025 [@CR-11].
 </BigStat>
 </div>
 </div>
@@ -72,10 +75,10 @@ Lost to tariffs in its third-quarter 2025 guidance [@CR-11].
 
 </Slide>
 
-<Slide title="One rulebook, and a moving one" covers={['Government', 'FDI']} tone="tint" lede="Singapore's payments law arrived in one piece. Vietnam's rules keep arriving one decree at a time.">
+<Slide title="For Mastercard, one steady rulebook and one that keeps moving" covers={['Government', 'FDI']} tone="tint" lede="Singapore's payments law arrived in one piece. Vietnam's rules keep arriving one decree at a time.">
 
 <Fragment slot="sg">
-<BigStat value="1" unit="act, in 2020" />
+<BigStat value="1" unit="law, since 2020" />
 
 <Flow country="SG" steps={[
   { title: 'January 2020: Payment Services Act', detail: 'Three licence classes, seven payment services, one regulator', tone: 'end' },
@@ -86,7 +89,7 @@ Lost to tariffs in its third-quarter 2025 guidance [@CR-11].
 </Fragment>
 
 <Fragment slot="vn">
-<BigStat value="3" unit="rules since 2022, and a cap floated" />
+<BigStat value="4" unit="rule moves since 2022" />
 
 <Flow country="VN" steps={[
   { title: 'October 2022: Decree 53', detail: 'Store specified data in Vietnam; open a local office' },
@@ -100,11 +103,12 @@ Lost to tariffs in its third-quarter 2025 guidance [@CR-11].
 
 <Fragment slot="foot">
 <div class="mx-auto grid max-w-3xl grid-cols-1 items-end gap-8 border-t border-rule pt-6 sm:grid-cols-2">
-<BigStat value="28×" unit="GDP, in cashless payments">
-Vietnam, 2025 [@MC-23].
+<p class="text-ink sm:col-span-2">Why Mastercard stays: Vietnam's market is booming</p>
+<BigStat value="28×" unit="Vietnam's GDP">
+The value of cashless payments in 2025 [@MC-23].
 </BigStat>
 <BigStat value="92%" unit="a year">
-Growth in contactless volume, 2022 to 2024 [@MC-16].
+Growth in contactless payments, 2022 to 2024 [@MC-16].
 </BigStat>
 </div>
 </Fragment>
