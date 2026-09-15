@@ -25,6 +25,8 @@ const sectionSchema = z.object({
     .optional(),
   // "slides": the section is one index.mdx of authored <Slide>s, and has no singapore/vietnam files.
   format: z.enum(['screens', 'slides']).optional(),
+  // false: the section is on the site only, with no write-up in the paper (the Q&A).
+  paper: z.boolean().optional(),
   status,
 });
 

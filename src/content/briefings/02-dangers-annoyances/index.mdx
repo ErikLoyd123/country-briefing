@@ -1,6 +1,6 @@
 ---
-title: Dangers and Annoyances
-short: Dangers & Annoyances
+title: Risks and Constraints
+short: Risks & Constraints
 thesis: The perceived risks of doing business in government, society, security and economy, ranked by how much they should change what you do.
 hero:
   image: vietnam/hoi-an-flood.jpg
@@ -9,7 +9,7 @@ format: slides
 status: draft
 ---
 
-<Slide title="How the risk raters see it" lede="On every outside score, Singapore sits at or near the top and Vietnam in the middle of the pack." layout="joined">
+<Slide title="How the risk raters see it" covers={['Economy']} lede="On every outside score, Singapore sits at or near the top and Vietnam in the middle of the pack." layout="joined">
 
 <Plate width="wide">
 <RatingLadder scales={[
@@ -30,13 +30,13 @@ status: draft
 
 </Slide>
 
-<Slide title="Every risk, as we rank it" tone="tint" lede="Ranked by how much each should change what a foreign company does. Select one to jump to it." layout="joined">
+<Slide title="Every risk, as we rank it" covers={['Government', 'Society', 'Security', 'Economy']} tone="tint" lede="Ranked by how much each should change what a foreign company does. Select one to jump to it." layout="joined">
 
 <RiskMap section="dangers-annoyances" />
 
 </Slide>
 
-<Slide title="Government" lede="In Singapore the risk is what you say. In Vietnam it is who you deal with." sgMedia="singapore/speakers-corner.jpg" vnMedia="vietnam/hanoi-ba-dinh.jpg">
+<Slide title="Government" covers={['Government']} lede="In Singapore the risk is what you say. In Vietnam it is who you deal with." sgMedia="singapore/speakers-corner.jpg" vnMedia="vietnam/hanoi-ba-dinh.jpg">
 
 <Fragment slot="sg">
 <RiskCard country="SG" area="government" level="low" title="Stable to the point of predictability, with tight rules on speech">
@@ -66,7 +66,7 @@ Foreign digital firms can be ordered to store user data locally [@VN-25].
 
 </Slide>
 
-<Slide title="Society" lede="Singapore is old and expensive. Vietnam is young, but short of skills and clean air." sgMedia="singapore/public-housing.jpg" vnMedia="vietnam/hanoi-haze.jpg">
+<Slide title="Society" covers={['Society']} lede="Singapore is old and expensive. Vietnam is young, but short of skills and clean air." sgMedia="singapore/public-housing.jpg" vnMedia="vietnam/hanoi-haze.jpg">
 
 <Fragment slot="sg">
 <BigStat value="1 in 5" unit="citizens aged 65 or older" />
@@ -93,7 +93,7 @@ Hanoi was the 10th most polluted major city in January 2026 [@VN-30].
 
 </Slide>
 
-<Slide title="Security" lede="In Singapore the threat comes by phone. In Vietnam it comes by road and by weather.">
+<Slide title="Security" covers={['Security']} lede="In Singapore the threat comes by phone. In Vietnam it comes by road and by weather.">
 
 <Fragment slot="sg">
 <CompareBars label="Reported cases in 2025" items={[
@@ -133,7 +133,7 @@ Bag snatching from motorbikes and taxi scams [@VN-41].
 
 </Slide>
 
-<Slide title="The tariff gap" lede="The same US policy costs Vietnam twice what it costs Singapore, and four times as much if goods are judged transshipped." layout="joined" backdrop="video/vn-cai-mep-port.mp4">
+<Slide title="The tariff gap" covers={['Economy', 'Trade']} lede="The same US policy costs Vietnam twice what it costs Singapore, and four times as much if goods are judged transshipped." layout="joined" backdrop="video/vn-cai-mep-port.mp4">
 
 <div class="mx-auto max-w-3xl">
 <CompareBars label="US tariff on imports, 2025" items={[
@@ -147,7 +147,7 @@ Bag snatching from motorbikes and taxi scams [@VN-41].
 
 </Slide>
 
-<Slide title="Economy" lede="Singapore is a trade hub in a trade war. Vietnam is growing fast on the business model the tariff targets." sgMedia="singapore/strait-shipping.jpg" vnMedia="vietnam/saigon-river-containers.jpg">
+<Slide title="Economy" covers={['Economy', 'Trade']} lede="Singapore is a trade hub in a trade war. Vietnam is growing fast on the business model the tariff targets." sgMedia="singapore/strait-shipping.jpg" vnMedia="vietnam/saigon-river-containers.jpg">
 
 <Fragment slot="sg">
 <RiskCard country="SG" area="economy" level="high" title="A trade hub in a trade war">

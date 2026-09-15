@@ -14,7 +14,7 @@ status: draft
 <li class="border-t-2 border-ink pt-5">
 <p class="num text-sm text-muted">Question 1</p>
 <p class="mt-2 font-display text-xl leading-snug text-ink">What are the perceived risks of doing business in each country in government, society, security and economy?</p>
-<p class="mt-4 flex flex-wrap gap-x-5 gap-y-2 font-medium text-ink"><a class="underline decoration-ink/30 underline-offset-4 hover:decoration-ink" href="/briefing/dangers-annoyances">Dangers & Annoyances</a> <a class="underline decoration-ink/30 underline-offset-4 hover:decoration-ink" href="/briefing/need-to-know#at-a-glance">Need to Know</a> <a class="underline decoration-ink/30 underline-offset-4 hover:decoration-ink" href="/briefing/local-knowledge">Local Knowledge</a></p>
+<p class="mt-4 flex flex-wrap gap-x-5 gap-y-2 font-medium text-ink"><a class="underline decoration-ink/30 underline-offset-4 hover:decoration-ink" href="/briefing/dangers-annoyances">Risks & Constraints</a> <a class="underline decoration-ink/30 underline-offset-4 hover:decoration-ink" href="/briefing/need-to-know#at-a-glance">Need to Know</a> <a class="underline decoration-ink/30 underline-offset-4 hover:decoration-ink" href="/briefing/local-knowledge">Local Knowledge</a></p>
 </li>
 <li class="border-t-2 border-ink pt-5">
 <p class="num text-sm text-muted">Question 2</p>
@@ -30,7 +30,7 @@ status: draft
 
 </Slide>
 
-<Slide title="At a glance" tone="tint" lede="Both are one-party-dominant and both are safe to visit. Almost everything else differs." layout="joined">
+<Slide title="At a glance" covers={['Government', 'Security']} tone="tint" lede="Both are one-party-dominant and both are safe to visit. Almost everything else differs." layout="joined">
 
 <Plate key>
 <StatDuel rows={[
@@ -54,7 +54,7 @@ status: draft
 
 </Slide>
 
-<Slide title="A small rich city and a big fast-growing country" lede="About 17 times the people in Vietnam; about 17 times the output per person in Singapore." layout="joined">
+<Slide title="A small rich city and a big fast-growing country" covers={['Society', 'Economy']} lede="About 17 times the people in Vietnam; about 17 times the output per person in Singapore." layout="joined">
 
 <Plate key>
 <UnitCompare rows={[
@@ -72,7 +72,7 @@ status: draft
 
 </Slide>
 
-<Slide title="When the weather gets in the way" lede="Our November trip lands at the tail of Vietnam's typhoon season." layout="joined" backdrop="video/vn-storm-palms.mp4">
+<Slide title="When the weather gets in the way" covers={['Security']} lede="Our November trip lands at the tail of Vietnam's typhoon season." layout="joined" backdrop="video/vn-storm-palms.mp4">
 
 <SeasonStrip
   rows={[
@@ -89,7 +89,7 @@ status: draft
 
 </Slide>
 
-<Slide title="Ten things to know on arrival" sgMedia="singapore/jewel-changi.jpg" vnMedia="vietnam/motorbikes-at-lights.jpg">
+<Slide title="Ten things to know on arrival" covers={['Security']} sgMedia="singapore/jewel-changi.jpg" vnMedia="vietnam/motorbikes-at-lights.jpg">
 
 <Fragment slot="sg">
 
@@ -113,7 +113,7 @@ status: draft
 
 </Slide>
 
-<Slide title="And five more each" sgMedia="singapore/hawker-centre.jpg" vnMedia="video/rainy-day-traffic.mp4">
+<Slide title="And five more each" covers={['Security']} sgMedia="singapore/hawker-centre.jpg" vnMedia="video/rainy-day-traffic.mp4">
 
 <Fragment slot="sg">
 

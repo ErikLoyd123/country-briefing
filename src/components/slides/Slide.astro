@@ -14,11 +14,19 @@
 // align="mirror" right-aligns Singapore's half against the seam; use it for short text and figures.
 // tone: "paper" (default), "tint" (a pale ground, to break a run of white slides) or "night" (dark ground).
 // backdrop: a photo or video filling the whole slide behind a darkened veil; implies tone="night".
+// covers: which parts of the assignment prompt the slide answers, shown as pills over the title.
+//
+// A Q&A slide sets the question in a dark band across the top, and the answer underneath:
+//   <Slide question={3} title="What does the tariff mean?" media="vietnam/shoe-lasts.jpg" lede="The short answer.">
+// question: its number, shown as "Q3" and used for the slide's anchor (#q3). media: a photo or video behind
+// the band. lede: the short answer, set large under the band. Halves, default and foot slots work as usual.
 import HeroMedia from '../story/HeroMedia.astro';
+import CoverPills from '../ui/CoverPills.astro';
 import { findCredit } from '../../lib/credits.js';
 import { slideAnchor } from '../../lib/sources.js';
 
-const { title, lede, layout = 'pair', split = 50, sgMedia, vnMedia, align = 'start', id, backdrop } = Astro.props;
+const { title, lede, layout = 'pair', split = 50, sgMedia, vnMedia, align = 'start', id, backdrop, covers, question } = Astro.props;
+if (question && backdrop) throw new Error(`Slide "${title}": a question slide takes media for its band, not backdrop`);
 const tone = backdrop ? 'night' : (Astro.props.tone ?? 'paper');
 if (!['paper', 'tint', 'night'].includes(tone)) throw new Error(`Slide "${title}": tone "${tone}" should be paper, tint or night`);
 if (!['pair', 'joined', 'backdrop'].includes(layout)) throw new Error(`Slide "${title}": layout "${layout}" should be pair, joined or backdrop`);
@@ -31,15 +39,26 @@ const media = (file) => {
   return file.endsWith('.mp4') ? { video: file, alt: credit.alt } : { image: file, alt: credit.alt };
 };
 const backdropMedia = media(backdrop);
+const questionMedia = media(Astro.props.media);
 const halves = [
   { code: 'sg', name: 'Singapore', slot: 'sg', media: media(sgMedia) },
   { code: 'vn', name: 'Vietnam', slot: 'vn', media: media(vnMedia) },
 ];
 const hasHalves = Boolean(Astro.slots.has('sg') || Astro.slots.has('vn') || sgMedia || vnMedia);
-const slug = id ?? (title ? slideAnchor(title) : undefined);
+const slug = id ?? (question ? `q${question}` : title ? slideAnchor(title) : undefined);
 ---
 
-<section id={slug} class="frame slide" data-layout={layout} data-align={align} data-tone={tone} data-backdrop={backdropMedia ? '' : undefined} data-slide-title={title} style={`--split: ${split}%; --split-n: ${split / 100}`}>
+<section
+  id={slug}
+  class="frame slide"
+  data-layout={layout}
+  data-align={align}
+  data-tone={tone}
+  data-backdrop={backdropMedia ? '' : undefined}
+  data-question={question ? '' : undefined}
+  data-slide-title={question ? `Q${question}. ${title}` : title}
+  style={`--split: ${split}%; --split-n: ${split / 100}`}
+>
   {
     backdropMedia && (
       <div class="slide-bg" aria-hidden={backdropMedia.video ? 'true' : undefined}>
@@ -48,8 +67,28 @@ const slug = id ?? (title ? slideAnchor(title) : undefined);
     )
   }
   {
-    title && (
+    question && (
+      <header class="slide-head qa-band">
+        {questionMedia && (
+          <div class="qa-band-bg" aria-hidden={questionMedia.video ? 'true' : undefined}>
+            <HeroMedia image={questionMedia.image} video={questionMedia.video} alt={questionMedia.alt} sizes="100vw" />
+          </div>
+        )}
+        <div class="container-wide">
+          <p class="qa-kicker">
+            <span class="qa-num type-heavy num">Q{question}</span>
+            <CoverPills areas={covers} size="md" />
+          </p>
+          <h2 class="qa-question">{title}</h2>
+        </div>
+      </header>
+    )
+  }
+  {question && lede && <p class="qa-answer container-wide">{lede}</p>}
+  {
+    title && !question && (
       <header class="slide-head container-wide">
+        <CoverPills areas={covers} size="md" class="mb-3 justify-center" />
         <h2 class="slide-title">{title}</h2>
         {lede && <p class="slide-lede">{lede}</p>}
       </header>
@@ -161,6 +200,93 @@ const slug = id ?? (title ? slideAnchor(title) : undefined);
     font-size: clamp(1.1rem, 1.5vw, 1.35rem);
     line-height: 1.45;
     color: var(--color-ink-2);
+  }
+
+  /* Q&A: the question in a dark band flush with the top of the slide, the short answer under it. */
+  .slide[data-question] {
+    padding-top: 0;
+  }
+  .qa-band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(1.75rem, 5vh, 3.25rem);
+    background: var(--color-night);
+    color: var(--color-on-night);
+    text-align: left;
+  }
+  .qa-band-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  /* Dark under the question on the left, opening up to the picture on the right. */
+  .qa-band-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      var(--color-night) 25%,
+      color-mix(in srgb, var(--color-night) 72%, transparent) 60%,
+      color-mix(in srgb, var(--color-night) 35%, transparent)
+    );
+  }
+  .qa-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.9rem;
+  }
+  .qa-num {
+    display: inline-grid;
+    place-items: center;
+    min-width: 3.1rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: var(--color-saffron);
+    color: var(--color-night);
+    font-size: 1.05rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .qa-question {
+    margin-top: 0.9rem;
+    max-width: 34ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 3.5vw, 3.25rem);
+    font-weight: 450;
+    line-height: 1.08;
+    color: var(--color-on-night);
+    text-wrap: balance;
+  }
+  .qa-answer {
+    display: flex;
+    align-items: baseline;
+    margin-top: clamp(1.5rem, 3.5vh, 2.5rem);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.1vw, 1.85rem);
+    line-height: 1.3;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+  .qa-answer::before {
+    content: 'A';
+    flex: none;
+    align-self: center;
+    display: inline-grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    margin-right: 0.75rem;
+    border: 1.5px solid var(--color-ink);
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 800;
+  }
+  .slide[data-question] .slide-body {
+    margin-top: clamp(1.25rem, 3vh, 2.25rem);
   }
 
   .slide-body,

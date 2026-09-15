@@ -1,30 +1,16 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RiskLevel from '../components/story/RiskLevel.astro';
-import { credits, creditLine } from '../lib/credits.js';
-import { loadIndex } from '../lib/sources.js';
 import { TEAM } from '../lib/team.js';
-
-const appendices = (await getCollection('appendices')).sort((a, b) => a.data.order - b.data.order);
-const index = loadIndex();
 ---
 
-<BaseLayout title="About" description="Team, method, and media credits for the briefing.">
+<BaseLayout title="About" description="Team and risk ratings for the briefing.">
   <div class="container-text py-16">
     <p class="text-sm text-muted">{TEAM.course} · {TEAM.series}</p>
     <h1 class="mt-3 text-5xl">About this briefing</h1>
-    <div class="briefing-prose mt-8">
-      <p>
-        Doing business in Singapore and Vietnam, told the way a guidebook tells it: what to know before you land, what can go wrong, what it means for your money, and what to ask
-        when you are standing in the room. Two companies we will visit in November, Crocs and Mastercard, run through every section so you can watch the same firm cross the
-        border.
-      </p>
-    </div>
 
     <section class="mt-16">
-      <h2 class="font-display text-3xl">Team</h2>
-      <p class="mt-3 text-ink-2">{TEAM.name}</p>
+      <h2 class="font-display text-3xl">{TEAM.name}</h2>
       <ul class="mt-4 grid gap-x-8 sm:grid-cols-2">
         {TEAM.members.map((name) => <li class="border-b border-rule py-3 text-ink">{name}</li>)}
       </ul>
@@ -34,84 +20,13 @@ const index = loadIndex();
       <h2 class="font-display text-3xl">How we rate risk</h2>
       <div class="briefing-prose mt-5">
         <p>
-          Dangers and Annoyances covers the perceived risks of doing business in the four areas the assignment names: government, society, security and the economy. Each risk is
+          Risks and Constraints covers the perceived risks of doing business in the four areas the assignment names: government, society, security and the economy. Each risk is
           ranked by how much it should change what you do, from highest to lowest. The ranking is the team's judgment, not a score; every fact behind it is cited.
         </p>
       </div>
       <ul class="mt-6 flex flex-wrap gap-3" aria-label="Risk levels, highest first">
         {['high', 'mid', 'low'].map((level) => <li><RiskLevel level={level} /></li>)}
       </ul>
-    </section>
-
-    <section id="method" class="mt-16 scroll-mt-20">
-      <h2 class="font-display text-3xl">Sources and verification</h2>
-      <div class="briefing-prose mt-5">
-        <p>
-          The briefing rests on {index.claims.length} claims from {index.sources.length} sources, all retrieved {TEAM.retrieved}. Readings come from Coface, the World Bank Logistics
-          Performance Index, Transparency International, the rating agencies, government sources and company filings. The CIA World Factbook was discontinued in February 2026, so we
-          substituted government sources.
-        </p>
-        <p>
-          Every claim has a row in the team's source table with its APA reference, link and a verbatim quote. A team member opens the link, confirms the source says what the claim
-          says, and initials it. Anything that fails comes off the site. The table, the full reference list and the facts we could not source are on the <a href="/sources">Sources</a> page.
-        </p>
-        <p>The site was built with Claude. Not affiliated with Lonely Planet.</p>
-      </div>
-    </section>
-
-    {
-      appendices.length > 0 && (
-        <section class="mt-16">
-          <h2 class="font-display text-3xl">Appendices</h2>
-          <ul class="mt-4 space-y-2">
-            {appendices.map((a) => (
-              <li>
-                <a class="text-ink underline decoration-rule underline-offset-4 hover:decoration-ink" href={`/appendix/${a.id}`}>
-                  {a.data.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
-
-    <section id="credits" class="mt-16 scroll-mt-20">
-      <h2 class="font-display text-3xl">Photo and video credits</h2>
-      {
-        credits.length === 0 ? (
-          <p class="mt-4 text-ink-2">No photos or video yet.</p>
-        ) : (
-          <table class="mt-5 w-full text-sm">
-            <thead>
-              <tr class="border-b border-ink text-left text-muted">
-                <th class="py-2 font-normal">File</th>
-                <th class="py-2 font-normal">Credit</th>
-                <th class="py-2 font-normal">License</th>
-              </tr>
-            </thead>
-            <tbody>
-              {credits.map((c) => (
-                <tr class="border-b border-rule">
-                  <td class="py-2 pr-4 text-ink">{c.file}</td>
-                  <td class="py-2 pr-4 text-ink-2">
-                    {c.aiGenerated ? 'Illustrative (AI-generated), ' : ''}
-                    {c.url ? (
-                      <a href={c.url} class="underline decoration-rule underline-offset-2 hover:decoration-ink">
-                        {creditLine(c)}
-                      </a>
-                    ) : (
-                      creditLine(c)
-                    )}
-                  </td>
-                  <td class="py-2 text-muted">{c.license}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )
-      }
-      <p class="mt-6 text-sm text-muted">Map boundaries from Natural Earth via the world-atlas package. Shipping routes are illustrative.</p>
     </section>
   </div>
 </BaseLayout>

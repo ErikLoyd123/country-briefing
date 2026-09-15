@@ -1,4 +1,4 @@
-// Build-time only. Lists every risk written in the briefing, so the homepage and the Dangers risk map
+// Build-time only. Lists every risk written in the briefing, so the homepage and the Risks and Constraints risk map
 // can summarise them without repeating the text. Reads each opening tag's area, level and title:
 //   <RiskCard country="SG" …> in a slides section's index.mdx
 //   <Risk …> in a screens section's singapore.mdx / vietnam.mdx (country from the file name)

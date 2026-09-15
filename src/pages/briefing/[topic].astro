@@ -264,6 +264,13 @@ const pager = [
       order: 3;
       flex-grow: 2;
     }
+    /* Q&A: the answer stays close under its question band; spare height goes below. */
+    .briefing :global(.slide.frame[data-question]::before) {
+      flex-grow: 0.3;
+    }
+    .briefing :global(.slide[data-question] > .qa-answer) {
+      margin-top: clamp(1.5rem, 3.5vh, 2.5rem);
+    }
     .briefing :global(.frame:not(.slide)) {
       padding-block: clamp(1.25rem, 5vh, 3rem);
     }

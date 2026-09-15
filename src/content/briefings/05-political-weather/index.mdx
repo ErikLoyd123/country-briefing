@@ -9,7 +9,7 @@ format: slides
 status: draft
 ---
 
-<Slide title="Twelve years of political weather" lede="The events that moved the risk picture. Vietnam's list is longer, and most of it is recent." layout="joined">
+<Slide title="Twelve years of political weather" covers={['Politics']} lede="The events that moved the risk picture. Vietnam's list is longer, and most of it is recent." layout="joined">
 
 <Plate width="wide" key>
 <Timeline bare brief legend={false} />
@@ -17,7 +17,7 @@ status: draft
 
 </Slide>
 
-<Slide title="Transparency and corruption in practice" sgMedia="singapore/parliament-house.jpg" vnMedia="vietnam/national-assembly-hanoi.jpg">
+<Slide title="Transparency and corruption in practice" covers={['Transparency', 'Corruption']} sgMedia="singapore/parliament-house.jpg" vnMedia="vietnam/national-assembly-hanoi.jpg">
 
 <ScaleCompare
   label="Corruption Perceptions Index, 2025"
@@ -36,7 +36,7 @@ status: draft
 
 </Slide>
 
-<Slide title="Between Washington and Beijing" tone="tint" lede="For both countries, what matters most with the US and what matters most with China point in different directions." layout="joined">
+<Slide title="Between Washington and Beijing" covers={['Trade']} tone="tint" lede="For both countries, what matters most with the US and what matters most with China point in different directions." layout="joined">
 
 <PullDiagram
   left="United States"
@@ -57,7 +57,7 @@ status: draft
 
 </Slide>
 
-<Slide title="The agreements that set the terms" lede="Both are in the two big regional deals. Singapore also has its own deals with the US and China; Vietnam's run to Europe and the UK." layout="joined">
+<Slide title="The agreements that set the terms" covers={['Trade']} lede="Both are in the two big regional deals. Singapore also has its own deals with the US and China; Vietnam's run to Europe and the UK." layout="joined">
 
 <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
 <TradeAgreements bare />
@@ -77,7 +77,7 @@ Highly integrated into global trade, and dependent on Chinese supply chains, not
 
 </Slide>
 
-<Slide title="Civil unrest" tone="tint" lede="Rare in both. In Vietnam it has two known triggers." split={36} sgMedia="singapore/little-india.jpg" vnMedia="vietnam/industrial-welding.jpg">
+<Slide title="Civil unrest" covers={['Civil unrest']} tone="tint" lede="Rare in both. In Vietnam it has two known triggers." split={36} sgMedia="singapore/little-india.jpg" vnMedia="vietnam/industrial-welding.jpg">
 
 <Fragment slot="sg">
 <BigStat when="December 2013" value="62" unit="injured">
@@ -100,7 +100,7 @@ Protests against 99-year land leases and the cybersecurity law [@VN-68].
 
 </Slide>
 
-<Slide title="The industries most exposed to politics">
+<Slide title="The industries most exposed to politics" covers={['Industries']}>
 
 <Fragment slot="sg">
 <Industry name="Wealth management" image="singapore/raffles-place.jpg" figure="S$6.07tn" figureLabel="under management">
@@ -128,7 +128,7 @@ The revised power plan's target, after 2023 blackouts that cost US$1.4 billion [
 
 </Slide>
 
-<Slide title="What changed in the last three weeks" lede="And one date still to come." layout="joined">
+<Slide title="What changed in the last three weeks" covers={['Politics']} lede="And one date still to come." layout="joined">
 
 <Plate width="wide">
 <DateStrip
@@ -150,7 +150,7 @@ The revised power plan's target, after 2023 blackouts that cost US$1.4 billion [
 
 </Slide>
 
-<Slide title="The next 12 months, as we read it" layout="backdrop" sgMedia="singapore/marina-bay-night.jpg" vnMedia="video/vn-hcmc-night-aerial.mp4">
+<Slide title="The next 12 months, as we read it" covers={['Politics', 'Trade']} layout="backdrop" sgMedia="singapore/marina-bay-night.jpg" vnMedia="video/vn-hcmc-night-aerial.mp4">
 
 <Fragment slot="sg">
 Steady government and steady rules. The risk is external: tariffs, chokepoints, and sanctions compliance in the banks [@SG-48; @SG-52; @MC-26].

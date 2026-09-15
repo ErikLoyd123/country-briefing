@@ -254,10 +254,10 @@ export function loadNotUsed() {
 // Verification table groups: the Screen column mapped to the site's sections.
 export const SCREEN_GROUPS = [
   { title: 'Need to Know', screens: ['need to know', 'at a glance'] },
-  { title: 'Dangers and Annoyances', screens: ['dangers government', 'dangers society', 'dangers security', 'dangers economy'] },
+  { title: 'Risks and Constraints', screens: ['dangers government', 'dangers society', 'dangers security', 'dangers economy'] },
   { title: 'Money Matters', screens: ['money matters'] },
-  { title: 'The Political Weather', screens: ['political weather', 'what changed'] },
   { title: 'Local Knowledge', screens: ['local knowledge'] },
+  { title: 'The Political Weather', screens: ['political weather', 'what changed'] },
   { title: 'Etiquette', screens: ['etiquette'] },
   { title: 'Itineraries', screens: ['itinerary'] },
 ];

@@ -31,6 +31,7 @@ import UnitCompare from './slides/UnitCompare.astro';
 import RatingLadder from './slides/RatingLadder.astro';
 import TripStrip from './slides/TripStrip.astro';
 import Takeaway from './slides/Takeaway.astro';
+import QuestionIndex from './slides/QuestionIndex.astro';
 
 export const mdxComponents = {
   Callout,
@@ -65,4 +66,5 @@ export const mdxComponents = {
   RatingLadder,
   TripStrip,
   Takeaway,
+  QuestionIndex,
 };

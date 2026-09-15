@@ -1,0 +1,17 @@
+---
+// Pills naming the parts of the assignment prompt something answers. See src/lib/covers.js.
+import { coverPills } from '../../lib/covers.js';
+
+const { areas = [], size = 'sm', class: className } = Astro.props;
+const pills = coverPills(areas);
+---
+
+{
+  pills.length > 0 && (
+    <span class:list={['flex flex-wrap gap-1', className]}>
+      {pills.map((p) => (
+        <span class:list={['rounded-full border leading-none', size === 'md' ? 'px-2.5 py-1 text-xs' : 'px-2 py-0.5 text-[11px]', p.pill]}>{p.area}</span>
+      ))}
+    </span>
+  )
+}

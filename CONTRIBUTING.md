@@ -22,12 +22,13 @@ This guide is for everyone on the team, whether or not you use git. You only eve
 | Folder | Section |
 |---|---|
 | `01-need-to-know` | Need to Know |
-| `02-dangers-annoyances` | Dangers and Annoyances |
+| `02-dangers-annoyances` | Risks and Constraints |
 | `03-money-matters` | Money Matters |
-| `04-political-weather` | The Political Weather |
-| `05-local-knowledge` | Local Knowledge: Crocs and Mastercard |
+| `04-local-knowledge` | Local Knowledge: Crocs and Mastercard |
+| `05-political-weather` | The Political Weather |
 | `06-etiquette` | Etiquette and Survival Guide |
 | `07-itineraries` | Itineraries |
+| `08-questions` | Questions and Answers (site only, not in the paper) |
 
 The number at the start of the folder name sets the order.
 
@@ -193,7 +194,7 @@ No imports needed. Copy and adjust. Every figure takes `cite` claim IDs (checked
 
 **Lines over a few years:** `<ShareLines label="…" unit="%" years={[2023, 2024, 2025]} series={[{ name: 'Crocs Brand', values: [56, 51, 45], cite: ['CR-1'] }]} />`
 
-**A risk** (Dangers and Annoyances). `area` is `government`, `society`, `security` or `economy`; `level` is `high` (Watch closely), `mid` (Manage it) or `low` (Low, but real). The homepage and `<RiskMap section="dangers-annoyances" />` list every risk card automatically.
+**A risk** (Risks and Constraints). `area` is `government`, `society`, `security` or `economy`; `level` is `high` (Watch closely), `mid` (Manage it) or `low` (Low, but real). The homepage and `<RiskMap section="dangers-annoyances" />` list every risk card automatically.
 
 ```mdx
 <RiskCard country="SG" area="security" level="mid" title="Scams, not street crime">

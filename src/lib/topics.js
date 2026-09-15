@@ -52,6 +52,7 @@ export async function getTopics() {
       hero: d.hero,
       status: d.status,
       format,
+      paper: d.paper ?? true,
       parts: t.parts,
     };
   });
