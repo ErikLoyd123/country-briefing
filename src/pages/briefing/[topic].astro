@@ -168,10 +168,18 @@ const pager = [
     if (!dir) return;
     const edge = headerHeight();
     const tops = frames.map((f) => f.getBoundingClientRect().top - edge);
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // A screen taller than the window: show the rest of it before moving on.
+    const current = frames[tops.findLastIndex((t) => t <= 8)];
+    const hidden = current ? current.getBoundingClientRect().bottom - window.innerHeight : 0;
+    if (dir > 0 && hidden > 8) {
+      e.preventDefault();
+      window.scrollBy({ top: Math.min(hidden, window.innerHeight - edge), behavior: smooth ? 'smooth' : 'auto' });
+      return;
+    }
     const target = dir > 0 ? frames[tops.findIndex((t) => t > 8)] : frames[tops.findLastIndex((t) => t < -8)];
     if (!target) return;
     e.preventDefault();
-    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
   });
 

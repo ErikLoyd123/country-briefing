@@ -9,7 +9,7 @@ format: slides
 status: draft
 ---
 
-<Slide title="How the risk raters see it" covers={['Economy']} lede="On every outside score, Singapore sits at or near the top and Vietnam in the middle of the pack." layout="joined">
+<Slide title="How the risk raters see it" covers={['Economy']} lede="Singapore scores near the top on every rating; Vietnam sits mid-pack." layout="joined">
 
 <Plate width="wide">
 <RatingLadder scales={[
@@ -26,24 +26,12 @@ status: draft
     sg: { at: 1, display: '1st', detail: 'Score 4.3', cite: ['SG-12'] },
     vn: { at: 43, display: '43rd', detail: 'Score 3.3', cite: ['VN-62'] } },
 ]} />
+<div class="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 border-t border-rule pt-4 text-sm leading-snug md:grid-cols-3">
+<p class="text-ink-2">**Coface country risk** runs from A1 (very low) to E (extreme) [@CF-1]. A3: less favourable outlook, stable politics [@CF-2]. B: uncertain outlook, possible strong political tension [@CF-3].</p>
+<p class="text-ink-2">**Coface business climate.** A1: reliable company accounts, effective debt collection, open market [@CF-4]. A4: patchy debt collection, some institutional gaps and market limits [@CF-5].</p>
+<p class="text-ink-2">**World Bank logistics rank:** how easily firms set up reliable supply chains, scored 1 to 5 on six core dimensions across 139 countries in 2023 [@WB-1; @WB-2].</p>
+</div>
 </Plate>
-
-<Fragment slot="foot">
-<div class="mx-auto grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-3">
-<div class="rounded-md border border-rule bg-paper p-5">
-<p class="text-sm font-medium text-ink">Coface country risk</p>
-<p class="mt-2 text-ink-2">Graded from A1 (very low) to E (extreme) [@CF-1]. Singapore's A3 means a less favourable outlook but stable politics [@CF-2]. Vietnam's B means an uncertain outlook, with politics that could see strong tension [@CF-3].</p>
-</div>
-<div class="rounded-md border border-rule bg-paper p-5">
-<p class="text-sm font-medium text-ink">Coface business climate</p>
-<p class="mt-2 text-ink-2">A1 (Singapore): reliable company accounts, effective debt collection and an almost fully open market [@CF-4]. A4 (Vietnam): debt collection is not always effective, institutions have gaps and market access has limits [@CF-5].</p>
-</div>
-<div class="rounded-md border border-rule bg-paper p-5">
-<p class="text-sm font-medium text-ink">World Bank logistics rank</p>
-<p class="mt-2 text-ink-2">How easily firms can set up reliable supply chains. Logistics professionals score each country from 1 to 5 on six core dimensions; 139 countries were ranked in 2023 [@WB-1; @WB-2].</p>
-</div>
-</div>
-</Fragment>
 
 </Slide>
 
@@ -188,16 +176,16 @@ Bag snatching from motorbikes and taxi scams [@VN-41].
 
 </Slide>
 
-<Slide title="Economy" covers={['Economy', 'Trade']} lede="Singapore is a trade hub exposed to US tariffs. Vietnam is the region's fastest-growing economy, on exports the US now taxes." sgMedia="singapore/strait-shipping.jpg" vnMedia="vietnam/saigon-river-containers.jpg">
+<Slide title="Economy" covers={['Economy', 'Trade']} lede="Singapore is exposed to US tariffs; Vietnam is growing fastest." sgMedia="singapore/strait-shipping.jpg" vnMedia="vietnam/saigon-river-containers.jpg">
 
 <Fragment slot="sg">
 <RiskCard country="SG" area="economy" level="high" title="A trade hub exposed to US tariffs">
-Trade is worth more than three times GDP [@SG-102]. PM Wong called the 2025 US tariffs the end of an era for rules-based trade [@SG-48].
+Trade is over three times GDP; the tariffs ended an era, said PM Wong [@SG-102; @SG-48].
 
 <Fragment slot="means">the hub premium shrinks if neutrality gets harder.</Fragment>
 </RiskCard>
 <RiskCard country="SG" area="economy" level="mid" title="Booming on AI, dependent on imported labour">
-Growth hit 5.9% in the second quarter of 2026 on the AI investment wave [@SG-49; @SG-50], with 1.6 million foreign workers [@SG-53].
+5.9% growth in Q2 2026 on AI investment, and 1.6 million foreign workers [@SG-49; @SG-50; @SG-53].
 
 <Fragment slot="means">hiring is competitive and depends on work passes.</Fragment>
 </RiskCard>
@@ -205,20 +193,22 @@ Growth hit 5.9% in the second quarter of 2026 on the AI investment wave [@SG-49;
 
 <Fragment slot="vn">
 <RiskCard country="VN" area="economy" level="high" title="A tariff on the export model">
-The US buys the exports; China supplies 40% of the imports [@VN-45; @VN-46]. A 12.5% US tariff has applied since July 2026, and a US intellectual property investigation is open [@VN-96; @VN-94].
+The US buys, China supplies 40% of imports, and the US tariff is 12.5% [@VN-45; @VN-46; @VN-96].
 
-<Fragment slot="means">US-bound exports cost more, and the investigation could add to that.</Fragment>
+<Fragment slot="means">US-bound exports cost more; an IP probe could add to that [@VN-94].</Fragment>
 </RiskCard>
 <RiskCard country="VN" area="economy" level="mid" title="Fast growth, rising prices, a weak dong">
-8.02% growth in 2025 and 7.2% forecast for 2026, with inflation at 4.89% [@VN-48; @AS-3; @VN-49].
+8.02% growth in 2025, 7.2% forecast for 2026, 4.89% inflation [@VN-48; @AS-3; @VN-49].
 
 <Fragment slot="means">price in depreciation and plan for outages [@VN-51; @VN-50].</Fragment>
 </RiskCard>
 </Fragment>
 
-<Fragment slot="foot">
+</Slide>
+
+<Slide title="Asia is slowing; Vietnam is not" covers={['Economy']} tone="tint" lede="The 2026 energy shock cut regional forecasts, but Vietnam is still Southeast Asia's fastest-growing economy." layout="joined">
+
 <div class="mx-auto max-w-3xl">
-<p class="mb-6 text-center font-display text-xl leading-snug text-ink">**Asia as a region is slowing** on the 2026 energy shock, but Vietnam is still Southeast Asia's fastest-growing economy [@AS-1; @AS-4; @AS-3].</p>
 <CompareBars label="GDP growth forecast, 2026" items={[
   { name: 'Vietnam', country: 'VN', value: 7.2, display: '7.2%', note: 'ADB', cite: ['AS-3'] },
   { name: 'Singapore', country: 'SG', value: 5, display: '4.5–5.5%', note: 'government forecast', cite: ['SG-49'] },
@@ -227,6 +217,7 @@ The US buys the exports; China supplies 40% of the imports [@VN-45; @VN-46]. A 1
   { name: 'East Asia and Pacific', value: 4.2, display: '4.2%', note: 'World Bank', cite: ['AS-4'] },
 ]} />
 </div>
-</Fragment>
+
+<p class="mx-auto mt-6 max-w-2xl text-center text-ink-2">Forecasts from the Asian Development Bank (July 2026), the World Bank (April 2026) and Singapore's trade ministry (August 2026) [@AS-1; @AS-4; @SG-49].</p>
 
 </Slide>

@@ -32,11 +32,16 @@ const NAMES = { sg: 'Singapore', vn: 'Vietnam' };
       <div class="units-row">
         <dt class="units-label">
           <span>{r.label}</span>
-          {r.per && <span class="units-per">{r.per}</span>}
-          {r.ref && (
-            <span class="units-ref">
-              {r.ref.label}: <span class="num font-medium text-ink">{r.ref.display}</span> {r.ref.detail}{' '}
-              <Fragment set:html={siteCitation(Astro.locals, r.ref.cite, `UnitCompare (${r.label}, ${r.ref.label})`)} />
+          {(r.per || r.ref) && (
+            <span class="units-per">
+              {r.per}
+              {r.per && r.ref && ' · '}
+              {r.ref && (
+                <>
+                  {r.ref.label}: <span class="num font-medium text-ink-2">{r.ref.display}</span> {r.ref.detail}{' '}
+                  <Fragment set:html={siteCitation(Astro.locals, r.ref.cite, `UnitCompare (${r.label}, ${r.ref.label})`)} />
+                </>
+              )}
             </span>
           )}
         </dt>
@@ -134,12 +139,6 @@ const NAMES = { sg: 'Singapore', vn: 'Vietnam' };
     display: block;
     font-size: 0.8rem;
     color: var(--color-muted);
-  }
-  .units-ref {
-    display: block;
-    margin-top: 0.15rem;
-    font-size: 0.8rem;
-    color: var(--color-ink-2);
   }
   .units-cell {
     display: flex;
