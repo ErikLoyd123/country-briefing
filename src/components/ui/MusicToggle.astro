@@ -1,0 +1,92 @@
+---
+// A quiet looping track behind the home hero, off until the visitor turns it on (browsers block sound
+// until someone clicks). It fades in and out and pauses while the tab is hidden.
+// <MusicToggle src="audio/ripples.m4a" />   src is under public/media/ and needs a credits.yaml entry.
+import { Volume2, VolumeX } from '@lucide/astro';
+import { findCredit } from '../../lib/credits.js';
+
+const { src } = Astro.props;
+if (!findCredit(src)) throw new Error(`MusicToggle: "${src}" has no credits.yaml entry.`);
+---
+
+<div class="music" data-music>
+  <audio src={`/media/${src}`} preload="none" loop></audio>
+  <button type="button" aria-pressed="false" class="inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-3 font-medium text-white hover:bg-white/10 aria-pressed:border-white/60 aria-pressed:bg-white/10">
+    <span class="music-icon-off" aria-hidden="true"><VolumeX size={16} /></span>
+    <span class="music-icon-on" aria-hidden="true"><Volume2 size={16} /></span>
+    Music
+  </button>
+</div>
+
+<script>
+  const FADE_MS = 1500;
+  const VOLUME = 0.35;
+
+  for (const root of document.querySelectorAll('[data-music]')) {
+    const audio = root.querySelector('audio');
+    const button = root.querySelector('button');
+    let on = false;
+    let frame = 0;
+
+    // HTMLMediaElement.volume is fixed at 1 on iOS, so there the fade is skipped and only play/pause apply.
+    const fadeTo = (target, done) => {
+      cancelAnimationFrame(frame);
+      const from = audio.volume;
+      const start = performance.now();
+      const step = (now) => {
+        // A frame's timestamp can be a little earlier than `start`, so clamp to 0.
+        const t = Math.min(1, Math.max(0, (now - start) / FADE_MS));
+        audio.volume = from + (target - from) * t;
+        if (t < 1) frame = requestAnimationFrame(step);
+        else done?.();
+      };
+      frame = requestAnimationFrame(step);
+    };
+
+    const start = () => {
+      if (audio.paused) audio.volume = 0;
+      audio
+        .play()
+        .then(() => on && fadeTo(VOLUME))
+        .catch(() => set(false));
+    };
+
+    const set = (next) => {
+      on = next;
+      root.classList.toggle('is-on', on);
+      button.setAttribute('aria-pressed', String(on));
+      if (on) start();
+      else fadeTo(0, () => audio.pause());
+    };
+
+    button.addEventListener('click', () => set(!on));
+
+    document.addEventListener('visibilitychange', () => {
+      if (!on) return;
+      if (document.hidden) {
+        cancelAnimationFrame(frame);
+        audio.pause();
+      } else start();
+    });
+
+    // Leaving the page stops the music; coming back with the Back button shows it off.
+    window.addEventListener('pagehide', () => {
+      if (!on) return;
+      cancelAnimationFrame(frame);
+      audio.pause();
+      on = false;
+      root.classList.remove('is-on');
+      button.setAttribute('aria-pressed', 'false');
+    });
+  }
+</script>
+
+<style>
+  .music-icon-on,
+  .is-on .music-icon-off {
+    display: none;
+  }
+  .is-on .music-icon-on {
+    display: inline-flex;
+  }
+</style>

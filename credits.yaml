@@ -1,5 +1,5 @@
 # Every image or video used on the site needs an entry here (the build fails otherwise).
-# file: path relative to src/assets/images/ (images) or public/media/ (video)
+# file: path relative to src/assets/images/ (images) or public/media/ (video and audio)
 # source: unsplash | pexels | flux | team | other
 # aiGenerated: true for Flux (or any AI) images; they are captioned "Illustrative (AI-generated)".
 #
@@ -429,4 +429,12 @@
   url: https://www.pexels.com/photo/a-woman-raising-her-hand-16305178/
   license: Pexels License
   alt: A woman in an audience raising her hand to ask a question at an indoor event
+  aiGenerated: false
+- file: audio/ripples.m4a
+  source: incompetech
+  title: Ripples
+  author: Kevin MacLeod
+  url: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100691
+  license: CC BY 4.0
+  alt: Slow solo guzheng music for the home page
   aiGenerated: false

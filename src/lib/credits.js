@@ -16,6 +16,7 @@ const SOURCE_NAMES = {
   'pexels-video': 'Pexels',
   pexels: 'Pexels',
   wikimedia: 'Wikimedia Commons',
+  incompetech: 'incompetech.com',
   flux: 'Flux',
   team: 'Team photo',
 };
