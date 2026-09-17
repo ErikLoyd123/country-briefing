@@ -27,6 +27,8 @@ const sectionSchema = z.object({
   format: z.enum(['screens', 'slides']).optional(),
   // false: the section is on the site only, with no write-up in the paper (the Q&A).
   paper: z.boolean().optional(),
+  // true: the closing Questions section. Not a numbered briefing section; its opener shows only the title.
+  conclusion: z.boolean().optional(),
   status,
 });
 

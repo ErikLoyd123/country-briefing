@@ -1,38 +1,21 @@
 ---
-title: Questions and Answers
-short: Q&A
-thesis: The twelve questions we expect, each answered in a line, with the evidence behind it.
+title: Questions
 hero:
   image: common/audience-raised-hand.jpg
   alt: A woman in an audience raising her hand to ask a question
 format: slides
 paper: false
+conclusion: true
 status: draft
 ---
 
-<Slide title="Twelve questions we are ready for" tone="tint" lede="Select one to jump to its answer." layout="joined">
+<Slide title="Eleven questions we are ready for" tone="tint" lede="Select one to jump to its answer." layout="joined">
 
 <QuestionIndex section="questions" />
 
 </Slide>
 
-<Slide question={1} look="panel" title="Why a dashboard instead of a paper, and why these two companies?" media="singapore/jewel-changi.jpg" lede="Because the cohort will use it on a phone in a lobby, not read it on a plane." layout="joined">
-
-<div class="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10">
-<div class="border-l-2 border-ink pl-5 font-display text-lg leading-relaxed text-ink-2">
-**Nothing lost from the paper.** Every fact still traces to its source, and the full cited paper is one tap away. Both companies operate in both countries, and we visit both in November.
-</div>
-<BigStat when="Crocs: making things, under the tariff" value="45%" unit="of Crocs Brand shoes made in Vietnam" size="sm">
-Its Asia company has been registered in Singapore since 2004 [@CR-1; @CR-19].
-</BigStat>
-<BigStat when="Mastercard: payments, under the data rules" value="2008" unit="Ho Chi Minh City office opens" size="sm">
-Its Asia Pacific headquarters is in Singapore [@MC-12; @MC-1].
-</BigStat>
-</div>
-
-</Slide>
-
-<Slide question={2} look="night" title="Which country is riskier?" covers={['Government', 'Economy', 'Corruption']} media="video/sg-rain-skyline.mp4" lede="Different risks. Singapore's come from outside; Vietnam's come from inside." layout="joined">
+<Slide question={1} look="night" title="Which country is riskier?" covers={['Government', 'Economy', 'Corruption']} media="video/sg-rain-skyline.mp4" lede="Different risks. Singapore's come from outside; Vietnam's come from inside." layout="joined">
 
 <StatDuel rows={[
   {
@@ -58,7 +41,7 @@ Its Asia Pacific headquarters is in Singapore [@MC-12; @MC-1].
 
 </Slide>
 
-<Slide question={3} look="band" title="What does the US tariff actually mean for a company making things in Vietnam?" covers={['Trade', 'Economy']} media="video/vn-cai-mep-port.mp4" lede="12.5% on most goods since July 2026, the same as Singapore, after the 2025 rates of 20% and 40% were struck down." layout="joined">
+<Slide question={2} look="band" title="What does the US tariff actually mean for a company making things in Vietnam?" covers={['Trade', 'Economy']} media="video/vn-cai-mep-port.mp4" lede="12.5% on most goods since July 2026, the same as Singapore, after the 2025 rates of 20% and 40% were struck down." layout="joined">
 
 <div class="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
 <BigStat when="Since July 2026" value="12.5%" unit="tariff" size="sm">
@@ -81,7 +64,7 @@ Expected off quarterly operating margin [@CR-11].
 
 </Slide>
 
-<Slide question={4} look="panel" title="Can I get my profits out?" covers={['FDI']} media="vietnam/dong-banknotes.jpg" lede="From Singapore, freely. From Vietnam, once a year, after the paperwork.">
+<Slide question={3} look="panel" title="Can I get my profits out?" covers={['FDI']} media="vietnam/dong-banknotes.jpg" lede="From Singapore, freely. From Vietnam, once a year, after the paperwork.">
 
 <Fragment slot="sg">
 <BigStat value="Any time" unit="and in full">
@@ -99,7 +82,7 @@ After audited accounts and tax finalisation, with seven working days' notice to 
 
 </Slide>
 
-<Slide question={5} look="night" title="Can a foreign company own 100% of its business?" covers={['FDI']} media="vietnam/saigon-skyline.jpg" lede="Usually. Singapore has no blanket cap; Vietnam closes some sectors and caps others." split={42}>
+<Slide question={4} look="night" title="Can a foreign company own 100% of its business?" covers={['FDI']} media="vietnam/saigon-skyline.jpg" lede="Usually. Singapore has no blanket cap; Vietnam closes some sectors and caps others." split={42}>
 
 <Fragment slot="sg">
 - **No blanket cap** on foreign ownership [@SG-56].
@@ -120,7 +103,7 @@ After audited accounts and tax finalisation, with seven working days' notice to 
 
 </Slide>
 
-<Slide question={6} look="band" title="How corrupt is Vietnam in practice, and what does it mean day to day?" covers={['Corruption', 'Transparency']} media="vietnam/national-assembly-hanoi.jpg" lede="Less each year, and the crackdown is real. Day to day, it shows up as delay." layout="joined">
+<Slide question={5} look="band" title="How corrupt is Vietnam in practice, and what does it mean day to day?" covers={['Corruption', 'Transparency']} media="vietnam/national-assembly-hanoi.jpg" lede="Less each year, and the crackdown is real. Day to day, it shows up as delay." layout="joined">
 
 <div class="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
 <BigStat when="Corruption Perceptions Index" value="41" unit="of 100" size="sm">
@@ -139,7 +122,7 @@ Officials avoid signing anything that could be questioned [@VN-66].
 
 </Slide>
 
-<Slide question={7} look="panel" title="Is Singapore's stability guaranteed?" covers={['Politics', 'Security']} media="singapore/parliament-house.jpg" lede="At home, close to it. The risk comes from outside." layout="joined">
+<Slide question={6} look="panel" title="Is Singapore's stability guaranteed?" covers={['Politics', 'Security']} media="singapore/parliament-house.jpg" lede="At home, close to it. The risk comes from outside." layout="joined">
 
 <div class="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10">
 <BigStat when="At home: May 2025 election" value="87 of 97" unit="seats" size="sm">
@@ -157,7 +140,7 @@ Driven by self-radicalisation, and held at high in September 2026 [@SG-40; @SG-9
 
 </Slide>
 
-<Slide question={8} look="night" title="What are the data rules if I run a platform or handle customer data?" covers={['Government', 'Industries']} media="singapore/server-racks.jpg" lede="Vietnam can make you keep data in the country. Singapore licenses payments instead." split={34}>
+<Slide question={7} look="night" title="What are the data rules if I run a platform or handle customer data?" covers={['Government', 'Industries']} media="singapore/server-racks.jpg" lede="Vietnam can make you keep data in the country. Singapore licenses payments instead." split={34}>
 
 <Fragment slot="sg">
 **Licensing, not localisation.** Payments are regulated through the Payment Services Act [@MC-7].
@@ -183,7 +166,7 @@ To take down content once told to [@VN-28].
 
 </Slide>
 
-<Slide question={9} look="band" title="What is the civil unrest risk?" covers={['Civil unrest']} media="vietnam/binh-duong-industrial-park.jpg" lede="Almost none in Singapore. Rare in Vietnam, and set off by China or land." split={36}>
+<Slide question={8} look="band" title="What is the civil unrest risk?" covers={['Civil unrest']} media="vietnam/binh-duong-industrial-park.jpg" lede="Almost none in Singapore. Rare in Vietnam, and set off by China or land." split={36}>
 
 <Fragment slot="sg">
 <BigStat when="December 2013" value="62" unit="injured">
@@ -204,7 +187,7 @@ Protests over 99-year land leases and the cybersecurity law [@VN-68].
 
 </Slide>
 
-<Slide question={10} look="panel" title="Which industries are most exposed to politics?" covers={['Industries']} media="video/port-cranes-aerial.mp4" lede="In Singapore, the ones that move money, ships and data. In Vietnam, the ones that export or hold data.">
+<Slide question={9} look="panel" title="Which industries are most exposed to politics?" covers={['Industries']} media="video/port-cranes-aerial.mp4" lede="In Singapore, the ones that move money, ships and data. In Vietnam, the ones that export or hold data.">
 
 <Fragment slot="sg">
 - **Wealth management.** S$6 trillion under management [@SG-74], and a regulator that fined nine institutions after the 2023 laundering case [@MC-10].
@@ -220,7 +203,7 @@ Protests over 99-year land leases and the cybersecurity law [@VN-68].
 
 </Slide>
 
-<Slide question={11} look="night" title="What does the FTSE Russell upgrade mean?" covers={['FDI', 'Economy']} media="vietnam/landmark-81.jpg" lede="Index money. Vietnam becomes an emerging market on 21 September." layout="joined">
+<Slide question={10} look="night" title="What does the FTSE Russell upgrade mean?" covers={['FDI', 'Economy']} media="vietnam/landmark-81.jpg" lede="Index money. Vietnam becomes an emerging market on 21 September." layout="joined">
 
 <div class="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
 <BigStat when="From 21 September 2026" value="Emerging" unit="market" size="sm">
@@ -239,7 +222,7 @@ Income enough for the World Bank to class Vietnam as upper-middle-income [@VN-19
 
 </Slide>
 
-<Slide question={12} look="band" title="What about disasters and safety for staff?" covers={['Security']} media="vietnam/hoi-an-flood.jpg" lede="In Vietnam, typhoons and roads. In Singapore, scams and the odd flash flood." split={34}>
+<Slide question={11} look="band" title="What about disasters and safety for staff?" covers={['Security']} media="vietnam/hoi-an-flood.jpg" lede="In Vietnam, typhoons and roads. In Singapore, scams and the odd flash flood." split={34}>
 
 <Fragment slot="sg">
 <BigStat value="S$913m" unit="lost to scams" size="sm">

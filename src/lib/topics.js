@@ -37,6 +37,7 @@ export async function getTopics() {
       throw new Error(`briefings/${folder}: a slides section is written in index.mdx only; remove singapore.mdx and vietnam.mdx`);
     }
     for (const f of REQUIRED_INDEX_FIELDS) {
+      if (f === 'thesis' && d.conclusion) continue;
       if (d[f] === undefined) throw new Error(`briefings/${folder}/index.mdx: frontmatter field "${f}" is required`);
     }
     if (!d.hero.image && !d.hero.video && !d.hero.label) {
@@ -53,6 +54,7 @@ export async function getTopics() {
       status: d.status,
       format,
       paper: d.paper ?? true,
+      conclusion: d.conclusion ?? false,
       parts: t.parts,
     };
   });

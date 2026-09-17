@@ -27,7 +27,7 @@ This guide is for everyone on the team, whether or not you use git. You only eve
 | `04-local-knowledge` | Local Knowledge: Crocs and Mastercard |
 | `05-political-weather` | The Political Weather |
 | `06-itineraries` | Itineraries |
-| `07-questions` | Questions and Answers (site only, not in the paper) |
+| `07-questions` | Questions: the closing section, unnumbered (site only, not in the paper) |
 
 The number at the start of the folder name sets the order.
 

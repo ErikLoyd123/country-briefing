@@ -33,7 +33,7 @@ const isActive = (href) => path === href || path.startsWith(href + '/');
           {topics.map((t) => (
             <li>
               <a href={`/briefing/${t.slug}`} class="flex items-baseline gap-3 rounded px-3 py-2 hover:bg-paper-2">
-                <span class="num w-4 shrink-0 text-muted">{t.order}</span>
+                <span class="num w-4 shrink-0 text-muted">{!t.conclusion && t.order}</span>
                 <span class="w-40 shrink-0 text-ink">{t.short}</span>
                 <CoverPills areas={sectionCovers(t)} />
               </a>
@@ -59,7 +59,7 @@ const isActive = (href) => path === href || path.startsWith(href + '/');
       </summary>
       <div class="absolute right-0 mt-2 w-72 rounded-md border border-rule bg-paper p-2 shadow-lg">
         <p class="px-3 pt-2 pb-1 text-xs text-muted">Briefing</p>
-        {topics.map((t) => <a href={`/briefing/${t.slug}`} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{t.order}. {t.short}</a>)}
+        {topics.map((t) => <a href={`/briefing/${t.slug}`} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{t.conclusion ? t.short : `${t.order}. ${t.short}`}</a>)}
         <hr class="my-2 border-rule" />
         {links.map((l) => <a href={l.href} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{l.label}</a>)}
       </div>
