@@ -262,6 +262,14 @@ const pager = [
     .briefing :global(.slide > .slide-head + *) {
       margin-top: 0;
     }
+    /* A pair slide with nothing in its default slot still renders an empty .slide-body. In this flex column
+       margins don't collapse, so skip it and let the halves take the body's place under the title. */
+    .briefing :global(.slide > .slide-head + .slide-body:empty) {
+      display: none;
+    }
+    .briefing :global(.slide > .slide-head + .slide-body:empty + *) {
+      margin-top: 0;
+    }
     .briefing :global(.slide.frame:not([data-layout='backdrop'])::before),
     .briefing :global(.slide.frame:not([data-layout='backdrop'], [data-overflow])::after) {
       content: '';
