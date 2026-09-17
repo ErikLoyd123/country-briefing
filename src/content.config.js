@@ -38,20 +38,9 @@ const briefings = defineCollection({
   schema: sectionSchema,
 });
 
-// The paper's full write-up of each section, same folder shape as the briefing.
-const writeup = defineCollection({
-  loader: glob({ pattern: '**/*.mdx', base: './src/content/paper/sections', generateId: pathId }),
-  schema: sectionSchema,
-});
-
 const appendices = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/appendices', generateId: pathId }),
   schema: z.object({ title: z.string(), order: z.number().int(), status }),
 });
 
-const paper = defineCollection({
-  loader: glob({ pattern: '*.mdx', base: './src/content/paper', generateId: pathId }),
-  schema: z.object({ title: z.string(), status }),
-});
-
-export const collections = { briefings, writeup, appendices, paper };
+export const collections = { briefings, appendices };
