@@ -26,9 +26,8 @@ This guide is for everyone on the team, whether or not you use git. You only eve
 | `03-money-matters` | Money Matters |
 | `04-local-knowledge` | Local Knowledge: Crocs and Mastercard |
 | `05-political-weather` | The Political Weather |
-| `06-etiquette` | Etiquette and Survival Guide |
-| `07-itineraries` | Itineraries |
-| `08-questions` | Questions and Answers (site only, not in the paper) |
+| `06-itineraries` | Itineraries |
+| `07-questions` | Questions and Answers (site only, not in the paper) |
 
 The number at the start of the folder name sets the order.
 
@@ -206,7 +205,7 @@ One line of evidence [@SG-38].
 
 **An industry, with photo:** `<Industry name="Footwear" image="vietnam/shoe-lasts.jpg" figure="US$11bn" figureLabel="to the US">Why it is exposed [@CR-22].</Industry>`
 
-**Rules in both countries and in each** (Etiquette): `<Trio>` with `sg`, `both` and `vn` slots, each a Markdown list. `sgMedia`, `bothMedia` and `vnMedia` put a photo or video on top of each column.
+**Rules in both countries and in each:** `<Trio>` with `sg`, `both` and `vn` slots, each a Markdown list. `sgMedia`, `bothMedia` and `vnMedia` put a photo or video on top of each column.
 
 **A visit** (Itineraries), three per slide in a `grid` of three columns, with an optional `media` photo: `<Visit when="Wed 4 Nov, 9:00" name="Emerson" kind="Industrial automation" media="singapore/industrial-automation.jpg">What it shows [@SG-83]. <Fragment slot="ask">The question.</Fragment></Visit>`
 
