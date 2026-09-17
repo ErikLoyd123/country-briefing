@@ -6,7 +6,7 @@
 //     divider (e.g. "Singapore"), so a visual right after it still starts a new frame.
 //   - Prose (paragraphs, lists, tables) collects into the current frame.
 // A file written as authored <Slide>s already is its frames, so it is left alone.
-// Only files under src/content/briefings/ are framed. Elsewhere (the paper page) the
+// Only files under src/content/briefings/ are framed. Elsewhere (the appendix pages) the
 // frames are plain wrappers; see .briefing-prose in src/styles/global.css.
 
 // Components that read as prose and flow with the text around them. None yet.

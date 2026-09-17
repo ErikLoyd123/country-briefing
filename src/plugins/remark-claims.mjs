@@ -5,7 +5,7 @@
 // else written as [@…] so a mistyped citation can't slip through as plain text.
 //
 // The briefing's slides (src/content/briefings) brief rather than document: their citations are checked
-// but not shown, and the text around them closes up. The paper and the Sources page carry the citations.
+// but not shown, and the text around them closes up. The Sources page carries the references.
 import { visit, SKIP } from 'unist-util-visit';
 import { loadIndex, citationPieces } from '../lib/sources.js';
 

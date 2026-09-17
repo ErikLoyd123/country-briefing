@@ -6,7 +6,6 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "pdf": "node scripts/export-pdf.mjs",
     "check": "vitest run && astro build",
     "media": "node scripts/fetch-media.mjs"
   },

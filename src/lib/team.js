@@ -1,4 +1,4 @@
-// Who made the briefing, shown in the footer, the paper cover and the About page.
+// Who made the briefing, shown in the footer and the About page.
 export const TEAM = {
   name: 'Team Poesis',
   members: ['Terese Rainwater', 'Allison Eaby', 'Zach Van Valkenburg', 'Erik Loyd'],

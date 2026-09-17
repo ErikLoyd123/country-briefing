@@ -170,7 +170,7 @@ export function withCitation(text, ids, index = loadIndex(), where = '') {
 
 // Pages that brief rather than document (the slides and the homepage) set Astro.locals.hideCitations.
 // Components pass Astro.locals here: claim IDs are still checked against sources.csv, but nothing is shown.
-// The paper and the Sources page carry the citations; the Sources page lists where each claim appears.
+// The Sources page carries the references and lists where each claim appears.
 export function siteCitation(locals, ids, where = '') {
   if (!locals?.hideCitations) return citationHtml(ids, undefined, where);
   if (ids?.length) sourcesFor(ids, undefined, where);

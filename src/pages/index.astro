@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroReel from '../components/story/HeroReel.astro';
 import { getTopics } from '../lib/topics.js';
-import { ArrowRight, FileText } from '@lucide/astro';
+import { ArrowRight } from '@lucide/astro';
 
 // The homepage is the front door: the hero and a way in. The facts live in the briefing slides.
 const [first] = await getTopics();
@@ -29,9 +29,6 @@ const [first] = await getTopics();
       <div class="flex flex-wrap gap-3">
         <a href={`/briefing/${first.slug}`} class="inline-flex items-center gap-2 rounded-full bg-saffron px-6 py-3 font-semibold text-ink shadow-lg shadow-black/20 transition hover:brightness-105">
           Start the briefing <ArrowRight size={18} aria-hidden="true" />
-        </a>
-        <a href="/paper" class="inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-3 font-medium text-white hover:bg-white/10">
-          <FileText size={16} aria-hidden="true" /> Paper
         </a>
       </div>
     </div>

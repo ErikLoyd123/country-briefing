@@ -61,13 +61,13 @@ Cite the claim's ID in square brackets with an `@`, just before the sentence's f
 | `…87 of 97 seats [@SG-17].` | …87 of 97 seats (US-ASEAN Business Council, 2025). |
 | `…a five-year high [@VN-55; @VN-56].` | …a five-year high (Viet Nam News, 2026a; Vietnam News Agency, 2026d). |
 
-The slides and the homepage check every citation but don't show it: the briefing is for presenting, and the paper carries the citations. The Sources page's verification table has an **On the site** column listing the slides each claim appears on, so you can always trace a number back to its source.
+The slides and the homepage check every citation but don't show it: the briefing is for presenting. The Sources page's verification table has an **On the site** column listing the slides each claim appears on, so you can always trace a number back to its source.
 
 In the paper, the site looks up each claim's source and writes the APA in-text citation for you, including the `2026a` / `2026b` letters when one author has several works in a year. Each citation links to its entry on the Sources page. If an ID isn't in `sources.csv`, the build stops and names the file.
 
 ## The site and the paper are written separately
 
-- **The paper** (`/paper`) is the full write-up: every fact, in prose, Singapore then Vietnam. It lives in `src/content/paper/sections/NN-section/` as `index.mdx` (overview), `singapore.mdx` and `vietnam.mdx`. Write it like a normal document with `## Headings`, paragraphs, lists and tables.
+- **The paper** is the full write-up: every fact, in prose, Singapore then Vietnam. It is no longer published on the site, but its files stay in `src/content/paper/sections/NN-section/` as `index.mdx` (overview), `singapore.mdx` and `vietnam.mdx`. Write it like a normal document with `## Headings`, paragraphs, lists and tables.
 - **The site** (`/briefing/<section>`) is the deck you brief from: short slides with photos, charts and diagrams. Each section is one file, `src/content/briefings/NN-section/index.mdx`, made of `<Slide>`s.
 
 A slide doesn't need every fact; the paper has them. When you change a number, change it in both places (the claim ID makes it easy to search for).

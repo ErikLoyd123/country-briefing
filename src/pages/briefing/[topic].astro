@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { topic, prev, next, total } = Astro.props;
-// Slides brief: components check their claim IDs but leave citations to the paper and the Sources page.
+// Slides brief: components check their claim IDs but leave citations to the Sources page.
 Astro.locals.hideCitations = true;
 const slides = topic.format === 'slides';
 const [overview, singapore, vietnam] = await Promise.all((slides ? ['index'] : ['index', 'singapore', 'vietnam']).map((p) => render(topic.parts[p])));
