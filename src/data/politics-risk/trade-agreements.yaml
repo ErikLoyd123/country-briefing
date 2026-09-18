@@ -1,5 +1,5 @@
 # Trade agreements in force for each country. members: which of SG / VN are party to it.
-# note: one short sentence; cite: claim IDs from src/data/sources.csv that support the row.
+# note: one short sentence; cite: claim IDs from src/data/politics-risk/sources.csv that support the row.
 - { id: cptpp, name: CPTPP (Trans-Pacific Partnership), members: [SG, VN], note: 12 economies; in force for Vietnam since 2019., cite: [SG-68, VN-64] }
 - { id: rcep, name: RCEP (Regional Comprehensive Economic Partnership), members: [SG, VN], note: 15 Asia-Pacific countries including China; in force for Vietnam since 2022., cite: [SG-68, VN-64] }
 - { id: eusfta, name: EU–Singapore FTA, members: [SG], note: One of Singapore's 29 free trade agreements in force., cite: [SG-68] }

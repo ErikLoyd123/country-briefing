@@ -3,7 +3,7 @@
 import { coverPills } from '../../lib/covers.js';
 
 const { areas = [], size = 'sm', class: className } = Astro.props;
-const pills = coverPills(areas);
+const pills = coverPills(areas, Astro.locals.desk);
 ---
 
 {

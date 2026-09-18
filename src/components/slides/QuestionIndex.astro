@@ -4,7 +4,7 @@
 // <QuestionIndex section="questions" />
 import { getQuestions } from '../../lib/questions.js';
 
-const questions = getQuestions(Astro.props.section);
+const questions = getQuestions(Astro.locals.desk, Astro.props.section);
 ---
 
 <ol class="qindex">

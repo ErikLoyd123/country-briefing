@@ -9,6 +9,12 @@ import rehypeFrames from './src/plugins/rehype-frames.mjs';
 export default defineConfig({
   site: 'https://country-briefing.example',
   integrations: [react(), mdx()],
+  // The briefing moved under its desk's path when the homepage became the front door for all five desks.
+  // Old links keep working: these two here, and /briefing/<section> and /appendix/<slug> in src/pages.
+  redirects: {
+    '/sources': '/politics-risk/sources',
+    '/about': '/politics-risk/about',
+  },
   markdown: {
     // Astro 7 defaults to the Sätteri processor; the citation and frame plugins need the unified
     // (remark/rehype) pipeline. MDX inherits this processor.

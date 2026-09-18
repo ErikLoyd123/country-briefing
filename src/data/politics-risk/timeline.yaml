@@ -1,5 +1,5 @@
 # Political and risk events. date: YYYY-MM (end: YYYY-MM for a span). country: SG | VN | both.
-# cite: claim IDs from src/data/sources.csv. Keep to about a dozen so it fits one screen.
+# cite: claim IDs from src/data/politics-risk/sources.csv. Keep to about a dozen so it fits one screen.
 - { date: "2013-12", country: SG, title: Little India riot, detail: The worst public violence in Singapore in four decades., cite: [SG-73] }
 - { date: "2014-05", country: VN, title: Anti-China factory riots, detail: At least 20 dead after China moved an oil rig into disputed waters., cite: [VN-67] }
 - { date: "2018-06", country: VN, title: Land lease and cyber law protests, detail: About 200 arrested., cite: [VN-68] }

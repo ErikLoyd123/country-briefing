@@ -3,13 +3,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroReel from '../components/story/HeroReel.astro';
 import MusicToggle from '../components/ui/MusicToggle.astro';
 import { getTopics } from '../lib/topics.js';
+import { DESKS, deskPath } from '../lib/desks.js';
 import { ArrowRight } from '@lucide/astro';
 
-// The homepage is the front door: the hero and a way in. The facts live in the briefing slides.
-const [first] = await getTopics();
+// The homepage is the front door to all five desks, one per team. Each card opens its desk's first section.
+// A desk still on its starter section says so (status in src/lib/desks.js).
+const desks = await Promise.all(DESKS.map(async (d) => ({ ...d, href: deskPath(d, `/briefing/${(await getTopics(d.slug))[0].slug}`) })));
 ---
 
-<BaseLayout title="Overview">
+<BaseLayout description="Country briefing on doing business in Singapore and Vietnam, in five desks: politics and risk, people and culture, marketing, supply chain, and finance.">
   <!-- Hero: synced Singapore / Vietnam aerial reel. -->
   <section data-hero class="relative isolate grid min-h-[calc(100svh-3.5rem)] grid-rows-[1fr_auto] overflow-hidden bg-night text-on-night">
     <HeroReel
@@ -20,22 +22,101 @@ const [first] = await getTopics();
       ]}
     />
 
-    <div data-hero-line class="container-wide relative grid gap-6 border-t border-white/10 py-8 md:grid-cols-[1fr_auto] md:items-end">
-      <div>
-        <h1 class="type-heavy max-w-3xl text-3xl leading-[1.05] tracking-[-0.035em] md:text-4xl">
-          Politics and Risk Desk<span class="sr-only">: Singapore and Vietnam</span>
-        </h1>
-        <p class="mt-3 max-w-2xl text-on-night-muted">What to know before you land, what can go wrong, what it means for your money, and what to ask when you are standing in the room.</p>
-      </div>
-      <div class="flex flex-wrap gap-3">
+    <div data-hero-line class="container-wide relative border-t border-white/10 py-8">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <h1 class="type-heavy max-w-3xl text-3xl leading-[1.05] tracking-[-0.035em] md:text-4xl">
+            Country Briefing<span class="sr-only">: Singapore and Vietnam</span>
+          </h1>
+          <p class="mt-3 max-w-2xl text-on-night-muted">Five desks, one per team. Pick a desk to start its briefing.</p>
+        </div>
         <MusicToggle src="audio/ripples.m4a" />
-        <a href={`/briefing/${first.slug}`} class="inline-flex items-center gap-2 rounded-full bg-saffron px-6 py-3 font-semibold text-ink shadow-lg shadow-black/20 transition hover:brightness-105">
-          Start the briefing <ArrowRight size={18} aria-hidden="true" />
-        </a>
       </div>
+
+      <ol class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5" aria-label="Desks">
+        {
+          desks.map((d) => (
+            <li class="flex">
+              <a href={d.href} class:list={['desk group', d.status === 'live' ? 'is-live' : 'is-starter']}>
+                <span class="desk-num num">{String(d.number).padStart(2, '0')}</span>
+                <span class="desk-name">{d.name}</span>
+                <span class="desk-blurb">{d.blurb}</span>
+                <span class="desk-cta">
+                  {d.status === 'live' ? 'Start the briefing' : 'In progress'}
+                  <ArrowRight size={16} aria-hidden="true" class="transition group-hover:translate-x-0.5" />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .desk {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1rem 1.1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgb(255 255 255 / 0.12);
+  }
+  .desk-num {
+    font-size: 0.8rem;
+    color: var(--color-on-night-muted);
+  }
+  .desk-name {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.15;
+  }
+  .desk-blurb {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--color-on-night-muted);
+  }
+  /* The call to action sits at the bottom of every card, whatever the blurb's length. */
+  .desk-cta {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .desk.is-live {
+    background: var(--color-saffron);
+    border-color: var(--color-saffron);
+    color: var(--color-ink);
+    box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.5);
+    transition: filter 150ms ease;
+  }
+  .desk.is-live:hover {
+    filter: brightness(1.05);
+  }
+  .desk.is-live .desk-num,
+  .desk.is-live .desk-blurb {
+    color: rgb(14 26 34 / 0.72);
+  }
+  .desk.is-starter {
+    background: rgb(255 255 255 / 0.04);
+    transition:
+      background 150ms ease,
+      border-color 150ms ease;
+  }
+  .desk.is-starter:hover {
+    background: rgb(255 255 255 / 0.09);
+    border-color: rgb(255 255 255 / 0.28);
+  }
+  .desk.is-starter .desk-cta {
+    font-weight: 500;
+    color: var(--color-on-night-muted);
+  }
+</style>
 
 <script>
   import '../scripts/motion.js';

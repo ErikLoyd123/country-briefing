@@ -32,7 +32,7 @@ const sectionSchema = z.object({
   status,
 });
 
-// The briefing site: short, screen-sized sections.
+// The briefing site: short, screen-sized sections, one folder per desk: src/content/briefings/<desk>/NN-slug/.
 const briefings = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/briefings', generateId: pathId }),
   schema: sectionSchema,
@@ -43,4 +43,10 @@ const appendices = defineCollection({
   schema: z.object({ title: z.string(), order: z.number().int(), status }),
 });
 
-export const collections = { briefings, appendices };
+// Each desk's About page text: src/content/about/<desk>.mdx, optional.
+const about = defineCollection({
+  loader: glob({ pattern: '*.mdx', base: './src/content/about', generateId: pathId }),
+  schema: z.object({}),
+});
+
+export const collections = { briefings, appendices, about };

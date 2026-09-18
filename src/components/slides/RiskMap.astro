@@ -8,7 +8,7 @@ import { AREAS, RISK_LEVELS } from '../../lib/format.js';
 
 const { section } = Astro.props;
 const order = Object.keys(RISK_LEVELS);
-const risks = getRisks().filter((r) => r.href.startsWith(`/briefing/${section}#`));
+const risks = getRisks().filter((r) => r.desk === Astro.locals.desk && r.section === section);
 const areas = Object.entries(AREAS).map(([id, label]) => ({
   id,
   label,

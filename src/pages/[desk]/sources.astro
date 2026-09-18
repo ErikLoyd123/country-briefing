@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { loadIndex } from '../../lib/sources.js';
+import { DESKS } from '../../lib/desks.js';
+
+export function getStaticPaths() {
+  return DESKS.map((desk) => ({ params: { desk: desk.slug }, props: { desk } }));
+}
+
+const { desk } = Astro.props;
+Astro.locals.desk = desk.slug;
+const index = loadIndex(desk.slug);
+---
+
+<BaseLayout title="Sources" description={`Every source used in the ${desk.name} briefing, in APA style.`}>
+  <div class="container-wide py-16">
+    <section id="references" class="max-w-3xl scroll-mt-20">
+      <h1 class="text-5xl">References</h1>
+      {
+        index.sources.length ? (
+          <ol class="reference-list mt-8 text-ink-2">
+            {index.sources.map((s) => (
+              <li id={s.id} class="scroll-mt-24 target:bg-sg-soft">
+                {s.reference}{' '}
+                <a href={s.url} class="text-ink underline decoration-rule underline-offset-2 hover:decoration-ink" target="_blank" rel="noopener">
+                  {s.url}
+                </a>
+                <span class="ml-2 text-xs text-muted">{s.claims.join(' · ')}</span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="mt-8 text-ink-2">
+            No sources yet. Add a row for each claim to <code>src/data/{desk.slug}/sources.csv</code> and it will be listed here.
+          </p>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>

@@ -1,22 +1,11 @@
 ---
-import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { mdxComponents } from '../../components/mdx.js';
+// Old link: appendix pages were at /appendix/<slug> before the site had desks. They are Politics & Risk's.
+import { getCollection } from 'astro:content';
+import { deskPath } from '../../lib/desks.js';
 
 export async function getStaticPaths() {
-  const entries = await getCollection('appendices');
-  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  return (await getCollection('appendices', (e) => e.id.startsWith('politics-risk/'))).map((e) => ({ params: { slug: e.id.split('/')[1] } }));
 }
 
-const { entry } = Astro.props;
-const { Content } = await render(entry);
+return Astro.redirect(deskPath('politics-risk', `/appendix/${Astro.params.slug}`), 301);
 ---
-
-<BaseLayout title={entry.data.title}>
-  <article class="container-text py-16">
-    <h1 class="text-5xl leading-tight">{entry.data.title}</h1>
-    <div class="briefing-prose mt-10">
-      <Content components={mdxComponents} />
-    </div>
-  </article>
-</BaseLayout>

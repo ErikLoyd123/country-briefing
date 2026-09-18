@@ -2,9 +2,13 @@
 import '../styles/global.css';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
+import { deskFromPath } from '../lib/desks.js';
 
-const { title, description = 'Politics and risk briefing: doing business in Singapore and Vietnam.', bodyClass = '', chrome = true } = Astro.props;
-const fullTitle = title ? `${title} | Singapore & Vietnam: Politics and Risk` : 'Singapore & Vietnam: Politics and Risk';
+// A desk's pages carry its name; the homepage speaks for all five desks.
+const desk = deskFromPath(Astro.url.pathname);
+const { title, description = `${desk ? desk.name + ' briefing' : 'Country briefing'}: doing business in Singapore and Vietnam.`, bodyClass = '', chrome = true } = Astro.props;
+const site = `Singapore & Vietnam: ${desk ? desk.name : 'Country Briefing'}`;
+const fullTitle = title ? `${title} | ${site}` : site;
 ---
 
 <!doctype html>

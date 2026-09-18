@@ -1,15 +1,21 @@
 ---
 import { ChevronDown, Menu } from '@lucide/astro';
 import { getTopics } from '../../lib/topics.js';
-import { questions, sectionCovers } from '../../lib/covers.js';
+import { questionsFor, sectionCovers } from '../../lib/covers.js';
 import CoverPills from '../ui/CoverPills.astro';
+import { deskFromPath, deskPath } from '../../lib/desks.js';
 
-const topics = await getTopics();
 const path = Astro.url.pathname;
-const links = [
-  { href: '/sources', label: 'Sources' },
-  { href: '/about', label: 'About' },
-];
+// The homepage picks a desk; every other page belongs to one desk and gets that desk's menu.
+const desk = deskFromPath(path);
+const topics = desk ? await getTopics(desk.slug) : [];
+const questions = desk ? questionsFor(desk.slug) : [];
+const links = desk
+  ? [
+      { href: deskPath(desk, '/sources'), label: 'Sources' },
+      { href: deskPath(desk, '/about'), label: 'About' },
+    ]
+  : [];
 const isActive = (href) => path === href || path.startsWith(href + '/');
 ---
 
@@ -19,30 +25,32 @@ const isActive = (href) => path === href || path.startsWith(href + '/');
       <span class="flex h-3 w-6 overflow-hidden rounded-[2px] self-center" aria-hidden="true">
         <span class="w-1/2 bg-sg"></span><span class="w-1/2 bg-vn"></span>
       </span>
-      <span class="font-display text-lg leading-none text-ink">Politics &amp; Risk</span>
+      <span class="font-display text-lg leading-none text-ink">{desk ? desk.name : 'Country Briefing'}</span>
       <span class="hidden text-sm text-muted sm:inline">Singapore and Vietnam</span>
     </a>
 
-    <nav aria-label="Primary" class="hidden items-center gap-1 text-sm md:flex">
+    {desk && <nav aria-label="Primary" class="hidden items-center gap-1 text-sm md:flex">
       <details class="nav-menu relative">
-        <summary class:list={['flex cursor-pointer list-none items-center gap-1 rounded px-3 py-2 hover:bg-paper-2', path.startsWith('/briefing') && 'text-ink font-medium']}>
+        <summary class:list={['flex cursor-pointer list-none items-center gap-1 rounded px-3 py-2 hover:bg-paper-2', path.startsWith(deskPath(desk, '/briefing')) && 'text-ink font-medium']}>
           Briefing <ChevronDown size={14} aria-hidden="true" />
         </summary>
         <ol class="absolute right-0 mt-2 w-[44rem] rounded-md border border-rule bg-paper p-2 shadow-[0_12px_32px_-12px_rgb(14_26_34/0.25)]">
           {topics.map((t) => (
             <li>
-              <a href={`/briefing/${t.slug}`} class="flex items-baseline gap-3 rounded px-3 py-2 hover:bg-paper-2">
+              <a href={deskPath(desk, `/briefing/${t.slug}`)} class="flex items-baseline gap-3 rounded px-3 py-2 hover:bg-paper-2">
                 <span class="num w-4 shrink-0 text-muted">{!t.conclusion && t.order}</span>
                 <span class="w-40 shrink-0 text-ink">{t.short}</span>
                 <CoverPills areas={sectionCovers(t)} />
               </a>
             </li>
           ))}
-          <li class="mt-1 flex flex-wrap gap-x-4 gap-y-1 border-t border-rule px-3 pt-2 pb-1 text-xs text-muted">
-            {questions.map((q, i) => (
-              <span class="flex items-center gap-1.5"><span class:list={['h-2 w-2 rounded-full', q.dot]}></span>Q{i + 1} {q.label}</span>
-            ))}
-          </li>
+          {questions.length > 0 && (
+            <li class="mt-1 flex flex-wrap gap-x-4 gap-y-1 border-t border-rule px-3 pt-2 pb-1 text-xs text-muted">
+              {questions.map((q, i) => (
+                <span class="flex items-center gap-1.5"><span class:list={['h-2 w-2 rounded-full', q.dot]}></span>Q{i + 1} {q.label}</span>
+              ))}
+            </li>
+          )}
         </ol>
       </details>
       {links.map((l) => (
@@ -50,19 +58,19 @@ const isActive = (href) => path === href || path.startsWith(href + '/');
           {l.label}
         </a>
       ))}
-    </nav>
+    </nav>}
 
-    <details class="nav-menu relative md:hidden">
+    {desk && <details class="nav-menu relative md:hidden">
       <summary class="flex cursor-pointer list-none items-center rounded p-2 hover:bg-paper-2" aria-label="Open menu">
         <Menu size={20} aria-hidden="true" />
       </summary>
       <div class="absolute right-0 mt-2 w-72 rounded-md border border-rule bg-paper p-2 shadow-lg">
         <p class="px-3 pt-2 pb-1 text-xs text-muted">Briefing</p>
-        {topics.map((t) => <a href={`/briefing/${t.slug}`} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{t.conclusion ? t.short : `${t.order}. ${t.short}`}</a>)}
+        {topics.map((t) => <a href={deskPath(desk, `/briefing/${t.slug}`)} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{t.conclusion ? t.short : `${t.order}. ${t.short}`}</a>)}
         <hr class="my-2 border-rule" />
         {links.map((l) => <a href={l.href} class="block rounded px-3 py-2 text-sm hover:bg-paper-2">{l.label}</a>)}
       </div>
-    </details>
+    </details>}
   </div>
 </header>
 

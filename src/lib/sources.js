@@ -1,13 +1,13 @@
 // Build-time only (reads the filesystem). Never import from a React island.
-// Sources come from src/data/sources.csv, the team's verification table: one row per claim,
+// Each desk's sources come from src/data/<desk>/sources.csv, the team's verification table: one row per claim,
 // each with the APA reference it rests on. Text cites claims by ID ([@SG-12]); the site turns
-// that into an APA in-text citation for the claim's source.
+// that into an APA in-text citation for the claim's source, linked to the desk's Sources page.
 import { readFileSync, statSync, readdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { csvParse } from 'd3-dsv';
+import { getDesk, deskPath } from './desks.js';
 
-export const SOURCES_PATH = resolve(process.cwd(), 'src/data/sources.csv');
-export const SOURCES_PAGE = '/sources';
+export const sourcesPath = (desk) => resolve(process.cwd(), 'src/data', getDesk(desk).slug, 'sources.csv');
 
 export const CLAIM_ID = /^[A-Z]{2,4}-\d+$/;
 
@@ -73,7 +73,7 @@ export function parseClaims(text) {
 
 // Groups claims by source and gives each source its in-text label. Two different works by the same
 // author in the same year get a, b, c suffixes, ordered by title (APA 7, section 8.19).
-export function buildIndex(claims) {
+export function buildIndex(claims, page = '/sources') {
   // A source is one link. Rows citing the same link must describe it the same way.
   const byUrl = new Map();
   for (const c of claims) {
@@ -115,21 +115,27 @@ export function buildIndex(claims) {
   const claimById = new Map(claims.map((c) => [c.id, c]));
   const sourceByClaim = new Map();
   for (const s of sources) for (const id of s.claims) sourceByClaim.set(id, s);
-  return { claims, claimById, sources, sourceByClaim };
+  return { claims, claimById, sources, sourceByClaim, page };
 }
 
-let cache;
-export function loadIndex() {
-  const mtime = statSync(SOURCES_PATH).mtimeMs;
-  if (!cache || cache.mtime !== mtime) cache = { mtime, index: buildIndex(parseClaims(readFileSync(SOURCES_PATH, 'utf8'))) };
-  return cache.index;
+// A desk's index, rebuilt when its sources.csv changes.
+const cache = new Map();
+export function loadIndex(desk) {
+  const path = sourcesPath(desk);
+  const mtime = statSync(path).mtimeMs;
+  const hit = cache.get(desk);
+  if (hit?.mtime === mtime) return hit.index;
+  const index = { ...buildIndex(parseClaims(readFileSync(path, 'utf8')), deskPath(desk, '/sources')), desk };
+  cache.set(desk, { mtime, index });
+  return index;
 }
 
 // The sources behind a list of claim IDs, deduplicated, in APA in-text order.
-export function sourcesFor(ids, index = loadIndex(), where = '') {
+export function sourcesFor(ids, index, where = '') {
   const unknown = ids.filter((id) => !index.claimById.has(id));
   if (unknown.length) {
-    throw new Error(`Unknown claim ID(s) ${unknown.join(', ')}${where ? ` in ${where}` : ''}. Add the claim to src/data/sources.csv.`);
+    const table = index.desk ? `src/data/${index.desk}/sources.csv` : 'the sources table';
+    throw new Error(`Unknown claim ID(s) ${unknown.join(', ')}${where ? ` in ${where}` : ''}. Add the claim to ${table}.`);
   }
   const list = [...new Set(ids.map((id) => index.sourceByClaim.get(id)))];
   return list.sort((a, b) => a.author.localeCompare(b.author) || a.yearLabel.localeCompare(b.yearLabel));
@@ -137,11 +143,11 @@ export function sourcesFor(ids, index = loadIndex(), where = '') {
 
 // Citation as a list of pieces: [{ text }, { text, href, title }]. Consecutive works by one author
 // share the name: (Crocs, Inc., 2025, 2026).
-export function citationPieces(ids, index = loadIndex(), where = '') {
+export function citationPieces(ids, index, where = '') {
   const pieces = [{ text: '(' }];
   let prev = null;
   for (const s of sourcesFor(ids, index, where)) {
-    const link = { href: `${SOURCES_PAGE}#${s.id}`, title: s.reference };
+    const link = { href: `${index.page}#${s.id}`, title: s.reference };
     if (prev && prev.author === s.author) pieces.push({ text: ', ' }, { ...link, text: s.yearLabel });
     else pieces.push(...(prev ? [{ text: '; ' }] : []), { ...link, text: s.label });
     prev = s;
@@ -153,7 +159,7 @@ export function citationPieces(ids, index = loadIndex(), where = '') {
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 // HTML for components that take claim IDs as a prop (cite={['SG-1', 'SG-2']}).
-export function citationHtml(ids, index = loadIndex(), where = '') {
+export function citationHtml(ids, index, where = '') {
   if (!ids?.length) return '';
   const inner = citationPieces(ids, index, where)
     .map((p) => (p.href ? `<a href="${p.href}" title="${esc(p.title)}">${esc(p.text)}</a>` : esc(p.text)))
@@ -162,30 +168,39 @@ export function citationHtml(ids, index = loadIndex(), where = '') {
 }
 
 // Text with trailing claim IDs rendered as a citation: "Body text." + [SG-1] → "Body text (…)."
-export function withCitation(text, ids, index = loadIndex(), where = '') {
+export function withCitation(text, ids, index, where = '') {
   if (!ids?.length) return esc(text);
   const m = /^([\s\S]*?)([.!?]?)$/.exec(text.trim());
   return `${esc(m[1])} ${citationHtml(ids, index, where)}${m[2]}`;
 }
 
-// Pages that brief rather than document (the slides and the homepage) set Astro.locals.hideCitations.
-// Components pass Astro.locals here: claim IDs are still checked against sources.csv, but nothing is shown.
-// The Sources page carries the references and lists where each claim appears.
+// Components pass Astro.locals here. Every desk page sets locals.desk, which picks the sources table the claim
+// IDs are checked against. Pages that brief rather than document (the slides) also set locals.hideCitations:
+// the IDs are still checked, but nothing is shown. The Sources page carries the references.
+const localIndex = (locals, where) => {
+  if (!locals?.desk) throw new Error(`${where || 'A component'} cites claims outside a desk page, so there is no sources table to check them against.`);
+  return loadIndex(locals.desk);
+};
+
 export function siteCitation(locals, ids, where = '') {
-  if (!locals?.hideCitations) return citationHtml(ids, undefined, where);
-  if (ids?.length) sourcesFor(ids, undefined, where);
+  if (!ids?.length) return '';
+  const index = localIndex(locals, where);
+  if (!locals.hideCitations) return citationHtml(ids, index, where);
+  sourcesFor(ids, index, where);
   return '';
 }
 
 export function siteWithCitation(locals, text, ids, where = '') {
-  if (!locals?.hideCitations) return withCitation(text, ids, undefined, where);
-  if (ids?.length) sourcesFor(ids, undefined, where);
+  if (!ids?.length) return esc(text);
+  const index = localIndex(locals, where);
+  if (!locals.hideCitations) return withCitation(text, ids, index, where);
+  sourcesFor(ids, index, where);
   return esc(text);
 }
 
-// Where each claim appears on the site: Map of claim ID → [{ section, slide, href }].
+// Where each of a desk's claims appears on the site: Map of claim ID → [{ section, slide, href }].
 // Reads each slides section's index.mdx one <Slide> at a time, counting claim IDs written in the slide and
-// in the data files its components read.
+// in the desk's data files its components read (src/data/<desk>/timeline.yaml, …).
 const DATA_BY_TAG = { Timeline: 'timeline.yaml', TradeAgreements: 'trade-agreements.yaml' };
 export const slideAnchor = (title) =>
   title
@@ -193,10 +208,11 @@ export const slideAnchor = (title) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-export function claimUsage(index = loadIndex()) {
+export function claimUsage(desk) {
+  const index = loadIndex(desk);
   const cwd = process.cwd();
   const ids = (text) => [...text.matchAll(/\b[A-Z]{2,4}-\d+\b/g)].map((m) => m[0]).filter((id) => index.claimById.has(id));
-  const dataIds = (file) => ids(readFileSync(resolve(cwd, 'src/data', file), 'utf8'));
+  const dataIds = (file) => ids(readFileSync(resolve(cwd, 'src/data', desk, file), 'utf8'));
   const usage = new Map();
   const add = (id, place) => {
     const list = usage.get(id) ?? [];
@@ -205,7 +221,7 @@ export function claimUsage(index = loadIndex()) {
   };
   add.all = (list, place) => list.forEach((id) => add(id, place));
 
-  const dir = resolve(cwd, 'src/content/briefings');
+  const dir = resolve(cwd, 'src/content/briefings', desk);
   for (const folder of readdirSync(dir).sort()) {
     const file = join(dir, folder, 'index.mdx');
     let text;
@@ -220,51 +236,10 @@ export function claimUsage(index = loadIndex()) {
     const slug = folder.replace(/^\d+-/, '');
     for (const chunk of text.split(/(?=<Slide[\s>])/).slice(1)) {
       const title = /^<Slide[^>]*?\stitle="([^"]*)"/.exec(chunk)?.[1] ?? '';
-      const place = { section, slide: title, href: `/briefing/${slug}${title ? `#${slideAnchor(title)}` : ''}` };
+      const place = { section, slide: title, href: deskPath(desk, `/briefing/${slug}${title ? `#${slideAnchor(title)}` : ''}`) };
       add.all(ids(chunk), place);
       for (const [tag, data] of Object.entries(DATA_BY_TAG)) if (chunk.includes(`<${tag}`)) add.all(dataIds(data), place);
     }
   }
   return usage;
-}
-
-// Claim IDs cited anywhere in content (MDX) or data (YAML). Drives the paper's reference list.
-export function citedClaimIds(index = loadIndex()) {
-  const roots = ['src/content', 'src/data'].map((d) => resolve(process.cwd(), d));
-  const found = new Set();
-  const walk = (dir) => {
-    for (const e of readdirSync(dir, { withFileTypes: true })) {
-      const p = join(dir, e.name);
-      if (e.isDirectory()) walk(p);
-      else if (/\.(mdx?|ya?ml)$/.test(e.name)) {
-        for (const m of readFileSync(p, 'utf8').matchAll(/\b[A-Z]{2,4}-\d+\b/g)) if (index.claimById.has(m[0])) found.add(m[0]);
-      }
-    }
-  };
-  roots.forEach(walk);
-  return found;
-}
-
-// Facts the team wanted but could not source (src/data/sources-not-used.csv).
-export function loadNotUsed() {
-  const text = readFileSync(resolve(process.cwd(), 'src/data/sources-not-used.csv'), 'utf8');
-  return csvParse(text.replace(/^﻿/, '').trim()).map((r) => ({ wanted: r['What we wanted'], why: r['Why it is not on the dashboard'] }));
-}
-
-// Verification table groups: the Screen column mapped to the site's sections.
-export const SCREEN_GROUPS = [
-  { title: 'Need to Know', screens: ['need to know', 'at a glance'] },
-  { title: 'Risks and Constraints', screens: ['dangers government', 'dangers society', 'dangers security', 'dangers economy'] },
-  { title: 'Money Matters', screens: ['money matters'] },
-  { title: 'Local Knowledge', screens: ['local knowledge'] },
-  { title: 'The Political Weather', screens: ['political weather', 'what changed'] },
-  { title: 'Etiquette', screens: ['etiquette'] },
-  { title: 'Itineraries', screens: ['itinerary'] },
-];
-
-export function claimsByGroup(index = loadIndex()) {
-  const known = new Set(SCREEN_GROUPS.flatMap((g) => g.screens));
-  const groups = SCREEN_GROUPS.map((g) => ({ title: g.title, claims: index.claims.filter((c) => g.screens.includes(c.screen.toLowerCase())) }));
-  const other = index.claims.filter((c) => !known.has(c.screen.toLowerCase()));
-  return other.length ? [...groups, { title: 'Other', claims: other }] : groups;
 }

@@ -1,0 +1,11 @@
+---
+// /<desk> opens the desk's first briefing section.
+import { getTopics } from '../../lib/topics.js';
+import { DESKS, deskPath } from '../../lib/desks.js';
+
+export async function getStaticPaths() {
+  return Promise.all(DESKS.map(async (desk) => ({ params: { desk: desk.slug }, props: { first: (await getTopics(desk.slug))[0] } })));
+}
+
+return Astro.redirect(deskPath(Astro.params.desk, `/briefing/${Astro.props.first.slug}`), 301);
+---

@@ -1,7 +1,6 @@
 ---
-// Two-lane political timeline from src/data/timeline.yaml: Singapore left, Vietnam right.
-import raw from '../../data/timeline.yaml?raw';
-import { loadYaml } from '../../lib/yaml.js';
+// Two-lane timeline from the desk's src/data/<desk>/timeline.yaml: Singapore left, Vietnam right.
+import { loadDeskYaml } from '../../lib/yaml.js';
 import { siteCitation } from '../../lib/sources.js';
 
 // bare: no title or outer margin, for use inside a <Slide> that titles it.
@@ -9,7 +8,7 @@ import { siteCitation } from '../../lib/sources.js';
 const { title = 'Key political events', from, bare = false, brief = false, legend = true } = Astro.props;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const events = loadYaml(raw, 'src/data/timeline.yaml')
+const events = loadDeskYaml(Astro.locals.desk, 'timeline.yaml', 'Timeline')
   .map((e) => {
     if (!/^\d{4}-\d{2}$/.test(e.date)) throw new Error(`timeline.yaml: date "${e.date}" must be YYYY-MM`);
     if (e.end && !/^\d{4}-\d{2}$/.test(e.end)) throw new Error(`timeline.yaml: end "${e.end}" must be YYYY-MM`);

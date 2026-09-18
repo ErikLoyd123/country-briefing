@@ -1,12 +1,12 @@
 ---
 import { Check, Minus } from '@lucide/astro';
-import raw from '../../data/trade-agreements.yaml?raw';
-import { loadYaml } from '../../lib/yaml.js';
+import { loadDeskYaml } from '../../lib/yaml.js';
 import { siteWithCitation } from '../../lib/sources.js';
 
 // bare: no title or outer margin, for use inside a <Slide> that titles it.
 const { title = 'Trade agreements in force', bare = false } = Astro.props;
-const agreements = loadYaml(raw, 'src/data/trade-agreements.yaml');
+// The desk's src/data/<desk>/trade-agreements.yaml.
+const agreements = loadDeskYaml(Astro.locals.desk, 'trade-agreements.yaml', 'TradeAgreements');
 ---
 
 <section class:list={['not-prose', !bare && 'my-12']}>

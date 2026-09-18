@@ -1,0 +1,41 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { mdxComponents } from '../../components/mdx.js';
+import { COURSE, DESKS } from '../../lib/desks.js';
+
+export async function getStaticPaths() {
+  // A desk's own About text is optional: src/content/about/<desk>.mdx.
+  const about = await getCollection('about');
+  return DESKS.map((desk) => ({ params: { desk: desk.slug }, props: { desk, entry: about.find((e) => e.id === desk.slug) } }));
+}
+
+const { desk, entry } = Astro.props;
+Astro.locals.desk = desk.slug;
+const body = entry ? await render(entry) : null;
+const { team } = desk;
+---
+
+<BaseLayout title="About" description={`The team behind the ${desk.name} briefing.`}>
+  <div class="container-text py-16">
+    <p class="text-sm text-muted">{COURSE} · Country Briefing {desk.number} of {DESKS.length}</p>
+    <h1 class="mt-3 text-5xl">About this briefing</h1>
+
+    <section class="mt-16">
+      <h2 class="font-display text-3xl">{team.name}</h2>
+      {
+        team.members.length ? (
+          <ul class="mt-4 grid gap-x-8 sm:grid-cols-2">
+            {team.members.map((name) => (
+              <li class="border-b border-rule py-3 text-ink">{name}</li>
+            ))}
+          </ul>
+        ) : (
+          <p class="mt-4 text-ink-2">Members to be added.</p>
+        )
+      }
+    </section>
+
+    {body && <body.Content components={mdxComponents} />}
+  </div>
+</BaseLayout>

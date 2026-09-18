@@ -1,5 +1,6 @@
 import { it, expect } from 'vitest';
 import { parseApa, inTextAuthor, parseClaims, buildIndex, citationHtml, withCitation, loadIndex, claimUsage, siteCitation, siteWithCitation } from '../src/lib/sources.js';
+import { DESKS } from '../src/lib/desks.js';
 
 const HEADER = 'ID,Screen,Country / company,Claim,Source (APA),Link,Retrieved,Verified by,Notes,Quote';
 const row = (id, apa, url) => `${id},need to know,Singapore,A claim.,"${apa}",${url},2026-09-13,,,`;
@@ -56,25 +57,29 @@ it('puts a citation before the closing punctuation', () => {
   expect(withCitation('Things arrive on time.', ['SG-1'], ix).replace(/<[^>]+>/g, '')).toBe('Things arrive on time (World Bank, 2025).');
 });
 
-it('loads the real source table, and every claim in it is cited on a slide', () => {
-  const ix = loadIndex();
+it.each(DESKS.map((d) => d.slug))('loads the %s source table, and every claim in it is cited on a slide', (desk) => {
+  const ix = loadIndex(desk);
+  expect(ix.page).toBe(`/${desk}/sources`);
   expect(new Set(ix.sources.map((s) => s.id)).size).toBe(ix.sources.length);
   // The Sources page lists every row, so a row no slide cites is a stray reference.
-  const usage = claimUsage(ix);
+  const usage = claimUsage(desk);
   expect(ix.claims.map((c) => c.id).filter((id) => !usage.has(id))).toEqual([]);
 });
 
 it('hides citations on briefing pages but still checks the claim IDs', () => {
-  const locals = { hideCitations: true };
+  const locals = { desk: 'politics-risk', hideCitations: true };
   expect(siteCitation(locals, ['SG-8'])).toBe('');
   expect(siteWithCitation(locals, 'Things arrive on time.', ['SG-8'])).toBe('Things arrive on time.');
   expect(() => siteCitation(locals, ['XX-9'], 'StatDuel')).toThrow(/XX-9 in StatDuel/);
-  expect(siteCitation({}, ['SG-8'])).toMatch(/class="cite"/);
+  expect(siteCitation({ desk: 'politics-risk' }, ['SG-8'])).toMatch(/href="\/politics-risk\/sources#/);
+  // Each desk checks against its own table, and a page outside a desk has none.
+  expect(() => siteCitation({ desk: 'marketing' }, ['SG-8'], 'StatDuel')).toThrow(/src\/data\/marketing\/sources\.csv/);
+  expect(() => siteCitation({}, ['SG-8'], 'StatDuel')).toThrow(/outside a desk page/);
 });
 
 it('lists the slides each claim appears on, including data files and the homepage', () => {
-  const usage = claimUsage();
-  expect(usage.get('SG-22')).toContainEqual(expect.objectContaining({ section: 'Need to Know', href: expect.stringMatching(/^\/briefing\/need-to-know#/) }));
-  // Timeline rows come from src/data/timeline.yaml, listed on the slide that shows <Timeline>.
-  expect(usage.get('SG-73')?.some((p) => p.href.startsWith('/briefing/political-weather'))).toBe(true);
+  const usage = claimUsage('politics-risk');
+  expect(usage.get('SG-22')).toContainEqual(expect.objectContaining({ section: 'Need to Know', href: expect.stringMatching(/^\/politics-risk\/briefing\/need-to-know#/) }));
+  // Timeline rows come from src/data/politics-risk/timeline.yaml, listed on the slide that shows <Timeline>.
+  expect(usage.get('SG-73')?.some((p) => p.href.startsWith('/politics-risk/briefing/political-weather'))).toBe(true);
 });

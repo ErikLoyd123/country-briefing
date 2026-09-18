@@ -1,16 +1,37 @@
 ---
-import { TEAM } from '../../lib/team.js';
+import { COURSE, DESKS, deskFromPath, deskPath } from '../../lib/desks.js';
+
+// The homepage belongs to all five desks; every other page belongs to one desk.
+const desk = deskFromPath(Astro.url.pathname);
+const team = desk?.team;
 ---
 
 <footer class="screen-only mt-24 border-t border-rule">
   <div class="container-wide grid gap-6 py-10 text-sm text-muted md:grid-cols-[1fr_auto]">
-    <div class="max-w-xl">
-      <p class="font-display text-base text-ink">Politics and Risk Desk: Singapore and Vietnam</p>
-      <p class="mt-2">{TEAM.course}. {TEAM.name}: {TEAM.members.join(', ')}. Sources retrieved {TEAM.retrieved}; every claim is checked by a team member. Not affiliated with Lonely Planet.</p>
-    </div>
-    <nav aria-label="Footer" class="flex flex-wrap items-start gap-x-5 gap-y-2">
-      <a href="/about#risk-levels" class="hover:text-ink">How we rate risk</a>
-      <a href="/sources" class="hover:text-ink">Sources</a>
-    </nav>
+    {
+      desk ? (
+        <div class="max-w-xl">
+          <p class="font-display text-base text-ink">{desk.name} Desk: Singapore and Vietnam</p>
+          <p class="mt-2">
+            {COURSE}. {team.name}
+            {team.members.length > 0 && `: ${team.members.join(', ')}`}.
+            {desk.retrieved && ` Sources retrieved ${desk.retrieved}; every claim is checked by a team member.`} Not affiliated with Lonely Planet.
+          </p>
+        </div>
+      ) : (
+        <div class="max-w-xl">
+          <p class="font-display text-base text-ink">Country Briefing: Singapore and Vietnam</p>
+          <p class="mt-2">{COURSE}. {DESKS.length} desks, one per team. Not affiliated with Lonely Planet.</p>
+        </div>
+      )
+    }
+    {
+      desk && (
+        <nav aria-label="Footer" class="flex flex-wrap items-start gap-x-5 gap-y-2">
+          <a href={deskPath(desk, '/about')} class="hover:text-ink">About</a>
+          <a href={deskPath(desk, '/sources')} class="hover:text-ink">Sources</a>
+        </nav>
+      )
+    }
   </div>
 </footer>

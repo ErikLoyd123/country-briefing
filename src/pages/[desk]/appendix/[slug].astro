@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { mdxComponents } from '../../../components/mdx.js';
+import { getDesk } from '../../../lib/desks.js';
+
+// Appendix pages are optional, one folder per desk: src/content/appendices/<desk>/<slug>.mdx.
+export async function getStaticPaths() {
+  const entries = await getCollection('appendices');
+  return entries.map((entry) => {
+    const [desk, slug] = entry.id.split('/');
+    return { params: { desk: getDesk(desk).slug, slug }, props: { entry } };
+  });
+}
+
+const { entry } = Astro.props;
+Astro.locals.desk = Astro.params.desk;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title}>
+  <article class="container-text py-16">
+    <h1 class="text-5xl leading-tight">{entry.data.title}</h1>
+    <div class="briefing-prose mt-10">
+      <Content components={mdxComponents} />
+    </div>
+  </article>
+</BaseLayout>
