@@ -1,14 +1,16 @@
 # Every image or video used on the site needs an entry here (the build fails otherwise).
+# Unsplash, Pexels and Wikimedia entries are written by `npm run media` from media-sources.yaml: don't edit them here.
+# Add an entry by hand only for media that script can't fetch (your own photos, AI images, music); those are kept.
 # file: path relative to src/assets/images/ (images) or public/media/ (video and audio)
-# source: unsplash | pexels | flux | team | other
+# source: flux | team | or the site's name (hand-written)   unsplash | pexels-photo | pexels-video | wikimedia (generated)
 # aiGenerated: true for Flux (or any AI) images; they are captioned "Illustrative (AI-generated)".
 #
 # Example:
-# - file: singapore/marina-bay-dusk.jpg
-#   source: unsplash
+# - file: common/team-photo.jpg
+#   source: team
 #   author: Jane Photographer
-#   url: https://unsplash.com/photos/abc123
-#   license: Unsplash License
+#   license: Used with permission
+#   alt: What the photo verifiably shows (and where)
 #   aiGenerated: false
 - file: singapore/marina-bay-night.jpg
   source: unsplash

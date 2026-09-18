@@ -1,6 +1,6 @@
 // Downloads photos/videos listed in media-sources.yaml and writes their credits to credits.yaml.
-// Usage: npm run media            download missing files, refresh credits
-//        npm run media -- --force re-download everything
+// Usage: npm run media            download missing files and credit them
+//        npm run media -- --force re-download everything and refresh every credit
 // Keys come from .env (see .env.example). Unsplash downloads are reported to Unsplash as their API
 // guidelines require.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -115,13 +115,21 @@ for (const item of sources) {
   }
   const out = outPath(item);
   const download = FORCE || !existsSync(out);
+  const known = credits.find((c) => c.file === item.file && c.source === item.source);
+  console.log(`${download ? '↓' : '·'} ${item.file} (${item.source})`);
+  // Already downloaded and credited: keep the entry, so you only need a key for the provider you are adding from.
+  if (!download && known) {
+    fresh.push({ ...known, alt: item.alt });
+    continue;
+  }
   try {
-    console.log(`${download ? '↓' : '·'} ${item.file} (${item.source})`);
     const credit = await handler(item, download ? out : null);
     fresh.push({ file: item.file, source: item.source, ...credit, alt: item.alt, aiGenerated: false });
   } catch (err) {
     console.error(`✗ ${item.file}: ${err.message}`);
     failures++;
+    // A failed lookup (no key, rate limit, offline) must not drop a credit the build needs.
+    if (known) fresh.push(known);
   }
 }
 
