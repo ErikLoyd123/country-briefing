@@ -1,51 +1,115 @@
-# Politics and Risk Desk: Singapore and Vietnam
+# Country Briefing: Singapore and Vietnam
 
-A country briefing for DU EMBA Cohort 84 (Global Business), by Team Poesis. It covers doing business in Singapore and Vietnam the way a guidebook would: what to know before you land, what can go wrong, what it means for your money, and what to ask in the room. Crocs and Mastercard run through every section.
+Country briefings on doing business in Singapore and Vietnam, for DU EMBA Cohort 84 (Global Business). The site has five desks, one per team. The homepage lists them, and each desk has its own briefing (a deck of slides), Sources page and About page.
 
-The Markdown and data files produce the site: an overview and six sections (Need to Know, Risks and Constraints, Money Matters, The Political Weather, Local Knowledge, Itineraries), each a deck of slides with photos, charts and diagrams (`src/content/briefings/`). The full written paper is kept in `src/content/paper/` but is no longer published on the site.
+| # | Desk | Folder | Starts at |
+|---|---|---|---|
+| 1 | Politics & Risk (Team Poesis) | `politics-risk` | `/politics-risk/briefing/need-to-know` |
+| 2 | Human Resources & Cultural Implications | `hr-culture` | `/hr-culture/briefing/introduction` |
+| 3 | Marketing Practices | `marketing` | `/marketing/briefing/introduction` |
+| 4 | Supply Chain, Natural Resources & Infrastructure | `supply-chain` | `/supply-chain/briefing/introduction` |
+| 5 | Finance & Economics | `finance-economics` | `/finance-economics/briefing/introduction` |
 
-Every fact is a claim in `src/data/sources.csv`, the team's source table. Text cites claims by ID (`[@SG-17]`). The slides and homepage check the IDs but don't show citations, and the Sources page lists the slides each claim appears on.
+Politics & Risk is written. The other four start from an introduction section listing their assignment questions, for their teams to fill in. **[CONTRIBUTING.md](CONTRIBUTING.md)** explains how to write slides, cite sources and add photos.
 
-## Quick start
+Live site: https://country-briefing-ten.vercel.app
+
+## Getting started
+
+You need **Node.js 22.12 or newer** and **git**. On a Mac, `make` comes with the Xcode command line tools (`xcode-select --install`).
 
 ```bash
-npm install
-npm run dev      # http://localhost:4321
+git clone git@github.com:ErikLoyd123/country-briefing.git
+cd country-briefing
+make setup      # checks Node, installs dependencies, creates .env
+make dev        # the site at http://localhost:4321, reloading as you edit
 ```
 
-| Command | What it does |
+**No virtual environment needed.** This is a Node project: `npm ci` installs every dependency into the project's own `node_modules/` folder, so nothing is installed system-wide. The Node version is pinned in `.nvmrc`; if you use [nvm](https://github.com/nvm-sh/nvm), run `nvm install` then `nvm use` in the project folder to switch to it.
+
+**No `make`?** (Windows, for example.) The same steps with npm:
+
+```bash
+npm ci
+cp .env.example .env    # Windows: copy .env.example .env
+npm run dev
+```
+
+## Everyday commands
+
+| make | npm | What it does |
+|---|---|---|
+| `make setup` | `npm ci` | First-time install (and creates `.env`) |
+| `make dev` | `npm run dev` | Local site at http://localhost:4321 in this terminal; Ctrl+C stops it |
+| `make start` / `make stop` | `npx astro dev --background` / `npx astro dev stop` | The same site, running in the background |
+| `make restart` | | Restart the background site with a fresh cache, after changing `astro.config.mjs` or a plugin |
+| `make test` | `npm test` | Unit tests: source tables and citations |
+| `make build` | `npm run build` | Static build into `dist/`; fails on bad content or unknown claim IDs |
+| `make check` | `npm run check` | Tests, then a build: run this before you push |
+| `make media` | `npm run media` | Downloads photos and videos listed in `media-sources.yaml` (needs API keys, below) |
+
+Run `make` on its own to list every task.
+
+## API keys (only for adding photos and video)
+
+You only need keys to download new photos or videos with `make media`. Building and previewing the site needs none: every downloaded image is already in the repo.
+
+`make setup` copies `.env.example` to `.env`. Put your keys in `.env`; it is gitignored, so keys never reach GitHub. Everyone uses their own keys, and they are never built into the website.
+
+| Variable | Where to get it |
 |---|---|
-| `npm run dev` | Local site with live reload |
-| `npm test` | Unit tests (source table, APA citations, screen splitting) |
-| `npm run build` | Static build to `dist/`; fails on invalid content or unknown claim IDs |
-| `npm run check` | Tests + build |
-| `npm run media` | Downloads photos/videos listed in `media-sources.yaml` and writes `credits.yaml` (needs `.env`, see `.env.example`) |
+| `UNSPLASH_ACCESS_KEY` | Sign in at [unsplash.com/developers](https://unsplash.com/developers) → **Your apps** → **New Application** → accept the guidelines and name it. Copy the **Access Key** (not the Secret Key). Demo mode (50 requests an hour) is plenty. |
+| `PEXELS_API_KEY` | Sign in at [pexels.com/api](https://www.pexels.com/api/) → **Your API Key**. The key is issued instantly. |
+| `MEDIA_CONTACT_EMAIL` | Your email. Wikimedia Commons needs no key but asks scripts to identify themselves. |
+
+```ini
+# .env
+UNSPLASH_ACCESS_KEY=your-access-key
+PEXELS_API_KEY=your-pexels-key
+MEDIA_CONTACT_EMAIL=you@example.com
+```
+
+Then add an entry to `media-sources.yaml` and run `make media`; [CONTRIBUTING.md](CONTRIBUTING.md#adding-images-and-video) has the steps.
+
+## Where each desk's files live
+
+```
+src/
+  lib/desks.js                          the five desks: name, blurb, team, status
+  content/briefings/<desk>/NN-section/  a desk's sections, one index.mdx of slides each
+  content/about/<desk>.mdx              extra text for a desk's About page (optional)
+  content/appendices/<desk>/            appendix pages (optional)
+  data/<desk>/sources.csv               a desk's source table: one row per cited fact
+  data/<desk>/*.yaml                    data for built figures, e.g. timeline.yaml
+  assets/images/, public/media/         photos and videos shared by every desk
+media-sources.yaml, credits.yaml        where each photo and video came from
+```
+
+Each desk's claims are checked against its own `sources.csv`, so desks never share or collide on claim IDs. The build fails if a slide cites an ID that isn't in its desk's table, and `make test` fails if a row in the table isn't cited on a slide.
 
 ## Routes
 
 | Route | Page |
 |---|---|
-| `/` | Overview |
-| `/briefing/<section>` | The seven sections |
-| `/sources` | APA references, verification table, facts not used |
-| `/about` | Team, method, credits |
-| `/appendix/<slug>` | Appendices (glossary) |
+| `/` | Homepage: the five desks |
+| `/<desk>` | Opens the desk's first section |
+| `/<desk>/briefing/<section>` | A desk's sections |
+| `/<desk>/sources` | The desk's APA references |
+| `/<desk>/about` | The desk's team |
+| `/<desk>/appendix/<slug>` | Appendix pages (Politics & Risk's glossary) |
+
+Old Politics & Risk links (`/briefing/<section>`, `/sources`, `/about`, `/appendix/<slug>`) redirect to their new addresses.
+
+## Deploying
+
+The site is hosted on Vercel, connected to this GitHub repo. Every push to `main` deploys to https://country-briefing-ten.vercel.app within a minute or so. Run `make check` first: if the build fails, the deploy fails and the live site stays as it was.
 
 ## Stack
 
-- Astro 7 (static), MDX, React islands
-- Tailwind CSS 4
-- d3-geo maps
-- GSAP + Lenis for scroll motion
+- Astro 7 (static output), MDX, React islands
+- Tailwind CSS 4; design tokens in `src/styles/global.css`
+- d3-geo maps; GSAP and Lenis for scroll motion
 - A small remark plugin for claim-ID citations (`src/plugins/remark-claims.mjs`, `src/lib/sources.js`)
-- Playwright for PDF export
+- `sharp` for resizing downloaded photos
 
-Design tokens live in `src/styles/global.css`.
-
-## Adding content
-
-See **[CONTRIBUTING.md](CONTRIBUTING.md)**.
-
-## Draft status
-
-Sources were retrieved 13 September 2026. Claims show as verified on the Sources page once a team member initials them in `sources.csv`.
+The written Politics & Risk paper is kept in `src/content/paper/` but is no longer built or published.

@@ -1,23 +1,44 @@
 # Contributing to the briefing
 
-This guide is for everyone on the team, whether or not you use git. You only ever edit **Markdown (`.mdx`)**, **CSV**, and **YAML** files. You never need to touch styling or code.
+This guide is for every team, whether or not you use git. You only ever edit **Markdown (`.mdx`)**, **CSV**, and **YAML** files. You never need to touch styling or code.
+
+## Desks
+
+The site has five desks, one per team. The homepage lists them all, and each desk has its own briefing, Sources page and About page under its own address:
+
+| Desk | Folder name (`<desk>` below) | Address |
+|---|---|---|
+| Politics & Risk | `politics-risk` | `/politics-risk/briefing/need-to-know` |
+| Human Resources & Cultural Implications | `hr-culture` | `/hr-culture/briefing/introduction` |
+| Marketing Practices | `marketing` | `/marketing/briefing/introduction` |
+| Supply Chain, Natural Resources & Infrastructure | `supply-chain` | `/supply-chain/briefing/introduction` |
+| Finance & Economics | `finance-economics` | `/finance-economics/briefing/introduction` |
+
+A new desk starts with one **Introduction** section listing its assignment questions, an empty source table and an About page. To make it yours:
+
+1. Put your team's name and members in your desk's entry in `src/lib/desks.js`, and change its `status` from `'starter'` to `'live'` once your briefing is ready (the homepage card then says "Start the briefing").
+2. Edit `src/content/briefings/<desk>/01-introduction/index.mdx`, and add sections as new folders beside it: `02-your-section/index.mdx`, and so on.
+3. Add a row to `src/data/<desk>/sources.csv` for every fact you cite.
+
+Copy anything you like from the Politics & Risk desk: every slide component below works on every desk.
 
 ## Where things live
 
 | You want to… | Edit this |
 |---|---|
-| Edit a section's slides (the site) | `src/content/briefings/NN-section/index.mdx` |
-| Edit a section's full write-up (the paper) | `src/content/paper/sections/NN-section/` → `index.mdx`, `singapore.mdx`, `vietnam.mdx` |
-| Add, correct or verify a fact's source | `src/data/sources.csv` (the source table) |
-| Record a fact you couldn't source | `src/data/sources-not-used.csv` |
-| Write the executive summary | `src/content/paper/executive-summary.mdx` |
-| Add an appendix | `src/content/appendices/` (new `.mdx` file with `title` and `order`) |
-| Add an event to the timeline | `src/data/timeline.yaml` |
-| Update trade agreements | `src/data/trade-agreements.yaml` |
-| Change team names or the course line | `src/lib/team.js` |
+| Edit a section's slides | `src/content/briefings/<desk>/NN-section/index.mdx` |
+| Add, correct or verify a fact's source | `src/data/<desk>/sources.csv` (the source table) |
+| Change your team's name or members | `src/lib/desks.js` |
+| Add text to your About page | `src/content/about/<desk>.mdx` (new file; optional) |
+| Add an appendix | `src/content/appendices/<desk>/` (new `.mdx` file with `title` and `order`) |
+| Tag slides with the prompt areas they answer (`covers`) | `src/lib/covers.js`: add your desk's questions and areas first |
+| Add an event to your timeline (`<Timeline />`) | `src/data/<desk>/timeline.yaml` |
+| Update your trade agreements table (`<TradeAgreements />`) | `src/data/<desk>/trade-agreements.yaml` |
 | Add a photo or video | `media-sources.yaml`, then `npm run media` |
 
-## Sections
+## Politics & Risk sections
+
+Its sections live in `src/content/briefings/politics-risk/`:
 
 | Folder | Section |
 |---|---|
@@ -29,11 +50,11 @@ This guide is for everyone on the team, whether or not you use git. You only eve
 | `06-itineraries` | Itineraries |
 | `07-questions` | Questions: the closing section, unnumbered (site only, not in the paper) |
 
-The number at the start of the folder name sets the order.
+The number at the start of the folder name sets the order, on every desk.
 
 ## The source table
 
-Every fact on the site is a **claim** with its own row in `src/data/sources.csv`. It's the same table as the team's spreadsheet, so you can open it in Excel or Google Sheets and export it back as CSV with the same column headers.
+Every fact on the site is a **claim** with its own row in your desk's `src/data/<desk>/sources.csv`. Each desk has its own table, so IDs only need to be unique within your desk. It's the same table as the team's spreadsheet, so you can open it in Excel or Google Sheets and export it back as CSV with the same column headers.
 
 | Column | What goes in it |
 |---|---|
@@ -50,7 +71,7 @@ Every fact on the site is a **claim** with its own row in `src/data/sources.csv`
 
 Rows that share a link must use exactly the same `Source (APA)` text. The site groups claims by link, so one link is one entry in the reference list.
 
-The Sources page (`/sources`) shows the full APA reference list, the verification table grouped by section (with how many claims are verified), and the facts we couldn't source.
+Your desk's Sources page (`/<desk>/sources`) lists every source in your table as an APA reference, with the claim IDs that rest on it. Only keep rows a slide cites: `npm test` fails on a row no slide uses, so the reference list matches the briefing.
 
 ## Citing a fact
 
@@ -61,16 +82,9 @@ Cite the claim's ID in square brackets with an `@`, just before the sentence's f
 | `…87 of 97 seats [@SG-17].` | …87 of 97 seats (US-ASEAN Business Council, 2025). |
 | `…a five-year high [@VN-55; @VN-56].` | …a five-year high (Viet Nam News, 2026a; Vietnam News Agency, 2026d). |
 
-The slides and the homepage check every citation but don't show it: the briefing is for presenting. The Sources page's verification table has an **On the site** column listing the slides each claim appears on, so you can always trace a number back to its source.
+The slides check every citation but don't show it: the briefing is for presenting. The Sources page carries the references, and a claim's ID is how you trace a number on a slide back to its source.
 
-In the paper, the site looks up each claim's source and writes the APA in-text citation for you, including the `2026a` / `2026b` letters when one author has several works in a year. Each citation links to its entry on the Sources page. If an ID isn't in `sources.csv`, the build stops and names the file.
-
-## The site and the paper are written separately
-
-- **The paper** is the full write-up: every fact, in prose, Singapore then Vietnam. It is no longer published on the site, but its files stay in `src/content/paper/sections/NN-section/` as `index.mdx` (overview), `singapore.mdx` and `vietnam.mdx`. Write it like a normal document with `## Headings`, paragraphs, lists and tables.
-- **The site** (`/briefing/<section>`) is the deck you brief from: short slides with photos, charts and diagrams. Each section is one file, `src/content/briefings/NN-section/index.mdx`, made of `<Slide>`s.
-
-A slide doesn't need every fact; the paper has them. When you change a number, change it in both places (the claim ID makes it easy to search for).
+On pages that do show citations (About and appendix pages), the site looks up each claim's source and writes the APA in-text citation for you, including the `2026a` / `2026b` letters when one author has several works in a year. Each citation links to its entry on your desk's Sources page. If an ID isn't in your desk's `sources.csv`, the build stops and names the file.
 
 ## Writing a section's slides
 
@@ -193,7 +207,7 @@ No imports needed. Copy and adjust. Every figure takes `cite` claim IDs (checked
 
 **Lines over a few years:** `<ShareLines label="…" unit="%" years={[2023, 2024, 2025]} series={[{ name: 'Crocs Brand', values: [56, 51, 45], cite: ['CR-1'] }]} />`
 
-**A risk** (Risks and Constraints). `area` is `government`, `society`, `security` or `economy`; `level` is `high` (Watch closely), `mid` (Manage it) or `low` (Low, but real). The homepage and `<RiskMap section="dangers-annoyances" />` list every risk card automatically.
+**A risk** (Risks and Constraints). `area` is `government`, `society`, `security` or `economy`; `level` is `high` (Watch closely), `mid` (Manage it) or `low` (Low, but real). `<RiskMap section="dangers-annoyances" />` lists every risk card in that section automatically.
 
 ```mdx
 <RiskCard country="SG" area="security" level="mid" title="Scams, not street crime">
@@ -211,17 +225,7 @@ One line of evidence [@SG-38].
 
 **A photo or video anywhere:** `<Media src="vietnam/hcmc-metro.jpg" country="VN" ratio="21 / 9" />`
 
-**Built from data files:** `<Timeline bare />` (`brief` shows dates and titles only, for a slide; `legend={false}` inside a `<Plate key>`) (`src/data/timeline.yaml`), `<TradeAgreements bare />` (`src/data/trade-agreements.yaml`), `<RegionMap />`. In those YAML files, `cite: [SG-73]` lists the claim IDs behind each row.
-
-## Components for the paper
-
-The paper's files can use `<Risk>`, `<HintCards>`, `<Callout>`, `<Stops>` / `<Stop>`, `<Figure>`, `<CountryCompare>`, `<Timeline />` and `<TradeAgreements />`. Look at the existing files in `src/content/paper/sections/` for examples, and write a side-by-side comparison as a Markdown table:
-
-```md
-|  | Singapore | Vietnam |
-|---|---|---|
-| Corporate tax | 17 percent headline [@SG-59] | 20 percent standard [@VN-58] |
-```
+**Built from data files:** `<Timeline bare />` (`brief` shows dates and titles only, for a slide; `legend={false}` inside a `<Plate key>`) (`src/data/<desk>/timeline.yaml`), `<TradeAgreements bare />` (`src/data/<desk>/trade-agreements.yaml`), `<RegionMap />`. Each desk keeps its own copy of those YAML files; copy Politics & Risk's to start one. In them, `cite: [SG-73]` lists the claim IDs behind each row, from your desk's source table.
 
 ## Adding images and video
 
@@ -253,24 +257,22 @@ Only write captions and `alt` text you can verify: the place and what is shown. 
 
 ## Previewing your changes
 
-**With the code on your computer:**
+**With the code on your computer** (first-time setup is in the [README](README.md#getting-started)):
 
 ```bash
-npm install          # first time only
-npm run dev          # opens http://localhost:4321 and reloads as you edit
-npm test             # citation and source-table checks
-npm run build        # full check that everything is valid
-npm run pdf          # saves dist/country-briefing-politics-risk.pdf
+make dev             # opens http://localhost:4321 and reloads as you edit
+make test            # citation and source-table checks
+make check           # tests plus a full build: run before you push
 ```
 
-The first time you run `npm run pdf`, also run `npx playwright install chromium`.
+Without `make`, use `npm run dev`, `npm test` and `npm run check`.
 
 **Without git or a terminal:**
 
 1. Open the repository on GitHub.
 2. Find the file and click the pencil icon to edit.
 3. Commit to a new branch and open a pull request.
-4. Once the repo is connected to Vercel, a preview link is posted on the pull request so you can see your change.
+4. Vercel posts a preview link on the pull request so you can see your change before it goes live. Merging to `main` publishes it.
 
 ## When the build fails
 
@@ -278,8 +280,11 @@ The build stops on purpose when something would silently be wrong. The error nam
 
 | Message contains | Meaning |
 |---|---|
-| `Unknown claim ID(s) SG-99 in …` | You cited an ID that isn't in `sources.csv` (check spelling) |
-| `should cite claim IDs from src/data/sources.csv` | A citation isn't in the `[@SG-12]` form |
+| `Unknown claim ID(s) SG-99 in …` | You cited an ID that isn't in your desk's `sources.csv` (check spelling, and that you're editing the right desk's table) |
+| `should cite claim IDs from the desk's sources.csv` | A citation isn't in the `[@SG-12]` form |
+| `is not in a desk's folder` | A file with citations sits outside `src/content/briefings/<desk>/`, `appendices/<desk>/` or `about/<desk>.mdx` |
+| `Unknown desk "…"` | A folder under `src/content/briefings/` isn't one of the desks in `src/lib/desks.js` |
+| `is not a prompt area for desk` | A slide's `covers` tag uses an area your desk hasn't listed in `src/lib/covers.js` |
 | `sources.csv row N: …` | A bad row: a malformed ID, a duplicate ID, an empty required column, or a source not in APA form |
 | `share a link but describe the source differently` | Two rows with the same link have different `Source (APA)` text; make them match |
 | `data does not match collection schema` | A frontmatter field is missing or invalid |
