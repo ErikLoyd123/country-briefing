@@ -7,7 +7,7 @@ import remarkClaims from './src/plugins/remark-claims.mjs';
 import rehypeFrames from './src/plugins/rehype-frames.mjs';
 
 export default defineConfig({
-  site: 'https://country-briefing.example',
+  site: 'https://country-briefing-ten.vercel.app',
   integrations: [react(), mdx()],
   // The briefing moved under its desk's path when the homepage became the front door for all five desks.
   // Old links keep working: these two here, and /briefing/<section> and /appendix/<slug> in src/pages.
@@ -18,7 +18,7 @@ export default defineConfig({
   markdown: {
     // Astro 7 defaults to the Sätteri processor; the citation and frame plugins need the unified
     // (remark/rehype) pipeline. MDX inherits this processor.
-    // remarkClaims turns [@SG-12] into an APA in-text citation from src/data/sources.csv.
+    // remarkClaims turns [@SG-12] into an APA in-text citation from the desk's src/data/<desk>/sources.csv.
     processor: unified({ remarkPlugins: [remarkClaims], rehypePlugins: [rehypeFrames] }),
   },
   vite: {

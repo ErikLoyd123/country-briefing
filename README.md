@@ -10,7 +10,7 @@ Country briefings on doing business in Singapore and Vietnam, for DU EMBA Cohort
 | 4 | Supply Chain, Natural Resources & Infrastructure | `supply-chain` | `/supply-chain/briefing/introduction` |
 | 5 | Finance & Economics | `finance-economics` | `/finance-economics/briefing/introduction` |
 
-Politics & Risk is written. The other four start from an introduction section listing their assignment questions, for their teams to fill in. **[CONTRIBUTING.md](CONTRIBUTING.md)** explains how to write slides, cite sources and add photos.
+Politics & Risk is written. The other four start from an introduction section listing their assignment questions, for their teams to fill in. **[CONTRIBUTING.md](CONTRIBUTING.md)** explains how to write slides, cite sources and add photos. If you work with Claude Code, [CLAUDE.md](CLAUDE.md) gives it the same rules.
 
 Live site: https://country-briefing-ten.vercel.app
 
@@ -19,7 +19,7 @@ Live site: https://country-briefing-ten.vercel.app
 You need **Node.js 22.12 or newer** and **git**. On a Mac, `make` comes with the Xcode command line tools (`xcode-select --install`).
 
 ```bash
-git clone git@github.com:ErikLoyd123/country-briefing.git
+git clone https://github.com/ErikLoyd123/country-briefing.git
 cd country-briefing
 make setup      # checks Node, installs dependencies, creates .env
 make dev        # the site at http://localhost:4321, reloading as you edit
@@ -54,7 +54,7 @@ Run `make` on its own to list every task.
 
 You only need keys to download new photos or videos with `make media`. Building and previewing the site needs none: every downloaded image is already in the repo.
 
-`make setup` copies `.env.example` to `.env`. Put your keys in `.env`; it is gitignored, so keys never reach GitHub. Everyone uses their own keys, and they are never built into the website.
+`make setup` copies `.env.example` to `.env`. Put your keys in `.env`; it is gitignored, so keys never reach GitHub. Everyone uses their own keys, and they are never built into the website. You only need the key for the site you are adding from: a Pexels photo needs only `PEXELS_API_KEY`, and a Wikimedia photo needs no key at all.
 
 | Variable | Where to get it |
 |---|---|
@@ -102,7 +102,7 @@ Old Politics & Risk links (`/briefing/<section>`, `/sources`, `/about`, `/append
 
 ## Deploying
 
-The site is hosted on Vercel, connected to this GitHub repo. Every push to `main` deploys to https://country-briefing-ten.vercel.app within a minute or so. Run `make check` first: if the build fails, the deploy fails and the live site stays as it was.
+The site is hosted on Vercel, connected to this GitHub repo. Every team works on `main`, and every push to `main` deploys to https://country-briefing-ten.vercel.app within a minute or so. Run `make check` first: if the build fails, the deploy fails and the live site stays as it was. GitHub shows a green ✓ beside the commit once it is live. The push steps are in [CONTRIBUTING.md](CONTRIBUTING.md#publishing-your-changes).
 
 ## Stack
 

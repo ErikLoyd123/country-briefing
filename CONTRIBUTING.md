@@ -1,6 +1,6 @@
 # Contributing to the briefing
 
-This guide is for every team, whether or not you use git. You only ever edit **Markdown (`.mdx`)**, **CSV**, and **YAML** files. You never need to touch styling or code.
+This guide is for every team, whether or not you use git. You write in **Markdown (`.mdx`)**, **CSV**, and **YAML** files, plus your desk's own entry in two short lists (`src/lib/desks.js` for your team, `src/lib/covers.js` if you tag slides). You never need to touch styling or components.
 
 ## Desks
 
@@ -21,6 +21,8 @@ A new desk starts with one **Introduction** section listing its assignment quest
 3. Add a row to `src/data/<desk>/sources.csv` for every fact you cite.
 
 Copy anything you like from the Politics & Risk desk: every slide component below works on every desk.
+
+**Five teams, one repo.** Everything with `<desk>` in its path is yours alone, so you can't collide with another team there. A few files are shared by every desk: `src/lib/desks.js`, `src/lib/covers.js`, `media-sources.yaml`, `credits.yaml` and the photos in `src/assets/images/`. In those, add or change only your own entries, and pull the latest `main` before you run `npm run media`, because it rewrites `credits.yaml`. Any desk may use any photo already in the repo.
 
 ## Where things live
 
@@ -58,7 +60,7 @@ Every fact on the site is a **claim** with its own row in your desk's `src/data/
 
 | Column | What goes in it |
 |---|---|
-| `ID` | `SG-12`, `VN-3`, `CR-7`, `MC-20`: country or company, then a number. Never reuse an ID. |
+| `ID` | `SG-12`, `VN-3`, `CR-7`, `MC-20`: two to four capital letters for the country or company, a hyphen, then a number. Never reuse an ID. |
 | `Screen` | Which section the claim belongs to, e.g. `dangers economy` (groups the verification table) |
 | `Country / company` | `Singapore`, `Vietnam`, `Crocs / Vietnam`, … |
 | `Claim` | The fact, in one sentence |
@@ -249,7 +251,7 @@ Photos and videos are listed in **`media-sources.yaml`**. Credits are generated 
    - as a section banner: `hero: { image: vietnam/hanoi-old-quarter.jpg, alt: "…" }` (or `video: video/clip.mp4`)
    - inside text: `<Figure src="vietnam/hanoi-old-quarter.jpg" caption="…" />`
 
-`npm run media` needs API keys in `.env` for Unsplash and Pexels. Copy `.env.example` to `.env` and follow the steps in it. Wikimedia needs no key.
+`npm run media` needs an API key in `.env` for the site you are adding from: Unsplash or Pexels. Copy `.env.example` to `.env` and follow the steps in it. Wikimedia needs no key. Photos already in the repo are left alone, so you don't need the other site's key.
 
 **Flux / team photos:** put the file in `src/assets/images/` and add a credit to `credits.yaml` by hand with `source: flux` (or `team`) and `aiGenerated: true` for AI images, which are labeled "Illustrative image (AI-generated)" where they appear. Hand-written entries are kept when `npm run media` runs.
 
@@ -260,19 +262,39 @@ Only write captions and `alt` text you can verify: the place and what is shown. 
 **With the code on your computer** (first-time setup is in the [README](README.md#getting-started)):
 
 ```bash
-make dev             # opens http://localhost:4321 and reloads as you edit
+make dev             # serves the site at http://localhost:4321 and reloads as you edit
 make test            # citation and source-table checks
 make check           # tests plus a full build: run before you push
 ```
 
 Without `make`, use `npm run dev`, `npm test` and `npm run check`.
 
+## Publishing your changes
+
+Everyone works on `main`: no branches needed. Pushing to `main` on GitHub is publishing: Vercel builds it and the live site updates in about a minute. You need to be a collaborator on the GitHub repo to push; ask the Politics & Risk team to add you.
+
+Pull before you start work (`git pull`), so you have the other teams' latest. When you're ready to publish:
+
+```bash
+make check                                    # tests plus a full build: fix anything it reports first
+git add -A
+git commit -m "marketing: add the buying habits section"
+git pull --rebase                             # picks up anything other teams pushed meanwhile
+git push
+```
+
+- **`git push` was rejected?** Another team pushed since your last pull. Run `git pull --rebase`, then `git push` again.
+- **A conflict during the pull?** Each team edits its own desk's files, so this can only happen in a shared file (`src/lib/desks.js`, `src/lib/covers.js`, `media-sources.yaml`, `credits.yaml`). Keep both teams' entries, then `git add` the file and run `git rebase --continue`.
+- **Did it go live?** On GitHub, the commit gets a green ✓ once Vercel has deployed it. A red ✗ means the build failed and the live site stays as it was: run `make check` to see the error, fix it and push again.
+
 **Without git or a terminal:**
 
-1. Open the repository on GitHub.
+1. Open the repository on GitHub (signed in as a collaborator).
 2. Find the file and click the pencil icon to edit.
-3. Commit to a new branch and open a pull request.
-4. Vercel posts a preview link on the pull request so you can see your change before it goes live. Merging to `main` publishes it.
+3. Click **Commit changes** and keep **Commit directly to the `main` branch** selected. That publishes it, the same as a push.
+4. Watch for the green ✓ beside your commit. Nothing checks your change before it builds this way, so a red ✗ means a mistake in the file (usually a claim ID that isn't in your `sources.csv`): edit it again to fix it. The live site stays as it was until a build succeeds.
+
+Prefer to see a change before it goes live? Choose **Create a new branch** in step 3 and open a pull request: Vercel posts a preview link on it, and merging publishes it.
 
 ## When the build fails
 

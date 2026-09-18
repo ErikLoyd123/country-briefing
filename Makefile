@@ -17,7 +17,8 @@ check-node:
 	@command -v node >/dev/null || { echo "Node.js is not installed. Get it from https://nodejs.org or with nvm: https://github.com/nvm-sh/nvm"; exit 1; }
 	@node -e 'const [a, b] = process.versions.node.split(".").map(Number); if (a < 22 || (a === 22 && b < 12)) { console.error("Node " + process.versions.node + " is too old. Install Node 22.12 or newer (with nvm: nvm install && nvm use)."); process.exit(1); }'
 
-node_modules: package-lock.json
+# check-node is order-only (after the |): it runs every time, without forcing a reinstall.
+node_modules: package-lock.json | check-node
 	npm ci
 	@touch node_modules
 
