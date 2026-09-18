@@ -231,7 +231,7 @@ One line of evidence [@SG-38].
 
 ## Adding images and video
 
-Photos and videos are listed in **`media-sources.yaml`**. Credits are generated from that file and listed once on the About page (some Wikimedia photos are Creative Commons and require attribution); pages themselves don't show credits.
+Photos and videos are listed in **`media-sources.yaml`**. Each one's author, link and license are recorded from that file into `credits.yaml`, which is the record of where the media came from; the site itself doesn't show credits.
 
 1. Find the image or video:
    - **Unsplash:** the photo ID is the last part of the URL (`unsplash.com/photos/…-7ryPpZK1qV8` → `7ryPpZK1qV8`)

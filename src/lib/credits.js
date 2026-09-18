@@ -4,8 +4,8 @@ import { loadYaml } from './yaml.js';
 
 export const credits = loadYaml(raw, 'credits.yaml') ?? [];
 
-// Credits are listed once on /about (the Creative Commons photos require attribution);
-// pages don't show per-image credits. Returns null when a file has no entry.
+// credits.yaml is the record of where each file came from; the site doesn't show credits. Components use an
+// entry for its alt text and AI-generated flag. Returns null when a file has no entry.
 export function findCredit(file) {
   return credits.find((x) => x.file === file) ?? null;
 }
