@@ -226,7 +226,7 @@ export function claimUsage(desk) {
     const file = join(dir, folder, 'index.mdx');
     let text;
     try {
-      text = readFileSync(file, 'utf8');
+      text = readFileSync(file, 'utf8').replace(/\r\n/g, '\n'); // Windows checkouts may have CRLF endings
     } catch {
       continue;
     }
