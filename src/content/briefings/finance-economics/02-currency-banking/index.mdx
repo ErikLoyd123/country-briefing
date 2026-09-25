@@ -1,0 +1,160 @@
+---
+title: Currency and Banking
+short: Currency & Banking
+thesis: Singapore keeps a firm currency and well-capitalised banks. Vietnam trades cheap credit for growth, with a weaker dong and thinner bank buffers.
+hero:
+  image: singapore/sgd-banknotes.jpg
+  alt: Singapore dollar banknotes
+format: slides
+status: draft
+---
+
+<Slide title="Two central banks, two toolkits" lede="Singapore steers its currency. Vietnam steers the price and volume of credit, and the currency too.">
+
+<Fragment slot="sg">
+<BigStat value="2" unit="tightenings in 2026">
+MAS raised the currency's rate of rise in April and again, by less, in July [@SG-2; @SG-3].
+</BigStat>
+
+- **No policy interest rate.** MAS manages the Singapore dollar against a secret basket of currencies, inside a band it can tilt, widen or shift [@SG-1].
+- **Why tighten now:** a stronger dollar makes imported energy and food cheaper [@SG-2].
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="4.5%" unit="refinancing rate">
+Still at a historic low in May 2026, with the discount rate at 3.0% [@VN-1].
+</BigStat>
+
+- **More levers:** policy rates, credit-growth limits, market operations and a managed exchange-rate band.
+- **The tension:** in August the government told the central bank to keep rates stable and credit flowing, while managing the dong flexibly [@VN-2].
+</Fragment>
+
+</Slide>
+
+<Slide title="How the currencies move" tone="tint" lede="The Singapore dollar drifts up on purpose. The dong drifts down, and the central bank leans against it." layout="joined">
+
+<div class="grid grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)_minmax(0,1fr)]">
+<div class="hidden lg:block"><Media src="singapore/sgd-banknotes.jpg" ratio="3 / 4" /></div>
+<Plate key>
+<StatDuel rows={[
+  {
+    label: 'Recent direction',
+    sg: { value: '+1.2%', detail: 'Against its basket in 2025, and 0.4% more by April 2026', cite: ['SG-4'] },
+    vn: { value: '−5%', detail: 'About that much against the US dollar in 2024, still under pressure in 2025', cite: ['VN-3'] },
+  },
+  {
+    label: 'The band',
+    sg: { value: 'Undisclosed', detail: 'MAS keeps the basket and band confidential', cite: ['SG-1'] },
+    vn: { value: '±5%', detail: 'Banks trade within 5% of the daily reference rate', cite: ['VN-5'] },
+  },
+  {
+    label: 'Latest reading',
+    sg: { value: 'US$427bn', detail: 'Official reserves behind the currency, April 2026', cite: ['SG-5'] },
+    vn: { value: '₫26,300', detail: 'Per US dollar, July 2026 market average; reference rate about ₫25,600 in September', cite: ['VN-4', 'VN-5'] },
+  },
+]} head={false} />
+</Plate>
+<div class="hidden lg:block"><Media src="vietnam/dong-banknotes.jpg" ratio="3 / 4" /></div>
+</div>
+
+</Slide>
+
+<Slide title="What that does to your costs" lede="A strong currency makes imports cheap and people expensive. A weak one does the reverse." sgMedia="singapore/pasir-panjang-terminal.jpg" vnMedia="vietnam/saigon-river-containers.jpg">
+
+<Fragment slot="sg">
+- **Cheaper:** imported goods, energy, food and inputs [@SG-2].
+- **Dearer:** Singapore-based salaries and services, priced in other currencies.
+- **Currency risk:** low for an emerging-market region, but a rising dollar still squeezes margins on regional pricing [@SG-4].
+</Fragment>
+
+<Fragment slot="vn">
+- **Cheaper:** exports, which stay competitive as the dong slides [@VN-3].
+- **Dearer:** imported equipment, energy and any debt owed in US dollars.
+- **Currency risk:** build exchange-rate swings into pricing, sourcing and cash-flow plans in Ho Chi Minh City.
+</Fragment>
+
+</Slide>
+
+<Slide title="Moving money across the border" lede="Singapore's door is open. Vietnam's opens too, but by appointment and with paperwork.">
+
+<Fragment slot="sg">
+<BigStat value="None" unit="exchange controls" />
+
+- No restrictions on payments for trade and services, other than security-related ones [@SG-6].
+- Capital and profits can be sent home freely [@SG-7].
+- One reason Singapore serves as the region's treasury centre.
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="New" unit="rules from 18 August 2026" />
+
+- Investment money moves through a dedicated investment capital account, under a new central-bank circular [@VN-6].
+- Profits can leave once a year, after audited accounts and tax finalisation, and not at all while the books show accumulated losses [@VN-7].
+- Choice of bank and documentation matter as much as the rules. The steps are on Politics & Risk's Money Matters.
+</Fragment>
+
+</Slide>
+
+<Slide title="How strong are the banks" tone="tint" lede="Singapore's banks hold more capital, a fifth of the bad loans, and plenty of deposits behind their lending." layout="joined">
+
+<Plate key width="wide">
+<StatDuel rows={[
+  {
+    label: 'Capital adequacy',
+    sg: { value: '18.5%', detail: 'All banks, 2025 Q2', cite: ['SG-8'] },
+    vn: { value: '10.4 to 12.1%', detail: 'State banks to private banks, March 2025', cite: ['VN-8'] },
+  },
+  {
+    label: 'Bad loans',
+    sg: { value: '1.1%', detail: 'Nonperforming loans, 2025 Q2', cite: ['SG-8'] },
+    vn: { value: '5.3%', detail: 'On the balance sheet, March 2025', cite: ['VN-8'] },
+  },
+  {
+    label: 'Loans per deposit',
+    sg: { value: '66%', detail: 'Lending well covered by deposits', cite: ['SG-8'] },
+    vn: { value: '100%+', detail: 'Lending runs ahead of deposits', cite: ['VN-8'] },
+  },
+]} head={false} />
+
+<Fragment slot="note">Vietnam's banks now pay 6 to 8% for six- to twelve-month deposits to fund their lending [@VN-10].</Fragment>
+
+</Plate>
+
+</Slide>
+
+<Slide title="Where the pressure sits" lede="Singapore's risks come from abroad. Vietnam's are at home." sgMedia="singapore/raffles-place.jpg" vnMedia="vietnam/saigon-skyline.jpg">
+
+<Fragment slot="sg">
+The IMF calls the system resilient and its risks contained [@SG-9]. What to watch:
+
+- US-dollar funding and cross-border exposures [@SG-9].
+- Commercial real estate and links to non-bank lenders [@SG-9].
+- Cyber risk and pockets of heavily indebted companies [@SG-9].
+</Fragment>
+
+<Fragment slot="vn">
+Reforms are strengthening supervision, but the buffers are thin [@VN-8]. What to watch:
+
+- Credit growing faster than deposits [@VN-9].
+- Retail deposits' share falling from 48% in 2024 to 44% in 2025, with banks turning to bonds and interbank loans [@VN-9].
+- Bank lending tied up in real estate.
+</Fragment>
+
+</Slide>
+
+<Slide title="What it means for a company" layout="joined">
+
+<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+<Takeaway media="singapore/marina-bay-financial.jpg" label="Singapore">
+Banking, conversion and cash are reliable. The one policy risk is a stronger dollar.
+
+<Fragment slot="detail">MAS has tightened twice in 2026 to hold down imported inflation [@SG-2; @SG-3]; the banks are well capitalised and liquid [@SG-8].</Fragment>
+</Takeaway>
+<Takeaway media="vietnam/landmark-81.jpg" label="Vietnam">
+The growth is real. Treat currency hedging and your choice of bank as core controls, not paperwork.
+
+<Fragment slot="detail">The dong is prone to slide [@VN-3], profits leave once a year [@VN-7], and bank buffers are thin [@VN-8].</Fragment>
+</Takeaway>
+</div>
+
+</Slide>
