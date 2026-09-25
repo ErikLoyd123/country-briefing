@@ -43,7 +43,7 @@ export const DESKS = [
     name: 'Finance & Economics',
     blurb: 'Currency, banking, credit ratings, trade and the trends behind the numbers.',
     status: 'starter',
-    team: { name: 'Team Money', members: ['Garett Brownlee', 'Mel Swayne', 'Brian Friedman', 'Justin Alexander', 'Jeff Daskam'] },
+    team: { name: 'Team Whiskey', members: ['Garett Brownlee', 'Mel Swayne', 'Brian Friedman', 'Justin Alexander', 'Jeff Daskam'] },
     retrieved: '21 September 2026',
   },
 ].map((d, i) => ({ ...d, number: i + 1 }));
