@@ -1,7 +1,7 @@
 ---
 title: "Domestic Market Conditions and the Consumer Economy"
 short: "Domestic Market"
-thesis: "How households and local firms experience each economy day to day."
+thesis: "Singapore's consumers earn a lot, pay a lot and expect quality. Ho Chi Minh City's earn far less but spend more every year, and increasingly on credit."
 hero:
   image: vietnam/hanoi-market.jpg
   alt: "Fresh produce at a market in Hanoi"
@@ -9,16 +9,103 @@ format: slides
 status: draft
 ---
 
-<Slide title="What this section covers" tone="tint" lede="The economy as households and local firms feel it." layout="joined">
+<Slide title="What people earn" lede="Singapore's incomes rise steadily from a high base. Ho Chi Minh City's are a fraction of that, but well above the rest of Vietnam.">
 
-<ul class="mx-auto grid max-w-6xl grid-cols-1 gap-x-10 gap-y-4 md:grid-cols-2">
-<li class="border-t border-ink pt-3 text-lg text-ink">Income levels and wage trends</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Cost of living</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Consumer purchasing power</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Access to credit</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Domestic consumption patterns</li>
-</ul>
+<Fragment slot="sg">
+<BigStat value="S$5,775" unit="median monthly income, 2025">
+About US$4,420, up from S$3,949 in 2015 [@SG-36].
+</BigStat>
 
-<p class="mx-auto mt-10 max-w-6xl text-ink-2">Slides from Mel Swayne's paper to come.</p>
+- **Real wage growth:** 4.0% in 2025, about 2% a year over the decade [@SG-36]. Workers' purchasing power rose even after inflation.
+- **Pattern:** steady, moderate gains that move with inflation and the economic cycle.
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="10.7m ₫" unit="average monthly income, 2025">
+Ho Chi Minh City: about US$440, up from 7.5m ₫ in 2018 [@VN-42].
+</BigStat>
+
+- **National average:** 8.4m ₫, about US$335 [@VN-42].
+- **Pattern:** steady growth, with a dip during the pandemic.
+</Fragment>
+
+</Slide>
+
+<Slide title="What it costs to live there" tone="tint" lede="Singapore is one of the world's 20 most expensive cities. Ho Chi Minh City is near the bottom of the table, and so is what local wages buy." layout="joined">
+
+<Plate key width="wide">
+<StatDuel rows={[
+  {
+    label: 'Cost of living',
+    sg: { value: '90.8', detail: '19th highest in the world', cite: ['SG-37'] },
+    vn: { value: '29.6', detail: 'Ho Chi Minh City, 494th of 547 cities', cite: ['VN-43'] },
+  },
+  {
+    label: 'Rent',
+    sg: { value: '68.3', detail: '31.7% cheaper than New York', cite: ['SG-37'] },
+    vn: { value: '12.6', detail: '87.4% cheaper than New York', cite: ['VN-43'] },
+  },
+  {
+    label: 'Local purchasing power',
+    sg: { value: '91.3', detail: 'High purchasing power: high wages, high prices', cite: ['SG-37'] },
+    vn: { value: '42.7', detail: 'Low purchasing power: low wages, low prices', cite: ['VN-43'] },
+  },
+]} head={false} />
+
+<Fragment slot="note">Numbeo indexes, mid-2026, where New York = 100.</Fragment>
+
+</Plate>
+
+</Slide>
+
+<Slide title="What households spend" lede="Singapore spends on non-essentials such as personal care and health. Vietnam buys mostly essentials, with a focus on education." sgMedia="singapore/hawker-centre.jpg" vnMedia="vietnam/motorbikes-at-lights.jpg">
+
+<Fragment slot="sg">
+- **S$1,986 a month** per household member in 2023, about US$1,480, and rising since 2012/13 [@SG-38].
+- **Top five, 2023:** housing, food, transport, insurance and personal care, then health [@SG-38].
+</Fragment>
+
+<Fragment slot="vn">
+- **2.98m ₫ a month** per person in 2024, about US$119, up from 2.16m ₫ in 2016 [@VN-44].
+- **Where it goes:** mostly essentials, starting with food.
+- **Education:** spending per student rose 36.3% from 2022 to 9.5m ₫ a year in 2024 [@VN-62].
+</Fragment>
+
+</Slide>
+
+<Slide title="Access to credit" lede="Singapore's household borrowing is modest and steady. Vietnam's credit is expanding quickly, and that brings risk.">
+
+<Fragment slot="sg">
+<BigStat value="44.1%" unit="of GDP, household debt, 2026">
+Down from a peak of 66.9% in 2014 [@SG-46].
+</BigStat>
+
+- **Mature and stable:** credit is readily available to firms and households, without the rapid build-up seen elsewhere in the region.
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="141%" unit="of GDP, private-sector credit, 2025">
+Up from 108% in 2019 [@VN-45].
+</BigStat>
+
+- **For consumers,** easier credit supports spending. **For the system,** it raises risk (see Currency & Banking).
+</Fragment>
+
+</Slide>
+
+<Slide title="What it means for a company" layout="joined">
+
+<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+<Takeaway media="singapore/orchard-street.jpg" label="Singapore">
+A high-income, high-cost, stable market that rewards quality over low prices.
+
+<Fragment slot="detail">Incomes rise steadily [@SG-36] and purchasing power is high [@SG-37], but the city is among the world's most expensive [@SG-37]. Companies should expect a sophisticated, brand-conscious consumer base that values quality and reliability over low prices.</Fragment>
+</Takeaway>
+<Takeaway media="vietnam/saigon-skyline.jpg" label="Ho Chi Minh City">
+A large, fast-growing market still centred on essentials.
+
+<Fragment slot="detail">Incomes are well above the national average [@VN-42] and spending is climbing [@VN-44], but purchasing power is low [@VN-43]. Companies should anticipate strong demand growth but must tailor offerings to affordability constraints and regional income differences.</Fragment>
+</Takeaway>
+</div>
 
 </Slide>

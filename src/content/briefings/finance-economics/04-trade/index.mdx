@@ -1,7 +1,7 @@
 ---
 title: "Trade Structure, External Exposure and Global Integration"
 short: "Trade & Exposure"
-thesis: "How each country plugs into the global economy, and how those outside ties shape its risks and opportunities."
+thesis: "Singapore is a diversified hub whose trade is now riding an AI electronics boom. Vietnam's trade is growing faster but is driven by foreign-invested firms, relies on the US market and is exposed to US tariff swings."
 hero:
   image: singapore/strait-shipping.jpg
   alt: "Cargo ships in the Singapore Strait"
@@ -9,16 +9,154 @@ format: slides
 status: draft
 ---
 
-<Slide title="What this section covers" tone="tint" lede="How each economy trades with the world, and where that leaves it exposed." layout="joined">
+<Slide title="How much they trade" lede="Both are trading at record pace in 2026. Singapore's exports are surging; Vietnam's imports are outrunning its exports.">
 
-<ul class="mx-auto grid max-w-6xl grid-cols-1 gap-x-10 gap-y-4 md:grid-cols-2">
-<li class="border-t border-ink pt-3 text-lg text-ink">Imports and exports: volume, mix and growth</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Top trading partners</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Trade agreements and regional blocs</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Export-driven versus service-driven models</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Exposure to global supply-chain shocks</li>
-</ul>
+<Fragment slot="sg">
+<BigStat value="S$1.4tn" unit="goods trade, 2025">
+Up 8.7% on 2024 [@SG-23].
+</BigStat>
 
-<p class="mx-auto mt-10 max-w-6xl text-ink-2">Slides from Brian Friedman's paper to come.</p>
+- **2026 is faster still:** exports up 49.2% and imports 39.3% in August alone, year on year [@SG-24].
+- **What's driving it:** electronics exports up 131.8%, on AI-related demand [@SG-24].
+- **The mix:** machinery and transport equipment make up about 69% of non-oil exports [@SG-25].
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="US$930bn" unit="goods trade, 2025">
+A record, with a US$20bn surplus [@VN-26].
+</BigStat>
+
+- **2026 has flipped:** exports up 22.4% but imports up 35.3% through August [@VN-27].
+- **The result:** a US$23.5bn deficit by mid-September, the largest in 30 years [@VN-28].
+- **Where it sits:** domestic firms run the deficit; foreign-invested firms still run a surplus [@VN-28].
+</Fragment>
+
+</Slide>
+
+<Slide title="Who they trade with" tone="tint" lede="Singapore's top four partners are close in size. Vietnam sells mostly to the US and buys mostly from China.">
+
+<Fragment slot="sg">
+<CompareBars label="Total trade by partner, 2025, S$ billions" items={[
+  { name: 'Taiwan', country: 'SG', value: 170.3, display: '170.3', cite: ['SG-26'] },
+  { name: 'Mainland China', country: 'SG', value: 162.9, display: '162.9', cite: ['SG-26'] },
+  { name: 'Malaysia', country: 'SG', value: 145.0, display: '145.0', cite: ['SG-26'] },
+  { name: 'United States', country: 'SG', value: 139.2, display: '139.2', cite: ['SG-26'] },
+]} />
+
+Taiwan overtook China as the top partner in 2025 [@SG-26]. No single market dominates.
+</Fragment>
+
+<Fragment slot="vn">
+<CompareBars label="Exports by market, first half of 2026, US$ billions" items={[
+  { name: 'United States', country: 'VN', value: 86.5, display: '86.5', cite: ['VN-29'] },
+  { name: 'China', country: 'VN', value: 37.9, display: '37.9', cite: ['VN-29'] },
+  { name: 'Japan', country: 'VN', value: 14.8, display: '14.8', cite: ['VN-30'] },
+]} />
+
+The US takes about a third of exports [@VN-29]. On imports, China supplied US$138.6bn through August [@VN-27] and South Korea US$60.1bn [@VN-31].
+</Fragment>
+
+</Slide>
+
+<Slide title="Two trade models" tone="tint" lede="Singapore earns as a hub and a services centre. Vietnam earns by assembling for foreign firms, and its own companies are falling behind." layout="joined">
+
+<Plate key width="wide">
+<StatDuel rows={[
+  {
+    label: 'The main engine',
+    sg: { value: '71%', detail: 'Share of non-oil exports that are re-exports, 2025', cite: ['SG-25'] },
+    vn: { value: '77.3%', detail: 'Share of exports made by foreign-invested firms, 2025', cite: ['VN-26'] },
+  },
+  {
+    label: 'The second engine',
+    sg: { value: 'S$533.7bn', detail: 'Services exports in 2024, a surplus of about S$46bn', cite: ['SG-27'] },
+    vn: { value: 'US$108bn', detail: 'Exports by domestic firms in 2025, down 6.1%', cite: ['VN-26'] },
+  },
+  {
+    label: 'Where it is heading',
+    sg: { value: '136%', detail: 'Services trade as a share of GDP in 2024, up from 102% in 2014', cite: ['SG-28'] },
+    vn: { value: '18%', detail: 'Share of small firms in supply chains in 2023, down from 35% in 2009', cite: ['VN-34'] },
+  },
+]} head={false} />
+</Plate>
+
+</Slide>
+
+<Slide title="Trade agreements" lede="Both are in the region's big deals. Singapore's network is wider; Vietnam's can't replace the US market.">
+
+<Fragment slot="sg">
+<BigStat value="29" unit="free trade agreements in force">
+Including CPTPP, RCEP and the EU–Singapore FTA [@SG-29].
+</BigStat>
+
+- **The hedge is the network,** not any single deal: it spreads exposure across many markets.
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="18" unit="FTAs, in force and planned">
+Including CPTPP (2019), RCEP (2022) and the EU–Vietnam FTA (2020) [@VN-33].
+</BigStat>
+
+- **RCEP alone** covers about 30% of the world's people and output [@VN-33].
+- **A buffer, not a replacement:** no agreement matches the scale of the US market.
+</Fragment>
+
+</Slide>
+
+<Slide title="The US tariff risk" tone="tint" lede="Both now face the same new 12.5% US duty. Vietnam has far more at stake.">
+
+<Fragment slot="sg">
+<BigStat value="12.5%" unit="extra US duty from 24 July 2026">
+Part of a forced-labour action covering 60 economies [@SG-30].
+</BigStat>
+
+- **Exposed:** about a third of domestic exports to the US, S$9.5bn a year, roughly 3% of domestic exports globally [@SG-31].
+- **So far:** MTI calls the impact muted [@SG-31].
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="12.5%" unit="extra US duty from 24 July 2026">
+The same flat Section 301 rate [@VN-36].
+</BigStat>
+
+- **Before that:** a 20% reciprocal tariff from August 2025, cut to 10% in February 2026 after a Supreme Court ruling [@VN-35].
+- **Still contested:** 25 US states are suing over the new duty [@VN-37].
+- **At stake:** US$137bn of two-way trade through August, up 23.4% [@VN-32].
+</Fragment>
+
+</Slide>
+
+<Slide title="Where supply chains could break" lede="Singapore's risks are chokepoints and inputs. Vietnam's growth rests on firms that moved from China." sgMedia="singapore/pasir-panjang-terminal.jpg" vnMedia="vietnam/binh-duong-industrial-park.jpg">
+
+<Fragment slot="sg">
+- **Sea lanes:** Singapore, Malaysia and Indonesia pledged in August to keep the Malacca and Singapore Straits open [@SG-32].
+- **Helium:** under half of Singapore's chip fabs recycle it, vs 70%+ in Japan and Taiwan [@SG-33].
+- **Resilience:** 23% of firms could run four to six months through a shock, vs 13% globally [@SG-34].
+- **Planning ahead:** a first-of-its-kind essential-supplies pact with New Zealand took effect in July [@SG-35].
+</Fragment>
+
+<Fragment slot="vn">
+- **China+1:** Chinese-owned firms account for a disproportionate share of the export boom to the US [@VN-38].
+- **Still tied to China:** those firms keep sourcing their inputs there [@VN-38].
+- **Moving up:** a national chip strategy offers up to 50% subsidies for semiconductor R&D centres [@VN-39].
+- **Handle with care:** the shift may owe as much to trade tensions as to lasting advantage.
+</Fragment>
+
+</Slide>
+
+<Slide title="What it means for a company" layout="joined">
+
+<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+<Takeaway media="singapore/strait-shipping.jpg" label="Singapore">
+Truly diversified: many partners, 29 trade agreements, and a real AI electronics upcycle.
+
+<Fragment slot="detail">Watch chokepoints and critical inputs such as helium [@SG-33], and the new 12.5% US duty, which has had a muted impact so far [@SG-31].</Fragment>
+</Takeaway>
+<Takeaway media="vietnam/saigon-river-containers.jpg" label="Vietnam">
+Fast, foreign-investor-driven growth with heavy reliance on the US market.
+
+<Fragment slot="detail">Price in US tariff swings [@VN-35]. Capital markets are opening: the FTSE upgrade could draw US$6bn over time [@VN-40], and SSI expects US$10bn within a year [@VN-41].</Fragment>
+</Takeaway>
+</div>
 
 </Slide>
