@@ -42,7 +42,7 @@ export const DESKS = [
     slug: 'finance-economics',
     name: 'Finance & Economics',
     blurb: 'Currency, banking, credit ratings, trade and the trends behind the numbers.',
-    status: 'starter',
+    status: 'live',
     team: { name: 'Team Whiskey', members: ['Garett Brownlee', 'Mel Swayne', 'Brian Friedman', 'Justin Alexander', 'Jeff Daskam'] },
     retrieved: '21 September 2026',
   },
