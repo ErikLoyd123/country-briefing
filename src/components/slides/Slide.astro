@@ -205,6 +205,7 @@ const slug = id ?? (question ? `q${question}` : title ? slideAnchor(title) : und
     font-size: clamp(1.1rem, 1.5vw, 1.35rem);
     line-height: 1.45;
     color: var(--color-ink-2);
+    white-space: pre-line; /* a \n in a lede starts a new line */
   }
 
   /* Q&A: the question in a dark band flush with the top of the slide, the short answer under it. */

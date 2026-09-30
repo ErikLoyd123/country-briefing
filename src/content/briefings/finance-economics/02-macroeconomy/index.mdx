@@ -1,7 +1,7 @@
 ---
 title: "Macroeconomic Performance and National Financial Health"
 short: "Macroeconomy"
-thesis: "The baseline: how strong, stable and fast-growing each economy is, and how resilient it would be to a shock."
+thesis: "Singapore is rich, AAA-rated and growing steadily. Ho Chi Minh City grows almost twice as fast from a far lower base, with higher inflation and a sovereign still one notch below investment grade."
 hero:
   image: singapore/marina-bay-night.jpg
   alt: "Marina Bay, Singapore, at night"
@@ -9,17 +9,156 @@ format: slides
 status: draft
 ---
 
-<Slide title="What this section covers" tone="tint" lede="The big-picture indicators behind each economy." layout="joined">
+<Slide title="How fast they are growing" lede={"Both are running ahead of plan this year.\nSingapore on an AI boom, Ho Chi Minh City on investment."}>
 
-<ul class="mx-auto grid max-w-6xl grid-cols-1 gap-x-10 gap-y-4 md:grid-cols-2">
-<li class="border-t border-ink pt-3 text-lg text-ink">GDP and GDP per capita</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Inflation</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Unemployment</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">National debt and fiscal balance</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Credit ratings</li>
-<li class="border-t border-ink pt-3 text-lg text-ink">Long-term growth trends</li>
-</ul>
+<Fragment slot="sg">
+<BigStat value="6.1%" unit="growth, first half of 2026">
+Up from 5.0% in 2025 [@SG-10]. The 2026 forecast has been raised twice, now to 4.5 to 5.5% [@SG-11].
+</BigStat>
 
-<p class="mx-auto mt-10 max-w-6xl text-ink-2">Slides from Garett Brownlee's paper to come.</p>
+- **What's driving it:** global spending on AI hardware [@SG-11].
+- **Treat it as a tailwind,** not a planning baseline: the pace rides on one investment cycle.
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="8.55%" unit="Ho Chi Minh City, first half of 2026">
+Ahead of Vietnam's 8.18% [@VN-12; @VN-11], after national growth of 8.02% in 2025 [@VN-13].
+</BigStat>
+
+- **Weight:** nearly a quarter of national output and over a third of state revenue [@VN-11].
+- **Money coming in:** US$7.5bn of foreign investment, up nearly 90% [@VN-14].
+- **But:** only 19th of 34 provinces on growth [@VN-14].
+</Fragment>
+
+</Slide>
+
+<Slide title="What each economy produces per person" tone="tint" lede="Singapore's output per person is more than 11x Ho Chi Minh City's, and the city's is 1.7 times Vietnam's." layout="joined">
+
+<Plate key width="wide">
+<CompareBars label="GDP per person, US dollars, 2025" items={[
+  { name: 'Singapore', country: 'SG', value: 99370, display: 'US$99,370', note: 'S$129,194', cite: ['SG-13', 'SG-12'] },
+  { name: 'Ho Chi Minh City', country: 'VN', value: 8755, display: 'US$8,755', cite: ['VN-15'] },
+  { name: 'Vietnam', country: 'VN', value: 5026, display: 'US$5,026', cite: ['VN-13'] },
+]} />
+
+<Fragment slot="note">Singapore rewards premium products, professional services and regional functions, not competing on price. Ho Chi Minh City is Vietnam's largest consumer market by value.</Fragment>
+
+</Plate>
+
+</Slide>
+
+<Slide title="Prices and jobs" tone="tint" lede={"Inflation is climbing in both, faster in Vietnam.\nLabour is tight in Singapore and cheap but thinly skilled in Vietnam."} layout="joined">
+
+<Plate key width="wide">
+<StatDuel rows={[
+  {
+    label: 'Inflation',
+    sg: { value: '2.2%', detail: 'July 2026, highest in about two years; core 2.0%', cite: ['SG-14'] },
+    vn: { value: '4.89%', detail: 'August 2026, up from 3.31% for 2025', cite: ['VN-16', 'VN-17'] },
+  },
+  {
+    label: 'Unemployment',
+    sg: { value: '1.9%', detail: '1.48 vacancies per jobseeker, June 2026', cite: ['SG-16'] },
+    vn: { value: '2.22%', detail: '2.47% in cities, first half of 2026', cite: ['VN-18'] },
+  },
+  {
+    label: 'The catch',
+    sg: { value: '4,620', detail: 'Layoffs in Q2 2026, the most since late 2020', cite: ['SG-17'] },
+    vn: { value: '29.7%', detail: 'Share of workers with formal qualifications', cite: ['VN-18'] },
+  },
+]} head={false} />
+</Plate>
+
+</Slide>
+
+<Slide title="What that does to your costs" lede="Budget for rising costs in both, but the levers are different." sgMedia="singapore/orchard-street.jpg" vnMedia="vietnam/motorbikes-at-lights.jpg">
+
+<Fragment slot="sg">
+- **Prices:** MAS expects 1.5 to 2.5% inflation this year [@SG-15] and is letting the dollar rise faster [@SG-3].
+- **Currency:** a firmer dollar makes local payroll and leases dearer in US-dollar terms. Consider hedging them.
+- **Hiring:** layoffs in manufacturing, infocomm and finance free up experienced people for regional roles [@SG-17].
+</Fragment>
+
+<Fragment slot="vn">
+- **Prices:** inflation has averaged 4.45% so far this year [@VN-16]. Put cost-escalation clauses in supplier and lease contracts.
+- **Pay:** average income is about US$340 a month [@VN-18], still a clear cost advantage.
+- **Skills:** with under a third of workers formally qualified [@VN-18], skilled talent costs more than averages suggest.
+</Fragment>
+
+</Slide>
+
+<Slide title="The public finances" lede={"Singapore runs surpluses and owns more than it owes.\nVietnam borrows moderately to build."}>
+
+<Fragment slot="sg">
+<BigStat value="1.0%" unit="of GDP budget surplus, FY2026">
+S$8.5bn, after 1.9% in FY2025 [@SG-18].
+</BigStat>
+
+- **Debt looks high, isn't:** about 99% is raised for non-spending purposes, and the government has more assets than debts [@SG-20].
+- **Watch:** the Pillar Two top-up tax lifts large multinationals to a 15% effective rate from FY2027 [@SG-19]. Model it now.
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="~36%" unit="of GDP public debt">
+With a 2025 deficit near 3.6% of GDP [@VN-19].
+</BigStat>
+
+- **Room to build:** moderate debt leaves space for projects such as a US$67bn high-speed railway from Hanoi [@VN-20].
+</Fragment>
+
+</Slide>
+
+<Slide title="Credit ratings" tone="tint" lede="The top of the scale against one step below investment grade, with an upgrade in sight." layout="joined">
+
+<Plate key width="wide">
+<RatingLadder scales={[
+  { label: 'Sovereign credit rating (S&P scale)', steps: ['AAA', 'AA+', 'AA', 'AA-', 'A+', 'A', 'A-', 'BBB+', 'BBB', 'BBB-', 'BB+', 'BB', 'BB-'],
+    divide: { after: 'BBB-', left: 'Investment grade', right: 'Speculative' },
+    sg: { at: 'AAA', detail: 'S&P, Moody\'s and Fitch', cite: ['SG-21'] },
+    vn: { at: 'BB+', detail: 'S&P and Fitch; Moody\'s Ba2, outlook positive', cite: ['VN-21', 'VN-22', 'VN-23'] } },
+]} />
+
+<Fragment slot="note">Moody's moved Vietnam to a positive outlook in May 2026 [@VN-23], and Fitch already rates its secured bonds BBB- [@VN-22]. An upgrade would lower local borrowing costs.</Fragment>
+
+</Plate>
+
+</Slide>
+
+<Slide title="The long run" lede={"Singapore is settling into maturity.\nVietnam is aiming high, and forecasters expect less than the targets."}>
+
+<Fragment slot="sg">
+<BigStat value="2 to 3%" unit="a year, next decade">
+The government's own long-run growth estimate [@SG-22].
+</BigStat>
+
+- Modest by regional standards. Plan around it.
+- Use Singapore for control, stability and access to the region; look to faster neighbours for volume.
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="10.2%" unit="Ho Chi Minh City target, 2026">
+With output per person of US$9,800 [@VN-24]. That needs nearly 12% growth in the second half [@VN-11].
+</BigStat>
+
+- **Milestone:** upper-middle income as of July 2026 [@VN-25], aiming for high income by 2045 [@VN-20].
+- **Reality check:** AMRO expects 7.4% national growth for 2026 [@VN-20].
+</Fragment>
+
+</Slide>
+
+<Slide title="What it means for a company" layout="joined">
+
+<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+<Takeaway media="singapore/marina-bay-financial.jpg" label="Singapore">
+Stability, not rapid growth: the natural base for regional headquarters, treasury and financing.
+
+<Fragment slot="detail">Price in high operating costs, a firming currency [@SG-3] and the new 15% minimum tax on large multinationals [@SG-19].</Fragment>
+</Takeaway>
+<Takeaway media="vietnam/hcmc-metro.jpg" label="Ho Chi Minh City">
+Vietnam's largest urban market, drawing heavy foreign investment [@VN-14].
+
+<Fragment slot="detail">Plan for rising inflation [@VN-16], the gap between official targets and independent forecasts [@VN-20], and borrowing costs above investment-grade levels until an upgrade [@VN-21].</Fragment>
+</Takeaway>
+</div>
 
 </Slide>
