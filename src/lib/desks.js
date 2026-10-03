@@ -29,7 +29,7 @@ export const DESKS = [
     name: 'Marketing Practices',
     blurb: 'How customers buy, how price-sensitive they are, and which media channels shape their choices.',
     status: 'starter',
-    team: { name: 'Team to be named', members: [] },
+    team: { name: 'Team to be named', members: ['Hans Prahl', 'John Ox', "La'Ron Latin", 'Patrick Korn'] },
   },
   {
     slug: 'supply-chain',
