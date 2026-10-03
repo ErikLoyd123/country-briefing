@@ -25,10 +25,10 @@ E-wallets and cash on delivery; peak buying at Tết and the 11.11 and 12.12 sal
 
 <Plate key width="wide">
 <StatDuel rows={[
-  { label: 'Looked for offers or discounts', sg: { value: '53%' }, vn: { value: '33%' } },
-  { label: 'Bought more on sale', sg: { value: '55%' }, vn: { value: '38%' } },
-  { label: 'Spent less on non-essentials', sg: { value: '51%' }, vn: { value: '38%' } },
-  { label: 'Paid a premium for eco-friendly', sg: { value: '11%' }, vn: { value: '33%' } },
+  { label: 'Looked for offers or discounts', sg: { value: '53%', cite: ['SG-7'] }, vn: { value: '33%', cite: ['VN-8'] } },
+  { label: 'Bought more on sale', sg: { value: '55%', cite: ['SG-7'] }, vn: { value: '38%', cite: ['VN-8'] } },
+  { label: 'Spent less on non-essentials', sg: { value: '51%', cite: ['SG-7'] }, vn: { value: '38%', cite: ['VN-8'] } },
+  { label: 'Paid a premium for eco-friendly', sg: { value: '11%', cite: ['SG-7'] }, vn: { value: '33%', cite: ['VN-8'] } },
 ]} head={false} />
 
 <Fragment slot="note">UOB ASEAN Consumer Sentiment Study 2025, share of respondents.</Fragment>
@@ -40,15 +40,15 @@ E-wallets and cash on delivery; peak buying at Tết and the 11.11 and 12.12 sal
 <Slide title="Why they shop the way they do" lede="Singapore's caution comes from the cost of living. Vietnam's comes from income, but quality concerns are rising." sgMedia="singapore/hawker-centre.jpg" vnMedia="vietnam/hanoi-market.jpg">
 
 <Fragment slot="sg">
-- **Cost of living** is the top worry for 66%, and 63% say inflation has cut their purchasing power.
-- **Careful, not stopped:** 52% are cautious but still buy most of what they need.
+- **Cost of living** is the top worry for 66%, and 63% say inflation has cut their purchasing power [@SG-8].
+- **Careful, not stopped:** 52% are cautious but still buy most of what they need [@SG-8].
 - **What it rewards:** value bundles, member pricing and visible discounts on a premium base.
 </Fragment>
 
 <Fragment slot="vn">
-- **Price first:** 47% name price as the most important factor when choosing food.
-- **But quality matters:** 74% worry about pesticide residues and ultra-processed foods.
-- **Convenience is growing:** 54% buy prepared food at least once a week.
+- **Price first:** 47% name price as the most important factor when choosing food [@VN-10].
+- **But quality matters:** 74% worry about pesticide residues and ultra-processed foods [@VN-11].
+- **Convenience is growing:** 54% buy prepared food at least once a week [@VN-11].
 - **What it rewards:** small, affordable pack sizes and visible proof of safety.
 </Fragment>
 
@@ -60,9 +60,9 @@ E-wallets and cash on delivery; peak buying at Tết and the 11.11 and 12.12 sal
 <BigStat value="US$7.7bn" unit="Shopee, Lazada and TikTok Shop sales, FY2025" size="sm" />
 
 <CompareBars label="Share of combined platform sales" items={[
-  { name: 'Shopee', country: 'SG', value: 48, display: '48%' },
-  { name: 'TikTok Shop', country: 'SG', value: 31, display: '31%' },
-  { name: 'Lazada', country: 'SG', value: 22, display: '22%' },
+  { name: 'Shopee', country: 'SG', value: 48, display: '48%', cite: ['SG-10'] },
+  { name: 'TikTok Shop', country: 'SG', value: 31, display: '31%', cite: ['SG-10'] },
+  { name: 'Lazada', country: 'SG', value: 22, display: '22%', cite: ['SG-10'] },
 ]} max={60} />
 </Fragment>
 
@@ -70,9 +70,9 @@ E-wallets and cash on delivery; peak buying at Tết and the 11.11 and 12.12 sal
 <BigStat value="429tn ₫" unit="sales on the four largest platforms, 2025" size="sm" />
 
 <CompareBars label="Share of platform sales" items={[
-  { name: 'Shopee', country: 'VN', value: 56, display: '56%' },
-  { name: 'TikTok Shop', country: 'VN', value: 41.3, display: '41.3%' },
-  { name: 'Lazada and Tiki', country: 'VN', value: 3, display: '3%' },
+  { name: 'Shopee', country: 'VN', value: 56, display: '56%', cite: ['VN-12'] },
+  { name: 'TikTok Shop', country: 'VN', value: 41.3, display: '41.3%', cite: ['VN-12'] },
+  { name: 'Lazada and Tiki', country: 'VN', value: 3, display: '3%', cite: ['VN-12'] },
 ]} max={60} />
 </Fragment>
 
@@ -81,14 +81,13 @@ E-wallets and cash on delivery; peak buying at Tết and the 11.11 and 12.12 sal
 <Slide title="How and when they pay" lede="Singapore mixes cash, QR codes and cards. Vietnam has leapt to e-wallets, but cash on delivery still rules online." sgMedia="video/contactless-payment.mp4" vnMedia="vietnam/smartphone-chat.jpg">
 
 <Fragment slot="sg">
-- **Payment methods used:** cash 63%, scan-to-pay 56%, credit cards 52%.
-- **When:** discounts cluster around festive seasons and the year-end online sales.
+- **Payment methods used:** cash 63%, scan-to-pay 56%, credit cards 52% [@SG-9].
 </Fragment>
 
 <Fragment slot="vn">
-- **Payment methods used:** e-wallets 62%, cash 49%, QR codes 37%, credit cards 37%.
-- **Online:** cash on delivery is still the most preferred way to pay; 49% have tried buy-now-pay-later.
-- **When:** 85% shop around Tết, and the 10.10, 11.11 and 12.12 sales stretch the peak season across the last quarter.
+- **Payment methods used:** e-wallets 62%, cash 49%, QR codes 37%, credit cards 37% [@VN-9].
+- **Online:** cash on delivery is still the most preferred way to pay; 49% have tried buy-now-pay-later [@VN-13].
+- **When:** 85% shop around Tết, and the 10.10, 11.11 and 12.12 sales stretch the peak season across the last quarter [@VN-15].
 </Fragment>
 
 </Slide>

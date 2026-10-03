@@ -73,7 +73,7 @@ it('hides citations on briefing pages but still checks the claim IDs', () => {
   expect(() => siteCitation(locals, ['XX-9'], 'StatDuel')).toThrow(/XX-9 in StatDuel/);
   expect(siteCitation({ desk: 'politics-risk' }, ['SG-8'])).toMatch(/href="\/politics-risk\/sources#/);
   // Each desk checks against its own table, and a page outside a desk has none.
-  expect(() => siteCitation({ desk: 'marketing' }, ['SG-8'], 'StatDuel')).toThrow(/src\/data\/marketing\/sources\.csv/);
+  expect(() => siteCitation({ desk: 'marketing' }, ['SG-9999'], 'StatDuel')).toThrow(/src\/data\/marketing\/sources\.csv/);
   expect(() => siteCitation({}, ['SG-8'], 'StatDuel')).toThrow(/outside a desk page/);
 });
 
