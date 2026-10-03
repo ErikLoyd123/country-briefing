@@ -1,0 +1,94 @@
+---
+title: "Buying Habits and Price Sensitivity"
+short: "Buying Habits"
+thesis: "Singapore's shoppers are rich but squeezed by living costs, so they hunt for deals. Vietnam's spend carefully on essentials, but pay more for quality and sustainability when they trust the product."
+hero:
+  video: video/contactless-payment.mp4
+  alt: "A contactless card payment at a shop counter"
+format: slides
+status: draft
+---
+
+<Slide question={3} title="What are the main buying habits, and how price-sensitive is the customer?" media="singapore/hawker-centre.jpg" look="night" lede="Both are price-sensitive. Singaporeans chase discounts to cope with living costs; Vietnamese put price first but pay more for safety and sustainability.">
+
+<Fragment slot="sg">
+More than half hunt offers and buy on sale. Shopee leads online.
+</Fragment>
+
+<Fragment slot="vn">
+E-wallets and cash on delivery; peak buying at Tết and the 11.11 and 12.12 sales.
+</Fragment>
+
+</Slide>
+
+<Slide title="How price-sensitive they are" backdrop="video/sg-street-crossing.mp4" lede="Singaporeans chase discounts more. Vietnamese are three times as likely to pay extra for a greener product." layout="joined">
+
+<Plate key width="wide">
+<StatDuel rows={[
+  { label: 'Looked for offers or discounts', sg: { value: '53%' }, vn: { value: '33%' } },
+  { label: 'Bought more on sale', sg: { value: '55%' }, vn: { value: '38%' } },
+  { label: 'Spent less on non-essentials', sg: { value: '51%' }, vn: { value: '38%' } },
+  { label: 'Paid a premium for eco-friendly', sg: { value: '11%' }, vn: { value: '33%' } },
+]} head={false} />
+
+<Fragment slot="note">UOB ASEAN Consumer Sentiment Study 2025, share of respondents.</Fragment>
+
+</Plate>
+
+</Slide>
+
+<Slide title="Why they shop the way they do" lede="Singapore's caution comes from the cost of living. Vietnam's comes from income, but quality concerns are rising." sgMedia="singapore/hawker-centre.jpg" vnMedia="vietnam/hanoi-market.jpg">
+
+<Fragment slot="sg">
+- **Cost of living** is the top worry for 66%, and 63% say inflation has cut their purchasing power.
+- **Careful, not stopped:** 52% are cautious but still buy most of what they need.
+- **What it rewards:** value bundles, member pricing and visible discounts on a premium base.
+</Fragment>
+
+<Fragment slot="vn">
+- **Price first:** 47% name price as the most important factor when choosing food.
+- **But quality matters:** 74% worry about pesticide residues and ultra-processed foods.
+- **Convenience is growing:** 54% buy prepared food at least once a week.
+- **What it rewards:** small, affordable pack sizes and visible proof of safety.
+</Fragment>
+
+</Slide>
+
+<Slide title="Where they shop online" lede="Shopee leads in both markets, and TikTok Shop is the fast-growing challenger. Lazada is fading, sharply in Vietnam.">
+
+<Fragment slot="sg">
+<BigStat value="US$7.7bn" unit="Shopee, Lazada and TikTok Shop sales, FY2025" size="sm" />
+
+<CompareBars label="Share of combined platform sales" items={[
+  { name: 'Shopee', country: 'SG', value: 48, display: '48%' },
+  { name: 'TikTok Shop', country: 'SG', value: 31, display: '31%' },
+  { name: 'Lazada', country: 'SG', value: 22, display: '22%' },
+]} max={60} />
+</Fragment>
+
+<Fragment slot="vn">
+<BigStat value="429tn ₫" unit="sales on the four largest platforms, 2025" size="sm" />
+
+<CompareBars label="Share of platform sales" items={[
+  { name: 'Shopee', country: 'VN', value: 56, display: '56%' },
+  { name: 'TikTok Shop', country: 'VN', value: 41.3, display: '41.3%' },
+  { name: 'Lazada and Tiki', country: 'VN', value: 3, display: '3%' },
+]} max={60} />
+</Fragment>
+
+</Slide>
+
+<Slide title="How and when they pay" lede="Singapore mixes cash, QR codes and cards. Vietnam has leapt to e-wallets, but cash on delivery still rules online." sgMedia="video/contactless-payment.mp4" vnMedia="vietnam/smartphone-chat.jpg">
+
+<Fragment slot="sg">
+- **Payment methods used:** cash 63%, scan-to-pay 56%, credit cards 52%.
+- **When:** discounts cluster around festive seasons and the year-end online sales.
+</Fragment>
+
+<Fragment slot="vn">
+- **Payment methods used:** e-wallets 62%, cash 49%, QR codes 37%, credit cards 37%.
+- **Online:** cash on delivery is still the most preferred way to pay; 49% have tried buy-now-pay-later.
+- **When:** 85% shop around Tết, and the 10.10, 11.11 and 12.12 sales stretch the peak season across the last quarter.
+</Fragment>
+
+</Slide>
