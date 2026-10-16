@@ -30,6 +30,7 @@ export const DESKS = [
     blurb: 'How customers buy, how price-sensitive they are, and which media channels shape their choices.',
     status: 'live',
     team: { name: 'Team to be named', members: ['Hans Prahl', 'John Ox', "La'Ron Latin", 'Patrick Korn'] },
+    retrieved: '1 October 2026',
   },
   {
     slug: 'supply-chain',
